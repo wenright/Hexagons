@@ -4,6 +4,10 @@
 		"selected_items":
 		[
 			[
+				"set",
+				"select	(index, ...)"
+			],
+			[
 				"highes",
 				"highestScore"
 			],
@@ -55,8 +59,40 @@
 			"file": "main.lua",
 			"settings":
 			{
-				"buffer_size": 548,
+				"buffer_size": 607,
 				"line_ending": "Windows"
+			}
+		},
+		{
+			"file": "states/game.lua",
+			"settings":
+			{
+				"buffer_size": 506,
+				"line_ending": "Windows"
+			}
+		},
+		{
+			"file": "scripts/hexagon.lua",
+			"settings":
+			{
+				"buffer_size": 1404,
+				"line_ending": "Windows"
+			}
+		},
+		{
+			"file": "scripts/entities.lua",
+			"settings":
+			{
+				"buffer_size": 569,
+				"line_ending": "Windows"
+			}
+		},
+		{
+			"file": "conf.lua",
+			"settings":
+			{
+				"buffer_size": 2618,
+				"line_ending": "Unix"
 			}
 		}
 	],
@@ -95,10 +131,14 @@
 	"build_varint": "",
 	"command_palette":
 	{
-		"height": 148.0,
-		"last_filter": "install ",
+		"height": 800.0,
+		"last_filter": "",
 		"selected_items":
 		[
+			[
+				"theme",
+				"Themr: List themes"
+			],
 			[
 				"install ",
 				"Package Control: Install Package"
@@ -120,7 +160,7 @@
 				"Project: Add Folder"
 			]
 		],
-		"width": 408.0
+		"width": 816.0
 	},
 	"console":
 	{
@@ -141,6 +181,8 @@
 	},
 	"file_history":
 	[
+		"/C/Users/Will/Desktop/lovesdl/love-android-sdl2/assets/conf.lua",
+		"/C/Users/Will/Desktop/lovesdl/love-android-sdl2/assets/states/game.lua",
 		"/C/Users/Will/OneDrive/Programming/Love/standing-sim/lib/luann.lua",
 		"/C/Users/Will/OneDrive/Programming/Love/standing-sim/scripts/creature.lua",
 		"/C/Users/Will/OneDrive/Programming/Love/standing-sim/main.lua",
@@ -211,6 +253,18 @@
 		"case_sensitive": false,
 		"find_history":
 		[
+			"0",
+			"gridSize",
+			"offset",
+			"hexSize",
+			"key",
+			"size",
+			"30",
+			"15",
+			"2 * ",
+			"15",
+			"2 * ",
+			"100",
 			"threshold",
 			"exp",
 			"exp (",
@@ -342,7 +396,7 @@
 	"groups":
 	[
 		{
-			"selected": 0,
+			"selected": 1,
 			"sheets":
 			[
 				{
@@ -351,15 +405,43 @@
 					"semi_transient": false,
 					"settings":
 					{
-						"buffer_size": 548,
+						"buffer_size": 607,
 						"regions":
 						{
 						},
 						"selection":
 						[
 							[
-								261,
-								261
+								520,
+								520
+							]
+						],
+						"settings":
+						{
+							"syntax": "Packages/Lua/Lua.tmLanguage"
+						},
+						"translation.x": 0.0,
+						"translation.y": 0.0,
+						"zoom_level": 1.0
+					},
+					"stack_index": 2,
+					"type": "text"
+				},
+				{
+					"buffer": 1,
+					"file": "states/game.lua",
+					"semi_transient": false,
+					"settings":
+					{
+						"buffer_size": 506,
+						"regions":
+						{
+						},
+						"selection":
+						[
+							[
+								391,
+								391
 							]
 						],
 						"settings":
@@ -371,6 +453,92 @@
 						"zoom_level": 1.0
 					},
 					"stack_index": 0,
+					"type": "text"
+				},
+				{
+					"buffer": 2,
+					"file": "scripts/hexagon.lua",
+					"semi_transient": false,
+					"settings":
+					{
+						"buffer_size": 1404,
+						"regions":
+						{
+						},
+						"selection":
+						[
+							[
+								1016,
+								1016
+							]
+						],
+						"settings":
+						{
+							"syntax": "Packages/Lua/Lua.tmLanguage"
+						},
+						"translation.x": 0.0,
+						"translation.y": 988.0,
+						"zoom_level": 1.0
+					},
+					"stack_index": 1,
+					"type": "text"
+				},
+				{
+					"buffer": 3,
+					"file": "scripts/entities.lua",
+					"semi_transient": false,
+					"settings":
+					{
+						"buffer_size": 569,
+						"regions":
+						{
+						},
+						"selection":
+						[
+							[
+								218,
+								218
+							]
+						],
+						"settings":
+						{
+							"syntax": "Packages/Lua/Lua.tmLanguage"
+						},
+						"translation.x": -0.0,
+						"translation.y": 0.0,
+						"zoom_level": 1.0
+					},
+					"stack_index": 3,
+					"type": "text"
+				},
+				{
+					"buffer": 4,
+					"file": "conf.lua",
+					"semi_transient": false,
+					"settings":
+					{
+						"buffer_size": 2618,
+						"regions":
+						{
+						},
+						"selection":
+						[
+							[
+								668,
+								668
+							]
+						],
+						"settings":
+						{
+							"syntax": "Packages/Lua/Lua.tmLanguage",
+							"tab_size": 4,
+							"translate_tabs_to_spaces": true
+						},
+						"translation.x": 0.0,
+						"translation.y": 0.0,
+						"zoom_level": 1.0
+					},
+					"stack_index": 4,
 					"type": "text"
 				}
 			]
