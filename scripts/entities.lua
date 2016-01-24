@@ -10,27 +10,32 @@ local Entities = Class {
 }
 
 function Entities:add(...)
-	table.insert(self.pool, self.class(...))
-end
-
-function Entities:remove(obj)
-	for key, entity in ipairs(self.pool) do
-		if entity == obj then
-			self.pool[key] = nil
-			break
-		end
-	end
+	local obj = self.class(...)
+	table.insert(self.pool, obj)
+	return obj
 end
 
 function Entities:update(dt)
-	for _, entity in ipairs(self.pool) do
-		entity:draw()
+	for _, entity in pairs(self.pool) do
+		entity:update(dt)
 	end
 end
 
 function Entities:draw()
-	for _, entity in ipairs(self.pool) do
+	for _, entity in pairs(self.pool) do
 		entity:draw()
+	end
+end
+
+function Entities:pointermoved(x, y, dx, dy)
+	for _, entity in pairs(self.pool) do
+		entity:pointermoved(x, y, dx, dy)
+	end
+end
+
+function Entities:pointerreleased()
+	for _, entity in pairs(self.pool) do
+		entity:pointerreleased()
 	end
 end
 

@@ -11,8 +11,6 @@ Hexagon = require 'scripts.hexagon'
 function love.load()
 	io.stdout:setvbuf('no')
 
-	Camera:zoom(2)
-
 	Gamestate.registerEvents()
 	Gamestate.switch(Game)
 end
@@ -22,7 +20,7 @@ function love.update(dt)
 end
 
 function love.draw()
-	love.graphics.setColor(0, 200, 25)
+	love.graphics.setColor(255, 255, 255)
 	love.graphics.print(love.timer.getFPS())
 end
 
