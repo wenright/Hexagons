@@ -1,0 +1,469 @@
+{
+	"auto_complete":
+	{
+		"selected_items":
+		[
+			[
+				"highes",
+				"highestScore"
+			],
+			[
+				"high",
+				"highestScore"
+			],
+			[
+				"creature",
+				"creatures"
+			],
+			[
+				"for",
+				"for	for i=1,10"
+			],
+			[
+				"networ",
+				"networkIndex"
+			],
+			[
+				"current",
+				"currentNetwork"
+			],
+			[
+				"torsoSta",
+				"torsoStartingPosition"
+			],
+			[
+				"original",
+				"originalY"
+			],
+			[
+				"orignial",
+				"originalX"
+			],
+			[
+				"newjoint",
+				"love.physics.newRevoluteJoint"
+			],
+			[
+				"poly",
+				"love.graphics.polygon"
+			]
+		]
+	},
+	"buffers":
+	[
+		{
+			"file": "main.lua",
+			"settings":
+			{
+				"buffer_size": 548,
+				"line_ending": "Windows"
+			}
+		}
+	],
+	"build_system": "",
+	"build_system_choices":
+	[
+		[
+			[
+				[
+					"Packages/Lua Love/LuaLove.sublime-build",
+					""
+				],
+				[
+					"Packages/Lua Love/LuaLove.sublime-build",
+					"Run"
+				],
+				[
+					"Packages/Lua Love/LuaLove.sublime-build",
+					"Love2D"
+				],
+				[
+					"Packages/Lua Love/LuaLove.sublime-build",
+					"ldoc: File"
+				],
+				[
+					"Packages/Lua Love/LuaLove.sublime-build",
+					"ldoc: Project"
+				]
+			],
+			[
+				"Packages/Lua Love/LuaLove.sublime-build",
+				"Love2D"
+			]
+		]
+	],
+	"build_varint": "",
+	"command_palette":
+	{
+		"height": 148.0,
+		"last_filter": "install ",
+		"selected_items":
+		[
+			[
+				"install ",
+				"Package Control: Install Package"
+			],
+			[
+				"install",
+				"Package Control: Install Package"
+			],
+			[
+				"themr",
+				"Themr: List themes"
+			],
+			[
+				"install pa",
+				"Package Control: Install Package"
+			],
+			[
+				"folder",
+				"Project: Add Folder"
+			]
+		],
+		"width": 408.0
+	},
+	"console":
+	{
+		"height": 126.0,
+		"history":
+		[
+			"import urllib.request,os,hashlib; h = '2915d1851351e5ee549c20394736b442' + '8bc59f460fa1548d1514676163dafc88'; pf = 'Package Control.sublime-package'; ipp = sublime.installed_packages_path(); urllib.request.install_opener( urllib.request.build_opener( urllib.request.ProxyHandler()) ); by = urllib.request.urlopen( 'http://packagecontrol.io/' + pf.replace(' ', '%20')).read(); dh = hashlib.sha256(by).hexdigest(); print('Error validating download (got %s instead of %s), please try manual install' % (dh, h)) if dh != h else open(os.path.join( ipp, pf), 'wb' ).write(by)"
+		]
+	},
+	"distraction_free":
+	{
+		"menu_visible": true,
+		"show_minimap": false,
+		"show_open_files": false,
+		"show_tabs": false,
+		"side_bar_visible": false,
+		"status_bar_visible": false
+	},
+	"file_history":
+	[
+		"/C/Users/Will/OneDrive/Programming/Love/standing-sim/lib/luann.lua",
+		"/C/Users/Will/OneDrive/Programming/Love/standing-sim/scripts/creature.lua",
+		"/C/Users/Will/OneDrive/Programming/Love/standing-sim/main.lua",
+		"/C/Users/Will/OneDrive/Programming/Love/standing-sim/states/game.lua",
+		"/C/Users/Will/OneDrive/Programming/Love/mousemover/main.lua",
+		"/C/Users/Will/OneDrive/Programming/Love/standing-sim/conf.lua",
+		"/C/Users/Will/OneDrive/Programming/Love/standing-sim/scripts/limbs.lua",
+		"/C/Users/Will/OneDrive/Programming/Love/standing-sim/scripts/limb.lua",
+		"/C/Users/Will/OneDrive/Programming/Love/walking-sim/states/pretty_bad.network",
+		"/C/Users/Will/OneDrive/Programming/Love/standing-sim/states/console.lua",
+		"/C/Users/Will/OneDrive/Programming/Love/standing-sim/scripts/world.lua",
+		"/C/Users/Will/OneDrive/Programming/Love/standing-sim/states/walker.network",
+		"/C/Users/will/Downloads/smsspamcollection/SMSSpamCollection",
+		"/C/Users/will/OneDrive/Programming/Love/standing-sim/main.lua",
+		"/C/Users/will/OneDrive/Programming/Love/standing-sim/states/console.lua",
+		"/C/Users/will/OneDrive/Programming/Love/standing-sim/conf.lua",
+		"/C/Users/will/OneDrive/Programming/Love/standing-sim/states/wacky.network",
+		"/C/Users/will/OneDrive/Programming/Love/walking-sim/scripts/limb.lua",
+		"/C/Users/will/OneDrive/Programming/Love/walking-sim/scripts/limbs.lua",
+		"/C/Users/will/OneDrive/Programming/Love/walking-sim/states/console.lua",
+		"/C/Users/will/OneDrive/Programming/Love/walking-sim/scripts/world.lua",
+		"/C/Users/will/OneDrive/Programming/Love/walking-sim/states/game.lua",
+		"/C/Users/will/OneDrive/Programming/Love/walking-sim/conf.lua",
+		"/C/Users/will/OneDrive/Programming/Love/walking-sim/states/walker.network",
+		"/C/Users/will/OneDrive/Programming/Love/walking-sim/main.lua",
+		"/C/Users/will/OneDrive/Programming/Love/8pixels/states/game.lua",
+		"/C/Users/will/OneDrive/Programming/Love/8pixels/main.lua",
+		"/C/Users/will/OneDrive/Programming/Love/walking-sim/lib/console.lua",
+		"/C/Users/will/OneDrive/Programming/Love/arrow/maps/1.map",
+		"/C/Users/will/OneDrive/Programming/Love/Pong NN/main.lua",
+		"/C/Users/will/OneDrive/Programming/Love/Fish Game/src/Scripts/fish.lua",
+		"/C/Users/will/OneDrive/Programming/Love/pong NN 2/main.lua",
+		"/C/Users/will/OneDrive/Programming/Love/tetris/main.lua",
+		"/C/Users/will/OneDrive/Programming/Love/pong NN 2/scripts/paddle.lua",
+		"/C/Users/will/OneDrive/Programming/Love/tetris/src/main.lua",
+		"/C/Users/will/OneDrive/Programming/Love/Pong NN/luann.lua",
+		"/C/Users/will/OneDrive/Programming/Love/Pong NN/network2.network",
+		"/C/Users/Will/OneDrive/Programming/Love/Pong NN/main.lua",
+		"/C/Users/Will/OneDrive/Programming/Love/space-rts/scripts/actors/actors.lua",
+		"/C/Users/Will/OneDrive/Programming/Love/space-rts/scripts/images.lua",
+		"/C/Users/Will/OneDrive/Programming/Love/space-rts/scripts/shipGenerator-will.lua",
+		"/C/Users/Will/OneDrive/Programming/Love/space-rts/scripts/shipGenerator.lua",
+		"/C/Users/Will/OneDrive/Programming/Love/space-rts/scripts/actors/actors-will.lua",
+		"/C/Users/Will/OneDrive/Programming/Love/space-rts/scripts/utils.lua",
+		"/C/Users/Will/OneDrive/Programming/Love/space-rts/scripts/camera.lua",
+		"/C/Users/will/Desktop/backupshipgen.lua",
+		"/C/Users/will/AppData/Roaming/Sublime Text 3/Installed Packages/LOVE.sublime-build",
+		"/C/Users/will/AppData/Roaming/Sublime Text 3/Packages/Lua Love/LuaLove.sublime-settings",
+		"/C/Users/will/AppData/Roaming/Sublime Text 3/Packages/User/LuaLove.sublime-settings",
+		"/C/Users/will/AppData/Roaming/Sublime Text 3/Installed Packages/untitled.sublime-build",
+		"/C/Users/will/AppData/Roaming/Sublime Text 3/Installed Packages/Lua Love.sublime-package",
+		"/S/OneDrive/Programming/Love/space-rts/conf.lua",
+		"/C/Users/will/AppData/Roaming/Sublime Text 3/Packages/User/Preferences.sublime-settings"
+	],
+	"find":
+	{
+		"height": 70.0
+	},
+	"find_in_files":
+	{
+		"height": 0.0,
+		"where_history":
+		[
+		]
+	},
+	"find_state":
+	{
+		"case_sensitive": false,
+		"find_history":
+		[
+			"threshold",
+			"exp",
+			"exp (",
+			"exp(",
+			"exp",
+			"bp",
+			"signalSum",
+			"seed",
+			"cell",
+			"51",
+			"250",
+			"385",
+			"415",
+			"65",
+			"75",
+			"0.5",
+			"signal",
+			"1",
+			"100",
+			"print",
+			"numCreratures",
+			"seed",
+			"cell",
+			"mutateNetwork",
+			"newNetwork",
+			"print",
+			"mutateNe",
+			"startingPosition",
+			"startP",
+			"timeWarp",
+			"numCreatures",
+			"cells",
+			"numCreatures",
+			"score",
+			"local",
+			"strength",
+			"currentNetwork",
+			"Limbs",
+			"limbs",
+			"Limbs",
+			"lastFrameInput",
+			"network",
+			"Network",
+			"network",
+			"Network",
+			"network",
+			"Network",
+			"network",
+			"Network",
+			"network",
+			"Network",
+			"network",
+			"walker",
+			" + (love.math.random() - 0.5) / 10",
+			" + (love.math.random() - 0.5) / 10,",
+			"8",
+			"getAngle",
+			"sex",
+			"ham[^\\t]",
+			"19",
+			"getJointAngle",
+			"0.5 - ",
+			"inputs",
+			"(1 - ",
+			"25",
+			"1 - (",
+			"1 - ",
+			"25",
+			"1 - ",
+			" - 0.1",
+			"001",
+			"1 -",
+			"torsoStartingPosition",
+			"4",
+			"positionLastFrame",
+			"getH",
+			"getX",
+			"getAngle()",
+			" - 0.5",
+			" - 0.1",
+			" - 0.5",
+			":",
+			"getPosition",
+			" - 0.5",
+			"window",
+			", 0, 0",
+			"leftKnee",
+			"rightKnee",
+			"10",
+			"300",
+			"r2",
+			"r1",
+			"l2",
+			"l1",
+			"Leg",
+			"l2",
+			"r2",
+			"r1",
+			"l1",
+			"390",
+			"410",
+			"200",
+			"j = ",
+			"400",
+			"0.5",
+			"function love.",
+			"v",
+			"nearest",
+			"0.",
+			"1",
+			"class",
+			"ship[r][c]",
+			"}",
+			"{"
+		],
+		"highlight": true,
+		"in_selection": false,
+		"preserve_case": false,
+		"regex": false,
+		"replace_history":
+		[
+		],
+		"reverse": false,
+		"show_context": true,
+		"use_buffer2": true,
+		"whole_word": false,
+		"wrap": true
+	},
+	"groups":
+	[
+		{
+			"selected": 0,
+			"sheets":
+			[
+				{
+					"buffer": 0,
+					"file": "main.lua",
+					"semi_transient": false,
+					"settings":
+					{
+						"buffer_size": 548,
+						"regions":
+						{
+						},
+						"selection":
+						[
+							[
+								261,
+								261
+							]
+						],
+						"settings":
+						{
+							"syntax": "Packages/Lua/Lua.tmLanguage"
+						},
+						"translation.x": 0.0,
+						"translation.y": 0.0,
+						"zoom_level": 1.0
+					},
+					"stack_index": 0,
+					"type": "text"
+				}
+			]
+		}
+	],
+	"incremental_find":
+	{
+		"height": 33.0
+	},
+	"input":
+	{
+		"height": 43.0
+	},
+	"layout":
+	{
+		"cells":
+		[
+			[
+				0,
+				0,
+				1,
+				1
+			]
+		],
+		"cols":
+		[
+			0.0,
+			1.0
+		],
+		"rows":
+		[
+			0.0,
+			1.0
+		]
+	},
+	"menu_visible": false,
+	"output.exec":
+	{
+		"height": 353.0
+	},
+	"output.find_results":
+	{
+		"height": 0.0
+	},
+	"pinned_build_system": "Packages/Lua Love/LuaLove.sublime-build",
+	"project": "android.sublime-project",
+	"replace":
+	{
+		"height": 62.0
+	},
+	"save_all_on_build": true,
+	"select_file":
+	{
+		"height": 0.0,
+		"last_filter": "",
+		"selected_items":
+		[
+		],
+		"width": 0.0
+	},
+	"select_project":
+	{
+		"height": 1000.0,
+		"last_filter": "",
+		"selected_items":
+		[
+			[
+				"",
+				"C:\\Users\\will\\OneDrive\\Programming\\Love\\moons\\moonscript.sublime-project"
+			]
+		],
+		"width": 760.0
+	},
+	"select_symbol":
+	{
+		"height": 0.0,
+		"last_filter": "",
+		"selected_items":
+		[
+		],
+		"width": 0.0
+	},
+	"selected_group": 0,
+	"settings":
+	{
+	},
+	"show_minimap": true,
+	"show_open_files": false,
+	"show_tabs": true,
+	"side_bar_visible": true,
+	"side_bar_width": 349.0,
+	"status_bar_visible": false,
+	"template_settings":
+	{
+	}
+}
