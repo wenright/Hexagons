@@ -27,15 +27,24 @@ function Entities:draw()
 	end
 end
 
+function Entities:pointerdown(x, y)
+	x, y = Camera:worldCoords(x, y)
+	for _, entity in pairs(self.pool) do
+		entity:pointerdown(x, y, dx, dy)
+	end
+end
+
 function Entities:pointermoved(x, y, dx, dy)
+	x, y = Camera:worldCoords(x, y)
 	for _, entity in pairs(self.pool) do
 		entity:pointermoved(x, y, dx, dy)
 	end
 end
 
-function Entities:pointerreleased()
+function Entities:pointerreleased(x, y)
+	x, y = Camera:worldCoords(x, y)
 	for _, entity in pairs(self.pool) do
-		entity:pointerreleased()
+		entity:pointerreleased(x, y)
 	end
 end
 

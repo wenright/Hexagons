@@ -9,13 +9,28 @@ local Hexagon = Class {
 		
 		self.drawX, self.drawY = Game.hexSize * (y - x) * math.sqrt(3) / 2 * startMargin, Game.hexSize * ((y + x) / 2 - z) * startMargin
 		Timer.tween(tweenTime, self, {
-			drawX = Game.hexSize * (y - x) * math.sqrt(3) / 2 * endMargin,
-			drawY = Game.hexSize * ((y + x) / 2 - z) * endMargin
-		}, 'out-expo')
+				drawX = Game.hexSize * (y - x) * math.sqrt(3) / 2 * endMargin,
+				drawY = Game.hexSize * ((y + x) / 2 - z) * endMargin
+			},
+			'out-expo',
+			function()
+				self.ready = true
+			end)
 
-		self.color = {255, 55, 20}
-		self.selectedColor = {255, 255, 250}
+		-- self.color = {255, 55, 20}
+		self.color = {
+			love.math.random() * 255,
+			love.math.random() * 255,
+			love.math.random() * 255
+		}
+		self.selectedColor = {
+			self.color[1] + 100,
+			self.color[2] + 100,
+			self.color[3] + 100
+		}
+
 		self.selected = false
+		self.ready = false
 	end,
 
 	vertices = {
@@ -38,13 +53,13 @@ local Hexagon = Class {
 		math.sin(math.rad(60 * 5 + offset)) * Game.hexSize,
 	},
 
-	direcetions = {
-		NW = { 0, -1,  1},
-		W  = { 1, -1,  0},
-		SW = { 1,  0, -1},
-		SE = { 0,  1, -1},
-		E  = {-1,  1,  0},
-		NE = {-1,  0,  1}
+	directions = {
+		NW = {x =  0, y = -1, z =  1},
+		W  = {x =  1, y = -1, z =  0},
+		SW = {x =  1, y =  0, z = -1},
+		SE = {x =  0, y =  1, z = -1},
+		E  = {x = -1, y =  1, z =  0},
+		NE = {x = -1, y =  0, z =  1}
 	},
 
 	type = 'hexagon'
@@ -59,36 +74,76 @@ function Hexagon:draw()
 
 	love.graphics.translate(self.drawX, self.drawY)
 
-	-- This allows for filled polygons while still anti-aliasing without having to use full screen anti-aliasing
-	-- 	(Lines are anti-aliased automatically, fills are not)
-	if self.selected then
+	if self.selected or Game.selectedHexagon == self then
 		love.graphics.setColor(self.selectedColor)
-		love.graphics.polygon('line', Hexagon.vertices)
 	else
 		love.graphics.setColor(self.color)
-		love.graphics.polygon('line', Hexagon.vertices)
 	end
 
-	-- love.graphics.print(self.key)
-	love.graphics.print(self.x..','..self.y..'\n'..self.z, -10, -20)
-
-	-- Fill looks kind of bad because it extends over what it's supposed to 
-	-- love.graphics.polygon('fill', Hexagon.vertices)
+	-- This allows for filled polygons while still anti-aliasing without having to use full screen anti-aliasing
+	-- 	(Lines are anti-aliased automatically, fills are not)
+	love.graphics.polygon('fill', Hexagon.vertices)
+	love.graphics.polygon('line', Hexagon.vertices)
 
 	love.graphics.pop()
 end
 
-function Hexagon:pointermoved(x, y, dx, dy)
-	local mx, my = Camera:mousePosition()
-	self.selected = math.sqrt((self.drawX - mx)^2 + (self.drawY - my)^2) < Game.hexSize - 5
+function Hexagon:pointerdown(x, y)
+	if self.ready and not Game.selectedHexagon and self:checkCollision(x, y) then
+		Game.selectedHexagon = self
+		self.selected = true
+	end
 end
 
-function Hexagon:pointerreleased()
+function Hexagon:pointermoved(x, y, dx, dy)
+	-- Check if user has dragged pointer
+	if self.ready and Game.selectedHexagon and self:checkCollision(x, y) and self:isNeighbour(Game.selectedHexagon) then
+		self.selected = true
+	else
+		self.selected = false
+	end
+end
+
+function Hexagon:pointerreleased(x, y)
+	if self.ready and self.selected and Game.selectedHexagon and self ~= Game.selectedHexagon then
+		self:swap(Game.selectedHexagon)
+	end
+
 	self.selected = false
 end
 
 function Hexagon:equals(other)
 	return self.x == other.x and self.y == other.y and self.z == other.z
+end
+
+function Hexagon:isNeighbour(other)
+	for _, dir in pairs(Hexagon.directions) do
+		if self.x + dir.x == other.x and self.y + dir.y == other.y and self.z + dir.z == other.z then
+			return true
+		end
+	end
+
+	return false
+end
+
+function Hexagon:swap(other)
+	self.ready, other.ready = false, false
+
+	self.x, other.x = other.x, self.x
+	self.y, other.y = other.y, self.y 
+	self.z, other.z = other.z, self.z
+
+	-- TODO what happens when user tries to move during tween? currently we wait til done tweening, but feels laggy
+	-- 		Could just rememberr user wants to move a hex, then move once done tweening
+	local speed = 0.2
+	local tweenFunc = 'in-out-quad'
+
+	Timer.tween(speed, self, {drawX = other.drawX, drawY = other.drawY}, tweenFunc, function() self.ready = true end)
+	Timer.tween(speed, other, {drawX = self.drawX, drawY = self.drawY}, tweenFunc, function() other.ready = true end)
+end
+
+function Hexagon:checkCollision(x, y)
+	return math.sqrt((self.drawX - x)^2 + (self.drawY - y)^2) < Game.hexSize - 5
 end
 
 return Hexagon

@@ -1,6 +1,7 @@
 local Game = {
 	gridRadius = 3,
-	hexSize = 40
+	hexSize = 50,
+	selectedHexagon = nil
 }
 
 function Game:init()
@@ -32,7 +33,11 @@ function Game:draw()
 end
 
 function Game:touchpressed(id, x, y)
+	Game.hexagons:pointerdown(x, y)
+end
 
+function Game:mousepressed(x, y)
+	Game.hexagons:pointerdown(x, y)
 end
 
 function Game:touchmoved(id, x, y, dx, dy)
@@ -45,8 +50,14 @@ function Game:mousemoved(x, y, dx, dy)
 	end
 end
 
-function Game:mousereleased()
-	Game.hexagons:pointerreleased()
+function Game:touchreleased(x, y)
+	Game.hexagons:pointerreleased(x, y)
+	Game.selectedHexagon = nil
+end
+
+function Game:mousereleased(x, y)
+	Game.hexagons:pointerreleased(x, y)
+	Game.selectedHexagon = nil
 end
 
 return Game
