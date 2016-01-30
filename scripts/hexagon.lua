@@ -27,14 +27,6 @@ local Hexagon = Class {
 
 		-- self.color = {255, 55, 20}
 		self.color = colors[love.math.random(#colors)]
-		self.selectedColor = {
-			self.color[1] + 55,
-			self.color[2] + 55,
-			self.color[3] + 55
-		}
-
-		self.selected = false
-		self.ready = false
 	end,
 
 	vertices = {
@@ -77,12 +69,7 @@ function Hexagon:draw()
 	love.graphics.push()
 
 	love.graphics.translate(self.drawX, self.drawY)
-
-	if self.selected or Game.selectedHexagon == self then
-		love.graphics.setColor(self.selectedColor)
-	else
-		love.graphics.setColor(self.color)
-	end
+	love.graphics.setColor(self.color)
 
 	-- This allows for filled polygons while still anti-aliasing without having to use full screen anti-aliasing
 	-- 	(Lines are anti-aliased automatically, fills are not)

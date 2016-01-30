@@ -1,7 +1,8 @@
 local Game = {
 	gridRadius = 3,
 	hexSize = 50,
-	selectedHexagon = nil
+	selectedHexagon = nil,
+	pointerStart = {x = 0, y = 0}
 }
 
 function Game:init()
@@ -23,7 +24,7 @@ function Game:init()
 end
 
 function Game:update(dt)
-	Game.hexagons:update(dtZZ)
+	Game.hexagons:update(dt)
 end
 
 function Game:draw()
@@ -32,34 +33,53 @@ function Game:draw()
 	Game.hexagons:draw()
 
 	Camera:detach()
+
+	-- love.graphics.setColor(255, 255, 255, 100)
+	-- love.graphics.circle('line', Game.pointerStart.x, Game.pointerStart.y, 10, 50)
 end
 
 function Game:touchpressed(id, x, y)
-	Game.hexagons:pointerdown(x, y)
-end
-
-function Game:mousepressed(x, y)
-	Game.hexagons:pointerdown(x, y)
-end
-
-function Game:touchmoved(id, x, y, dx, dy)
-	Game.hexagons:pointermoved(x, y, dx, dy)
-end
-
-function Game:mousemoved(x, y, dx, dy)
-	if love.mouse.isDown(1) then
-		Game.hexagons:pointermoved(x, y, dx, dy)
-	end
+	Game.pointerStart = {x = x, y = y}
 end
 
 function Game:touchreleased(id, x, y)
-	Game.hexagons:pointerreleased(x, y)
-	Game.selectedHexagon = nil
+
+end
+
+function Game:mousepressed(x, y)
+	Game.pointerStart = {x = x, y = y}
 end
 
 function Game:mousereleased(x, y)
-	Game.hexagons:pointerreleased(x, y)
-	Game.selectedHexagon = nil
+	local dx, dy = Game.pointerStart.x - x, Game.pointerStart.y - y
+	local dist = math.sqrt(dx^2 + dy^2)
+
+	if dist > 30 then
+		local v1, v2 = -dx/dist, dy/dist
+
+		if between(v1, 0, 1) and between(v2, 0.5, 1) then
+			-- Slide hexagons starting a pointerStart up and to the right
+
+			print('NE')
+		elseif between(v1, 0, 1) and between(v2, -0.5, 0.5) then
+			print('E')
+		elseif between(v1, 0, 1) and between(v2, -0.5, -1) then
+			print('SE')
+		elseif between(v1, 0, -1) and between(v2, -0.5, -1) then
+			print('SW')
+		elseif between(v1, 0, -1) and between(v2, -0.5, 0.5) then
+			print('W')
+		elseif between(v1, 0, -1) and between(v2, 0.5, 1) then
+			print('NW')
+		end
+
+		print(v1, v2)
+	end
+end
+
+function between(x, first, second)
+
+	return x >= first and x <= second or x <= first and x >= second
 end
 
 return Game
