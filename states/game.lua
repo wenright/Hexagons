@@ -17,6 +17,8 @@ function Game:init()
 		end
 	end
 
+	love.graphics.setBackgroundColor(52,56,62)
+
 	print('Game loaded')
 end
 
@@ -50,7 +52,7 @@ function Game:mousemoved(x, y, dx, dy)
 	end
 end
 
-function Game:touchreleased(x, y)
+function Game:touchreleased(id, x, y)
 	Game.hexagons:pointerreleased(x, y)
 	Game.selectedHexagon = nil
 end

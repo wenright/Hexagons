@@ -43,6 +43,7 @@ end
 
 function Entities:pointerreleased(x, y)
 	x, y = Camera:worldCoords(x, y)
+	
 	for _, entity in pairs(self.pool) do
 		entity:pointerreleased(x, y)
 	end

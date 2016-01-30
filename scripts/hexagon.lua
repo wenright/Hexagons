@@ -1,7 +1,15 @@
 local offset = 30
 local startMargin = 2
 local endMargin = 1.1
-local tweenTime = 2
+local tweenTime = 1
+
+local colors = {
+	{85, 98, 112},    -- grey
+	{78, 205, 196},   -- blue
+	{199, 244, 100},  -- green
+	{255, 107, 107},  -- pink
+	-- {196, 77, 88}  -- red
+}
 
 local Hexagon = Class {
 	init = function(self, x, y, z)
@@ -18,15 +26,11 @@ local Hexagon = Class {
 			end)
 
 		-- self.color = {255, 55, 20}
-		self.color = {
-			love.math.random() * 255,
-			love.math.random() * 255,
-			love.math.random() * 255
-		}
+		self.color = colors[love.math.random(#colors)]
 		self.selectedColor = {
-			self.color[1] + 100,
-			self.color[2] + 100,
-			self.color[3] + 100
+			self.color[1] + 55,
+			self.color[2] + 55,
+			self.color[3] + 55
 		}
 
 		self.selected = false
@@ -86,30 +90,6 @@ function Hexagon:draw()
 	love.graphics.polygon('line', Hexagon.vertices)
 
 	love.graphics.pop()
-end
-
-function Hexagon:pointerdown(x, y)
-	if self.ready and not Game.selectedHexagon and self:checkCollision(x, y) then
-		Game.selectedHexagon = self
-		self.selected = true
-	end
-end
-
-function Hexagon:pointermoved(x, y, dx, dy)
-	-- Check if user has dragged pointer
-	if self.ready and Game.selectedHexagon and self:checkCollision(x, y) and self:isNeighbour(Game.selectedHexagon) then
-		self.selected = true
-	else
-		self.selected = false
-	end
-end
-
-function Hexagon:pointerreleased(x, y)
-	if self.ready and self.selected and Game.selectedHexagon and self ~= Game.selectedHexagon then
-		self:swap(Game.selectedHexagon)
-	end
-
-	self.selected = false
 end
 
 function Hexagon:equals(other)
