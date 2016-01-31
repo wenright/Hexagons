@@ -27,6 +27,15 @@ function Entities:draw()
 	end
 end
 
+function Entities:getAtPoint(x, y)
+	x, y = Camera:worldCoords(x, y)
+	for _, entity in pairs(self.pool) do
+		if entity:checkCollision(x, y) then
+			return entity
+		end
+	end
+end
+
 function Entities:pointerdown(x, y)
 	x, y = Camera:worldCoords(x, y)
 	for _, entity in pairs(self.pool) do
@@ -46,6 +55,12 @@ function Entities:pointerreleased(x, y)
 	
 	for _, entity in pairs(self.pool) do
 		entity:pointerreleased(x, y)
+	end
+end
+
+function Entities:forEach(func)
+	for _, entity in pairs(self.pool) do
+		func(entity)
 	end
 end
 

@@ -2,18 +2,22 @@ local Game = {
 	gridRadius = 3,
 	hexSize = 50,
 	selectedHexagon = nil,
-	pointerStart = {x = 0, y = 0}
+	pointerStart = {x = 0, y = 0},
+	canMove = true
 }
 
 function Game:init()
 	print('Creating hexagons...')
 	Game.hexagons = Entities(Hexagon)
+	Game.hexagonReference = {}
 
 	for x = -Game.gridRadius, Game.gridRadius do
+		Game.hexagonReference[x] = {}
 		for y = -Game.gridRadius, Game.gridRadius  do
+			Game.hexagonReference[x][y] = {}
 			local z = -x + -y
 			if math.abs(x) <= Game.gridRadius and math.abs(y) <= Game.gridRadius and math.abs(z) <= Game.gridRadius then
-				Game.hexagons:add(x, y, z)
+				Game.hexagonReference[x][y][z] = Game.hexagons:add(x, y, z)
 			end
 		end
 	end
@@ -54,31 +58,34 @@ function Game:mousereleased(x, y)
 	local dx, dy = Game.pointerStart.x - x, Game.pointerStart.y - y
 	local dist = math.sqrt(dx^2 + dy^2)
 
-	if dist > 30 then
+	if dist > 30 and Game.canMove then
 		local v1, v2 = -dx/dist, dy/dist
 
+		Game.canMove = false
+
+		-- Slide hexagons based on the direction that the user swiped
+		-- TODO: lerp the one that moves around by create a new one then destroying the old one,
+		-- 			So that it looks like a new one came from the other side 
 		if between(v1, 0, 1) and between(v2, 0.5, 1) then
-			-- Slide hexagons starting a pointerStart up and to the right
-
-			print('NE')
+			Hexagon.slideHexagons('y', true)
 		elseif between(v1, 0, 1) and between(v2, -0.5, 0.5) then
-			print('E')
+			Hexagon.slideHexagons('z', false)
 		elseif between(v1, 0, 1) and between(v2, -0.5, -1) then
-			print('SE')
+			Hexagon.slideHexagons('x', false)
 		elseif between(v1, 0, -1) and between(v2, -0.5, -1) then
-			print('SW')
+			Hexagon.slideHexagons('y', false)
 		elseif between(v1, 0, -1) and between(v2, -0.5, 0.5) then
-			print('W')
+			Hexagon.slideHexagons('z', true)
 		elseif between(v1, 0, -1) and between(v2, 0.5, 1) then
-			print('NW')
+			Hexagon.slideHexagons('x', true)
+		else
+			-- The user must have missed all hexagons, so allow moving again
+			Game.canMove = true
 		end
-
-		print(v1, v2)
 	end
 end
 
 function between(x, first, second)
-
 	return x >= first and x <= second or x <= first and x >= second
 end
 

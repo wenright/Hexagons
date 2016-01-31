@@ -14,16 +14,15 @@ local colors = {
 local Hexagon = Class {
 	init = function(self, x, y, z)
 		self.x, self.y, self.z = x, y, z
-		
-		self.drawX, self.drawY = Game.hexSize * (y - x) * math.sqrt(3) / 2 * startMargin, Game.hexSize * ((y + x) / 2 - z) * startMargin
+
+		self.drawX = Game.hexSize * (y - x) * math.sqrt(3) / 2 * startMargin
+		self.drawY = Game.hexSize * ((y + x) / 2 - z) * startMargin
+
 		Timer.tween(tweenTime, self, {
 				drawX = Game.hexSize * (y - x) * math.sqrt(3) / 2 * endMargin,
 				drawY = Game.hexSize * ((y + x) / 2 - z) * endMargin
 			},
-			'out-expo',
-			function()
-				self.ready = true
-			end)
+			'out-expo')
 
 		-- self.color = {255, 55, 20}
 		self.color = colors[love.math.random(#colors)]
@@ -76,6 +75,9 @@ function Hexagon:draw()
 	love.graphics.polygon('fill', Hexagon.vertices)
 	love.graphics.polygon('line', Hexagon.vertices)
 
+	love.graphics.setColor(0, 0, 0)
+	love.graphics.print(self.x..' '..self.y..'\n '..self.z)
+
 	love.graphics.pop()
 end
 
@@ -94,23 +96,97 @@ function Hexagon:isNeighbour(other)
 end
 
 function Hexagon:swap(other)
-	self.ready, other.ready = false, false
-
 	self.x, other.x = other.x, self.x
 	self.y, other.y = other.y, self.y 
 	self.z, other.z = other.z, self.z
 
-	-- TODO what happens when user tries to move during tween? currently we wait til done tweening, but feels laggy
-	-- 		Could just rememberr user wants to move a hex, then move once done tweening
 	local speed = 0.2
 	local tweenFunc = 'in-out-quad'
 
-	Timer.tween(speed, self, {drawX = other.drawX, drawY = other.drawY}, tweenFunc, function() self.ready = true end)
-	Timer.tween(speed, other, {drawX = self.drawX, drawY = self.drawY}, tweenFunc, function() other.ready = true end)
+	Timer.tween(speed, self, {drawX = other.drawX, drawY = other.drawY}, tweenFunc)
+	Timer.tween(speed, other, {drawX = self.drawX, drawY = self.drawY}, tweenFunc)
+end
+
+function Hexagon:move(dir)
+	dir = Hexagon.directions[dir]
+	assert(dir, 'That direction doesn\'t exist')
+
+	self.x = self.x + dir.x
+	self.y = self.y + dir.y
+	self.z = self.z + dir.z
+
+	self:setWorldCoordinates(self.x, self.y, self.z, endMargin)
+end
+
+function Hexagon:moveTo(x, y, z)
+	self.x = x
+	self.y = y
+	self.z = z
+
+	self:setWorldCoordinates(x, y, z, endMargin)
+end
+
+function Hexagon:setWorldCoordinates(x, y, z, margin)
+	local newDrawX = Game.hexSize * (y - x) * math.sqrt(3) / 2 * margin
+	local newDrawY = Game.hexSize * ((y + x) / 2 - z) * margin
+
+	Timer.tween(0.2, self, {
+			drawX = newDrawX,
+			drawY = newDrawY
+		},
+		'in-out-quad',
+		function() Game.canMove = true end)
 end
 
 function Hexagon:checkCollision(x, y)
 	return math.sqrt((self.drawX - x)^2 + (self.drawY - y)^2) < Game.hexSize - 5
+end
+
+function Hexagon.slideHexagons(axis, inverted)
+	local hoverHex = Game.hexagons:getAtPoint(Game.pointerStart.x, Game.pointerStart.y);
+	if hoverHex then
+		local hexAxis = hoverHex[axis]
+		local prevHex = hoverHex
+
+		local hexes = {}
+
+		-- First, collect the hexes we will be modifying
+		Game.hexagons:forEach(function(hex)
+			if hex[axis] == hexAxis then
+				table.insert(hexes, hex)
+			end
+		end)
+
+		-- Then sort them so that they can lerp in the right order
+		table.sort(hexes, function(a, b)
+			if inverted then
+				if axis == 'y' then
+					return a.x < b.x 
+				else
+					return a.y < b.y
+				end
+			else
+				if axis == 'y' then
+					return a.x > b.x 
+				else
+					return a.y > b.y
+				end
+			end
+		end)
+
+		prevHex = hexes[#hexes]
+		for _, hex in pairs(hexes) do
+			hex.tx = prevHex.x
+			hex.ty = prevHex.y
+			hex.tz = prevHex.z
+
+			prevHex = hex
+		end
+
+		for _, hex in pairs(hexes) do
+			hex:moveTo(hex.tx, hex.ty, hex.tz)
+		end
+	end
 end
 
 return Hexagon
