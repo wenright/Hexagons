@@ -75,9 +75,6 @@ function Hexagon:draw()
 	love.graphics.polygon('fill', Hexagon.vertices)
 	love.graphics.polygon('line', Hexagon.vertices)
 
-	love.graphics.setColor(0, 0, 0)
-	love.graphics.print(self.x..' '..self.y..'\n '..self.z)
-
 	love.graphics.pop()
 end
 
@@ -143,6 +140,7 @@ function Hexagon:checkCollision(x, y)
 end
 
 function Hexagon.slideHexagons(axis, inverted)
+	Game.canMove = false
 	local hoverHex = Game.hexagons:getAtPoint(Game.pointerStart.x, Game.pointerStart.y);
 	if hoverHex then
 		local hexAxis = hoverHex[axis]
@@ -186,6 +184,8 @@ function Hexagon.slideHexagons(axis, inverted)
 		for _, hex in pairs(hexes) do
 			hex:moveTo(hex.tx, hex.ty, hex.tz)
 		end
+	else
+		Game.canMove = true
 	end
 end
 

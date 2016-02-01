@@ -61,8 +61,6 @@ function Game:mousereleased(x, y)
 	if dist > 30 and Game.canMove then
 		local v1, v2 = -dx/dist, dy/dist
 
-		Game.canMove = false
-
 		-- Slide hexagons based on the direction that the user swiped
 		-- TODO: lerp the one that moves around by create a new one then destroying the old one,
 		-- 			So that it looks like a new one came from the other side 
@@ -80,7 +78,6 @@ function Game:mousereleased(x, y)
 			Hexagon.slideHexagons('x', true)
 		else
 			-- The user must have missed all hexagons, so allow moving again
-			Game.canMove = true
 		end
 	end
 end
