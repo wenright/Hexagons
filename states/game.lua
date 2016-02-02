@@ -3,21 +3,29 @@ local Game = {
 	hexSize = 50,
 	selectedHexagon = nil,
 	pointerStart = {x = 0, y = 0},
-	canMove = true
+	canMove = true,
+	stencilFunction = function()
+		love.graphics.push()
+
+		-- TODO this value will depend on the gridRadius
+		love.graphics.rotate(math.rad(30))
+		love.graphics.scale(6, 6)
+
+		love.graphics.polygon('fill', Hexagon.vertices)
+		love.graphics.pop()
+	end
 }
 
 function Game:init()
 	print('Creating hexagons...')
 	Game.hexagons = Entities(Hexagon)
-	Game.hexagonReference = {}
 
 	for x = -Game.gridRadius, Game.gridRadius do
-		Game.hexagonReference[x] = {}
 		for y = -Game.gridRadius, Game.gridRadius  do
-			Game.hexagonReference[x][y] = {}
 			local z = -x + -y
 			if math.abs(x) <= Game.gridRadius and math.abs(y) <= Game.gridRadius and math.abs(z) <= Game.gridRadius then
-				Game.hexagonReference[x][y][z] = Game.hexagons:add(x, y, z)
+				local hex = Game.hexagons:add(x, y, z)
+				hex:tweenIn(2, 'out-expo')
 			end
 		end
 	end
@@ -34,7 +42,16 @@ end
 function Game:draw()
 	Camera:attach()
 
+	love.graphics.stencil(Game.stencilFunction, 'replace', 1)
+	love.graphics.setStencilTest('greater', 0)
+
+	-- This shows where the stencil is cutting off
+	-- love.graphics.setColor(28, 130, 124)
+	-- love.graphics.rectangle('fill', -1000, -1000, 2000, 2000)
+
 	Game.hexagons:draw()
+
+	love.graphics.setStencilTest()
 
 	Camera:detach()
 
@@ -65,17 +82,17 @@ function Game:mousereleased(x, y)
 		-- TODO: lerp the one that moves around by create a new one then destroying the old one,
 		-- 			So that it looks like a new one came from the other side 
 		if between(v1, 0, 1) and between(v2, 0.5, 1) then
-			Hexagon.slideHexagons('y', true)
+			Hexagon.slideHexagons('y', 'NE', true)
 		elseif between(v1, 0, 1) and between(v2, -0.5, 0.5) then
-			Hexagon.slideHexagons('z', false)
+			Hexagon.slideHexagons('z', 'E',  false)
 		elseif between(v1, 0, 1) and between(v2, -0.5, -1) then
-			Hexagon.slideHexagons('x', false)
+			Hexagon.slideHexagons('x', 'SE', false)
 		elseif between(v1, 0, -1) and between(v2, -0.5, -1) then
-			Hexagon.slideHexagons('y', false)
+			Hexagon.slideHexagons('y', 'SW', false)
 		elseif between(v1, 0, -1) and between(v2, -0.5, 0.5) then
-			Hexagon.slideHexagons('z', true)
+			Hexagon.slideHexagons('z', 'W', true)
 		elseif between(v1, 0, -1) and between(v2, 0.5, 1) then
-			Hexagon.slideHexagons('x', true)
+			Hexagon.slideHexagons('x', 'NW', true)
 		else
 			-- The user must have missed all hexagons, so allow moving again
 		end

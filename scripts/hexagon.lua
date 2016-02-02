@@ -12,20 +12,14 @@ local colors = {
 }
 
 local Hexagon = Class {
-	init = function(self, x, y, z)
+	init = function(self, x, y, z, color)
 		self.x, self.y, self.z = x, y, z
 
-		self.drawX = Game.hexSize * (y - x) * math.sqrt(3) / 2 * startMargin
-		self.drawY = Game.hexSize * ((y + x) / 2 - z) * startMargin
-
-		Timer.tween(tweenTime, self, {
-				drawX = Game.hexSize * (y - x) * math.sqrt(3) / 2 * endMargin,
-				drawY = Game.hexSize * ((y + x) / 2 - z) * endMargin
-			},
-			'out-expo')
+		self.drawX = Game.hexSize * (y - x) * math.sqrt(3) / 2 * endMargin
+		self.drawY = Game.hexSize * ((y + x) / 2 - z) * endMargin
 
 		-- self.color = {255, 55, 20}
-		self.color = colors[love.math.random(#colors)]
+		self.color = color or colors[love.math.random(#colors)]
 	end,
 
 	vertices = {
@@ -78,6 +72,19 @@ function Hexagon:draw()
 	love.graphics.pop()
 end
 
+function Hexagon:tweenIn(time, func)
+	local x, y, z = self.x, self.y, self.z
+
+	self.drawX = Game.hexSize * (y - x) * math.sqrt(3) / 2 * startMargin
+	self.drawY = Game.hexSize * ((y + x) / 2 - z) * startMargin
+
+	Timer.tween(time, self, {
+		drawX = Game.hexSize * (y - x) * math.sqrt(3) / 2 * endMargin,
+		drawY = Game.hexSize * ((y + x) / 2 - z) * endMargin
+	},
+	func)
+end
+
 function Hexagon:equals(other)
 	return self.x == other.x and self.y == other.y and self.z == other.z
 end
@@ -104,7 +111,7 @@ function Hexagon:swap(other)
 	Timer.tween(speed, other, {drawX = self.drawX, drawY = self.drawY}, tweenFunc)
 end
 
-function Hexagon:move(dir)
+function Hexagon:move(dir, remove)
 	dir = Hexagon.directions[dir]
 	assert(dir, 'That direction doesn\'t exist')
 
@@ -112,7 +119,7 @@ function Hexagon:move(dir)
 	self.y = self.y + dir.y
 	self.z = self.z + dir.z
 
-	self:setWorldCoordinates(self.x, self.y, self.z, endMargin)
+	self:setWorldCoordinates(self.x, self.y, self.z, endMargin, remove)
 end
 
 function Hexagon:moveTo(x, y, z)
@@ -123,7 +130,7 @@ function Hexagon:moveTo(x, y, z)
 	self:setWorldCoordinates(x, y, z, endMargin)
 end
 
-function Hexagon:setWorldCoordinates(x, y, z, margin)
+function Hexagon:setWorldCoordinates(x, y, z, margin, remove)
 	local newDrawX = Game.hexSize * (y - x) * math.sqrt(3) / 2 * margin
 	local newDrawY = Game.hexSize * ((y + x) / 2 - z) * margin
 
@@ -132,14 +139,20 @@ function Hexagon:setWorldCoordinates(x, y, z, margin)
 			drawY = newDrawY
 		},
 		'in-out-quad',
-		function() Game.canMove = true end)
+		function() 
+			Game.canMove = true
+
+			if remove then
+				Game.hexagons:remove(self)
+			end
+		end)
 end
 
 function Hexagon:checkCollision(x, y)
 	return math.sqrt((self.drawX - x)^2 + (self.drawY - y)^2) < Game.hexSize - 5
 end
 
-function Hexagon.slideHexagons(axis, inverted)
+function Hexagon.slideHexagons(axis, dir, inverted)
 	Game.canMove = false
 	local hoverHex = Game.hexagons:getAtPoint(Game.pointerStart.x, Game.pointerStart.y);
 	if hoverHex then
@@ -182,7 +195,17 @@ function Hexagon.slideHexagons(axis, inverted)
 		end
 
 		for _, hex in pairs(hexes) do
-			hex:moveTo(hex.tx, hex.ty, hex.tz)
+			-- Find the one that has to move around the map, and duplicate/teleport it
+			if math.abs(hex.x - hex.tx) > 1 or math.abs(hex.y - hex.ty) > 1 or math.abs(hex.z - hex.tz) > 1 then
+				local newHex = Game.hexagons:add(hex.tx, hex.ty, hex.tz, hex.color)
+				newHex:tweenIn(0.2, 'in-out-quad')
+
+				-- Move this new hex up a little, then remove it when done
+				-- TODO
+				hex:move(dir, true)
+			else
+				hex:moveTo(hex.tx, hex.ty, hex.tz)
+			end
 		end
 	else
 		Game.canMove = true

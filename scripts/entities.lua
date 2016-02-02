@@ -15,6 +15,14 @@ function Entities:add(...)
 	return obj
 end
 
+function Entities:remove(e)
+	for key, entity in pairs(self.pool) do
+		if entity == e then
+			self.pool[key] = nil
+		end
+	end
+end
+
 function Entities:update(dt)
 	for _, entity in pairs(self.pool) do
 		entity:update(dt)
