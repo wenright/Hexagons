@@ -152,10 +152,28 @@ function Hexagon:checkCollision(x, y)
 	return math.sqrt((self.drawX - x)^2 + (self.drawY - y)^2) < Game.hexSize - 5
 end
 
+function Hexagon:checkForWin()
+	local won = true
+	local c = 0
+
+	Game.hexagons:forEach(function(hex)
+
+		if hex:isNeighbour(self) then
+			c = c + 1
+			if hex.color ~= self.color then
+				won = false
+			end
+		end
+	end)
+
+	return won and c == 6
+end
+
 function Hexagon.slideHexagons(axis, dir, inverted)
 	Game.canMove = false
 	local hoverHex = Game.hexagons:getAtPoint(Game.pointerStart.x, Game.pointerStart.y);
 	if hoverHex then
+		local slideTweenTime = 0.2
 		local hexAxis = hoverHex[axis]
 		local prevHex = hoverHex
 
@@ -198,7 +216,7 @@ function Hexagon.slideHexagons(axis, dir, inverted)
 			-- Find the one that has to move around the map, and duplicate/teleport it
 			if math.abs(hex.x - hex.tx) > 1 or math.abs(hex.y - hex.ty) > 1 or math.abs(hex.z - hex.tz) > 1 then
 				local newHex = Game.hexagons:add(hex.tx, hex.ty, hex.tz, hex.color)
-				newHex:tweenIn(0.2, 'in-out-quad')
+				newHex:tweenIn(slideTweenTime, 'in-out-quad')
 
 				-- Move this new hex up a little, then remove it when done
 				-- TODO
@@ -207,6 +225,14 @@ function Hexagon.slideHexagons(axis, dir, inverted)
 				hex:moveTo(hex.tx, hex.ty, hex.tz)
 			end
 		end
+
+		Timer.after(slideTweenTime, function()
+			Game.hexagons:forEach(function(hex)
+				if hex:checkForWin() then
+					Game.over = true
+				end
+			end)
+		end)
 	else
 		Game.canMove = true
 	end

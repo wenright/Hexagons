@@ -1,15 +1,18 @@
 local Game = {
-	gridRadius = 3,
+	gridRadius = 2,
 	hexSize = 50,
 	selectedHexagon = nil,
 	pointerStart = {x = 0, y = 0},
 	canMove = true,
+	over = false,
 	stencilFunction = function()
 		love.graphics.push()
 
 		-- TODO this value will depend on the gridRadius
 		love.graphics.rotate(math.rad(30))
-		love.graphics.scale(6, 6)
+
+		local scale = 5
+		love.graphics.scale(scale)
 
 		love.graphics.polygon('fill', Hexagon.vertices)
 		love.graphics.pop()
@@ -25,7 +28,7 @@ function Game:init()
 			local z = -x + -y
 			if math.abs(x) <= Game.gridRadius and math.abs(y) <= Game.gridRadius and math.abs(z) <= Game.gridRadius then
 				local hex = Game.hexagons:add(x, y, z)
-				hex:tweenIn(2, 'out-expo')
+				hex:tweenIn(1, 'out-expo')
 			end
 		end
 	end
@@ -40,23 +43,25 @@ function Game:update(dt)
 end
 
 function Game:draw()
-	Camera:attach()
+	if not Game.over then
+		Camera:attach()
 
-	love.graphics.stencil(Game.stencilFunction, 'replace', 1)
-	love.graphics.setStencilTest('greater', 0)
+		love.graphics.stencil(Game.stencilFunction, 'replace', 1)
+		love.graphics.setStencilTest('greater', 0)
 
-	-- This shows where the stencil is cutting off
-	-- love.graphics.setColor(28, 130, 124)
-	-- love.graphics.rectangle('fill', -1000, -1000, 2000, 2000)
+		-- This shows where the stencil is cutting off
+		-- love.graphics.setColor(28, 130, 124)
+		-- love.graphics.rectangle('fill', -1000, -1000, 2000, 2000)
 
-	Game.hexagons:draw()
+		Game.hexagons:draw()
 
-	love.graphics.setStencilTest()
+		love.graphics.setStencilTest()
 
-	Camera:detach()
-
-	-- love.graphics.setColor(255, 255, 255, 100)
-	-- love.graphics.circle('line', Game.pointerStart.x, Game.pointerStart.y, 10, 50)
+		Camera:detach()
+	else
+		love.graphics.setColor(255, 255, 255)
+		love.graphics.print('You won!')
+	end
 end
 
 function Game:touchpressed(id, x, y)
