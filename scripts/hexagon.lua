@@ -215,11 +215,13 @@ function Hexagon.slideHexagons(axis, dir, inverted)
 		for _, hex in pairs(hexes) do
 			-- Find the one that has to move around the map, and duplicate/teleport it
 			if math.abs(hex.x - hex.tx) > 1 or math.abs(hex.y - hex.ty) > 1 or math.abs(hex.z - hex.tz) > 1 then
-				local newHex = Game.hexagons:add(hex.tx, hex.ty, hex.tz, hex.color)
-				newHex:tweenIn(slideTweenTime, 'in-out-quad')
+				local dirVal = Hexagon.directions[dir]
+				assert(dirVal)
+
+				local newHex = Game.hexagons:add(hex.tx - dirVal.x, hex.ty - dirVal.y, hex.tz - dirVal.z, hex.color)
+				newHex:moveTo(hex.tx, hex.ty, hex.tz)
 
 				-- Move this new hex up a little, then remove it when done
-				-- TODO
 				hex:move(dir, true)
 			else
 				hex:moveTo(hex.tx, hex.ty, hex.tz)

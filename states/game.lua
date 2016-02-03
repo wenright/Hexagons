@@ -60,7 +60,7 @@ function Game:draw()
 		Camera:detach()
 	else
 		love.graphics.setColor(255, 255, 255)
-		love.graphics.print('You won!')
+		love.graphics.print('You won!', love.graphics.getWidth() / 2, 100)
 	end
 end
 
