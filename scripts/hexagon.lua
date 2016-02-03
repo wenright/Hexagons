@@ -82,7 +82,10 @@ function Hexagon:tweenIn(time, func)
 		drawX = Game.hexSize * (y - x) * math.sqrt(3) / 2 * endMargin,
 		drawY = Game.hexSize * ((y + x) / 2 - z) * endMargin
 	},
-	func)
+	func,
+	function()
+		Game.started = true
+	end)
 end
 
 function Hexagon:equals(other)

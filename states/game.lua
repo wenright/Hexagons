@@ -4,6 +4,7 @@ local Game = {
 	selectedHexagon = nil,
 	pointerStart = {x = 0, y = 0},
 	canMove = true,
+	started = false,
 	over = false,
 	stencilFunction = function()
 		love.graphics.push()
@@ -43,24 +44,26 @@ function Game:update(dt)
 end
 
 function Game:draw()
-	if not Game.over then
-		Camera:attach()
+	Camera:attach()
 
+	if Game.started then
 		love.graphics.stencil(Game.stencilFunction, 'replace', 1)
 		love.graphics.setStencilTest('greater', 0)
+	end
 
-		-- This shows where the stencil is cutting off
-		-- love.graphics.setColor(28, 130, 124)
-		-- love.graphics.rectangle('fill', -1000, -1000, 2000, 2000)
+	-- This shows where the stencil is cutting off
+	-- love.graphics.setColor(28, 130, 124)
+	-- love.graphics.rectangle('fill', -1000, -1000, 2000, 2000)
 
-		Game.hexagons:draw()
+	Game.hexagons:draw()
 
-		love.graphics.setStencilTest()
+	love.graphics.setStencilTest()
 
-		Camera:detach()
-	else
+	Camera:detach()
+
+	if Game.over then
 		love.graphics.setColor(255, 255, 255)
-		love.graphics.print('You won!', love.graphics.getWidth() / 2, 100)
+		love.graphics.print('You won!', love.graphics.getWidth() / 2, love.graphics.getHeight() / 2)
 	end
 end
 
