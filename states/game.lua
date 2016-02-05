@@ -79,7 +79,29 @@ function Game:touchpressed(id, x, y)
 end
 
 function Game:touchreleased(id, x, y)
+	local dx, dy = Game.pointerStart.x - x, Game.pointerStart.y - y
+	local dist = math.sqrt(dx^2 + dy^2)
 
+	if dist > 30 and Game.canMove then
+		local v1, v2 = -dx/dist, dy/dist
+
+		-- Slide hexagons based on the direction that the user swiped
+		if between(v1, 0, 1) and between(v2, 0.5, 1) then
+			Hexagon.slideHexagons('y', 'NE', true)
+		elseif between(v1, 0, 1) and between(v2, -0.5, 0.5) then
+			Hexagon.slideHexagons('z', 'E',  false)
+		elseif between(v1, 0, 1) and between(v2, -0.5, -1) then
+			Hexagon.slideHexagons('x', 'SE', false)
+		elseif between(v1, 0, -1) and between(v2, -0.5, -1) then
+			Hexagon.slideHexagons('y', 'SW', false)
+		elseif between(v1, 0, -1) and between(v2, -0.5, 0.5) then
+			Hexagon.slideHexagons('z', 'W', true)
+		elseif between(v1, 0, -1) and between(v2, 0.5, 1) then
+			Hexagon.slideHexagons('x', 'NW', true)
+		else
+			-- The user must have missed all hexagons, so allow moving again
+		end
+	end
 end
 
 function Game:mousepressed(x, y)
@@ -94,8 +116,6 @@ function Game:mousereleased(x, y)
 		local v1, v2 = -dx/dist, dy/dist
 
 		-- Slide hexagons based on the direction that the user swiped
-		-- TODO: lerp the one that moves around by create a new one then destroying the old one,
-		-- 			So that it looks like a new one came from the other side
 		if between(v1, 0, 1) and between(v2, 0.5, 1) then
 			Hexagon.slideHexagons('y', 'NE', true)
 		elseif between(v1, 0, 1) and between(v2, -0.5, 0.5) then
