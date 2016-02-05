@@ -1,18 +1,18 @@
 local Game = {
 	gridRadius = 2,
 	hexSize = 50,
-	selectedHexagon = nil,
 	pointerStart = {x = 0, y = 0},
 	canMove = true,
 	started = false,
 	over = false,
 	stencilFunction = function()
+		Game.stencilHexagons:draw()
+
 		love.graphics.push()
 
-		-- TODO this value will depend on the gridRadius
 		love.graphics.rotate(math.rad(30))
 
-		local scale = 5
+		local scale = 4
 		love.graphics.scale(scale)
 
 		love.graphics.polygon('fill', Hexagon.vertices)
@@ -23,6 +23,7 @@ local Game = {
 function Game:init()
 	print('Creating hexagons...')
 	Game.hexagons = Entities(Hexagon)
+	Game.stencilHexagons = Entities(Hexagon)
 
 	for x = -Game.gridRadius, Game.gridRadius do
 		for y = -Game.gridRadius, Game.gridRadius  do
@@ -30,11 +31,17 @@ function Game:init()
 			if math.abs(x) <= Game.gridRadius and math.abs(y) <= Game.gridRadius and math.abs(z) <= Game.gridRadius then
 				local hex = Game.hexagons:add(x, y, z)
 				hex:tweenIn(1, 'out-expo')
+
+				-- HACK: maybe just draw hexagons manually. Maintaining a second list of hexes could break things
+				local fakeHex = Game.stencilHexagons:add(x, y, z)
+				local margin = 1.1
+				fakeHex.drawX = Game.hexSize * (y - x) * math.sqrt(3) / 2 * margin
+				fakeHex.drawY = Game.hexSize * ((y + x) / 2 - z) * margin
 			end
 		end
 	end
 
-	love.graphics.setBackgroundColor(52,56,62)
+	love.graphics.setBackgroundColor(52, 56, 62)
 
 	print('Game loaded')
 end
@@ -88,7 +95,7 @@ function Game:mousereleased(x, y)
 
 		-- Slide hexagons based on the direction that the user swiped
 		-- TODO: lerp the one that moves around by create a new one then destroying the old one,
-		-- 			So that it looks like a new one came from the other side 
+		-- 			So that it looks like a new one came from the other side
 		if between(v1, 0, 1) and between(v2, 0.5, 1) then
 			Hexagon.slideHexagons('y', 'NE', true)
 		elseif between(v1, 0, 1) and between(v2, -0.5, 0.5) then

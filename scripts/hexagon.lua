@@ -1,5 +1,5 @@
 local offset = 30
-local startMargin = 2
+local startMargin = 5
 local endMargin = 1.1
 local tweenTime = 1
 
@@ -8,7 +8,6 @@ local colors = {
 	{78, 205, 196},   -- blue
 	{199, 244, 100},  -- green
 	{255, 107, 107},  -- pink
-	-- {196, 77, 88}  -- red
 }
 
 local Hexagon = Class {
@@ -104,7 +103,7 @@ end
 
 function Hexagon:swap(other)
 	self.x, other.x = other.x, self.x
-	self.y, other.y = other.y, self.y 
+	self.y, other.y = other.y, self.y
 	self.z, other.z = other.z, self.z
 
 	local speed = 0.2
@@ -142,7 +141,7 @@ function Hexagon:setWorldCoordinates(x, y, z, margin, remove)
 			drawY = newDrawY
 		},
 		'in-out-quad',
-		function() 
+		function()
 			Game.canMove = true
 
 			if remove then
@@ -193,13 +192,13 @@ function Hexagon.slideHexagons(axis, dir, inverted)
 		table.sort(hexes, function(a, b)
 			if inverted then
 				if axis == 'y' then
-					return a.x < b.x 
+					return a.x < b.x
 				else
 					return a.y < b.y
 				end
 			else
 				if axis == 'y' then
-					return a.x > b.x 
+					return a.x > b.x
 				else
 					return a.y > b.y
 				end
@@ -234,6 +233,7 @@ function Hexagon.slideHexagons(axis, dir, inverted)
 		Timer.after(slideTweenTime, function()
 			Game.hexagons:forEach(function(hex)
 				if hex:checkForWin() then
+					print('You won!')
 					Game.over = true
 				end
 			end)
