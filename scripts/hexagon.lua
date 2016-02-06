@@ -171,76 +171,71 @@ function Hexagon:checkForWin()
 	return won and c == 6
 end
 
-function Hexagon.slideHexagons(axis, dir, inverted)
+function Hexagon.slideHexagons(axis, axisValue, dir, inverted, amount)
 	Game.canMove = false
-	local hoverHex = Game.hexagons:getAtPoint(Game.pointerStart.x, Game.pointerStart.y);
-	if hoverHex then
-		local slideTweenTime = 0.2
-		local hexAxis = hoverHex[axis]
-		local prevHex = hoverHex
 
-		local hexes = {}
+	local slideTweenTime = 0.2
+	local prevHex = hoverHex
 
-		-- First, collect the hexes we will be modifying
-		Game.hexagons:forEach(function(hex)
-			if hex[axis] == hexAxis then
-				table.insert(hexes, hex)
-			end
-		end)
+	local hexes = {}
 
-		-- Then sort them so that they can lerp in the right order
-		table.sort(hexes, function(a, b)
-			if inverted then
-				if axis == 'y' then
-					return a.x < b.x
-				else
-					return a.y < b.y
-				end
-			else
-				if axis == 'y' then
-					return a.x > b.x
-				else
-					return a.y > b.y
-				end
-			end
-		end)
-
-		prevHex = hexes[#hexes]
-		for _, hex in pairs(hexes) do
-			hex.tx = prevHex.x
-			hex.ty = prevHex.y
-			hex.tz = prevHex.z
-
-			prevHex = hex
+	-- First, collect the hexes we will be modifying
+	Game.hexagons:forEach(function(hex)
+		if hex[axis] == axisValue then
+			table.insert(hexes, hex)
 		end
+	end)
 
-		for _, hex in pairs(hexes) do
-			-- Find the one that has to move around the map, and duplicate/teleport it
-			if math.abs(hex.x - hex.tx) > 1 or math.abs(hex.y - hex.ty) > 1 or math.abs(hex.z - hex.tz) > 1 then
-				local dirVal = Hexagon.directions[dir]
-				assert(dirVal)
-
-				local newHex = Game.hexagons:add(hex.tx - dirVal.x, hex.ty - dirVal.y, hex.tz - dirVal.z, hex.color)
-				newHex:moveTo(hex.tx, hex.ty, hex.tz)
-
-				-- Move this new hex up a little, then remove it when done
-				hex:move(dir, true)
+	-- Then sort them so that they can lerp in the right order
+	table.sort(hexes, function(a, b)
+		if inverted then
+			if axis == 'y' then
+				return a.x < b.x
 			else
-				hex:moveTo(hex.tx, hex.ty, hex.tz)
+				return a.y < b.y
+			end
+		else
+			if axis == 'y' then
+				return a.x > b.x
+			else
+				return a.y > b.y
 			end
 		end
+	end)
 
-		Timer.after(slideTweenTime, function()
-			Game.hexagons:forEach(function(hex)
-				if hex:checkForWin() then
-					print('You won!')
-					Game.over = true
-				end
-			end)
-		end)
-	else
-		Game.canMove = true
+	prevHex = hexes[#hexes]
+	for _, hex in pairs(hexes) do
+		hex.tx = prevHex.x
+		hex.ty = prevHex.y
+		hex.tz = prevHex.z
+
+		prevHex = hex
 	end
+
+	for _, hex in pairs(hexes) do
+		-- Find the one that has to move around the map, and duplicate/teleport it
+		if math.abs(hex.x - hex.tx) > 1 or math.abs(hex.y - hex.ty) > 1 or math.abs(hex.z - hex.tz) > 1 then
+			local dirVal = Hexagon.directions[dir]
+			assert(dirVal)
+
+			local newHex = Game.hexagons:add(hex.tx - dirVal.x, hex.ty - dirVal.y, hex.tz - dirVal.z, hex.color)
+			newHex:moveTo(hex.tx, hex.ty, hex.tz)
+
+			-- Move this new hex up a little, then remove it when done
+			hex:move(dir, true)
+		else
+			hex:moveTo(hex.tx, hex.ty, hex.tz)
+		end
+	end
+
+	Timer.after(slideTweenTime, function()
+		Game.hexagons:forEach(function(hex)
+			if hex:checkForWin() then
+				print('You won!')
+				Game.over = true
+			end
+		end)
+	end)
 end
 
 return Hexagon
