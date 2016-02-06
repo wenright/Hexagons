@@ -124,59 +124,56 @@ function Game:mousemoved(x, y, dx, dy)
 
 		local dist = math.sqrt(dx^2 + dy^2)
 
-		if not Game.slideDirection then
-			local hoverHex = Game.hexagons:getAtPoint(Game.pointerStart.x, Game.pointerStart.y)
+		if not Game.hoverHex then
+			Game.hoverHex = Game.hexagons:getAtPoint(Game.pointerStart.x, Game.pointerStart.y)
+		end
 
-			-- Only perform these actions if the user is over a hexagon
-			if hoverHex then
-				local v1, v2 = -dx/dist, dy/dist
+		-- Only perform these actions if the user is over a hexagon
+		if Game.hoverHex then
+			local v1, v2 = -dx/dist, dy/dist
 
-				-- Slide hexagons based on the direction that the user swiped
-				if between(v1, 0, 1) and between(v2, 0.5, 1) then
-					Game.slideDirection = 'SW'
-					Game.slideAxis = 'y'
-					Game.slideInverted = false
-				elseif between(v1, 0, 1) and between(v2, -0.5, 0.5) then
-					Game.slideDirection = 'W'
-					Game.slideAxis = 'z'
-					Game.slideInverted = true
-				elseif between(v1, 0, 1) and between(v2, -0.5, -1) then
-					Game.slideDirection = 'NW'
-					Game.slideAxis = 'x'
-					Game.slideInverted = true
-				elseif between(v1, 0, -1) and between(v2, -0.5, -1) then
-					Game.slideDirection = 'NE'
-					Game.slideAxis = 'y'
-					Game.slideInverted = true
-				elseif between(v1, 0, -1) and between(v2, -0.5, 0.5) then
-					Game.slideDirection = 'E'
-					Game.slideAxis = 'z'
-					Game.slideInverted = false
-				elseif between(v1, 0, -1) and between(v2, 0.5, 1) then
-					Game.slideDirection = 'SE'
-					Game.slideAxis = 'x'
-					Game.slideInverted = false
-				end
-
-				Game.slideAxisValue = hoverHex[Game.slideAxis]
-			end
-		elseif Game.canMove and diffDist >= Game.hexSize * 2 then
-			if Game.lastDxSign ~= math.sign(dx) or Game.dlastDySign ~= math.sign(dy) then
-				Game.slideInverted = not Game.slideInverted
+			-- Slide hexagons based on the direction that the user swiped
+			if between(v1, 0, 1) and between(v2, 0.5, 1) then
+				Game.slideDirection = 'SW'
+				Game.slideAxis = 'y'
+				Game.slideInverted = false
+			elseif between(v1, 0, 1) and between(v2, -0.5, 0.5) then
+				Game.slideDirection = 'W'
+				Game.slideAxis = 'z'
+				Game.slideInverted = true
+			elseif between(v1, 0, 1) and between(v2, -0.5, -1) then
+				Game.slideDirection = 'NW'
+				Game.slideAxis = 'x'
+				Game.slideInverted = true
+			elseif between(v1, 0, -1) and between(v2, -0.5, -1) then
+				Game.slideDirection = 'NE'
+				Game.slideAxis = 'y'
+				Game.slideInverted = true
+			elseif between(v1, 0, -1) and between(v2, -0.5, 0.5) then
+				Game.slideDirection = 'E'
+				Game.slideAxis = 'z'
+				Game.slideInverted = false
+			elseif between(v1, 0, -1) and between(v2, 0.5, 1) then
+				Game.slideDirection = 'SE'
+				Game.slideAxis = 'x'
+				Game.slideInverted = false
 			end
 
+			Game.slideAxisValue = Game.hoverHex[Game.slideAxis]
+		end
+
+		if Game.canMove and diffDist >= Game.hexSize * 2 then
 			Hexagon.slideHexagons(Game.slideAxis, Game.slideAxisValue, Game.slideDirection,  Game.slideInverted)
 			Game.pointerStart.x = x
 			Game.pointerStart.y = y
 		end
-
-		Game.lastDxSign, Game.dlastDySign = math.sign(dx), math.sign(dy)
 	end
 end
 
 function Game:mousereleased(x, y)
 	Game.slideDirection = nil
 	Game.slideAxis = nil
+	Game.hoverHex = false
 	Game.isDragged = false
 end
 
