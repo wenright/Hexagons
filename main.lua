@@ -1,3 +1,5 @@
+require 'scripts.utils'
+
 Timer = require 'lib.hump.timer'
 Gamestate = require 'lib.hump.gamestate'
 Class = require 'lib.hump.class'
