@@ -32,82 +32,85 @@
 
 <h2>Contents</h2>
 <ul>
-<li><a href="#Functions">Functions</a></li>
+<li><a href="#Methods">Methods</a></li>
 </ul>
 
 
+<h2>Classes</h2>
+<ul class="$(kind=='Topics' and '' or 'nowrap'">
+  <li><strong>Hexagon</strong></li>
+</ul>
 <h2>Modules</h2>
 <ul class="$(kind=='Topics' and '' or 'nowrap'">
   <li><a href="../modules/lib.hump.camera.html">lib.hump.camera</a></li>
-  <li><strong>Hexagon</strong></li>
 </ul>
 
 </div>
 
 <div id="content">
 
-<h1>Module <code>Hexagon</code></h1>
+<h1>Class <code>Hexagon</code></h1>
 <p>A hexagon object</p>
 <p></p>
 
 
-<h2><a href="#Functions">Functions</a></h2>
+<h2><a href="#Methods">Methods</a></h2>
 <table class="function_list">
 	<tr>
-	<td class="name" nowrap><a href="#init">init (x, y, z, color)</a></td>
+	<td class="name" nowrap><a href="#Hexagon:init">Hexagon:init (x, y, z, color)</a></td>
 	<td class="summary">Initialize a new hexagon object
  Note that coordinates are 3 dimensional, but will be drawn on a 2D plane</td>
 	</tr>
 	<tr>
-	<td class="name" nowrap><a href="#update">update (dt)</a></td>
+	<td class="name" nowrap><a href="#Hexagon:update">Hexagon:update (dt)</a></td>
 	<td class="summary">Updates the hex object</td>
 	</tr>
 	<tr>
-	<td class="name" nowrap><a href="#draw">draw ()</a></td>
+	<td class="name" nowrap><a href="#Hexagon:draw">Hexagon:draw ()</a></td>
 	<td class="summary">Draws a hexagon object</td>
 	</tr>
 	<tr>
-	<td class="name" nowrap><a href="#tweenIn">tweenIn (time, The)</a></td>
+	<td class="name" nowrap><a href="#Hexagon:tweenIn">Hexagon:tweenIn (time, The)</a></td>
 	<td class="summary">Tweens a hexagon from its starting position.</td>
 	</tr>
 	<tr>
-	<td class="name" nowrap><a href="#equals">equals (other)</a></td>
+	<td class="name" nowrap><a href="#Hexagon:equals">Hexagon:equals (other)</a></td>
 	<td class="summary">Compare a hexagon with another to see if they occupy the same space</td>
 	</tr>
 	<tr>
-	<td class="name" nowrap><a href="#isNeighbour">isNeighbour (other)</a></td>
+	<td class="name" nowrap><a href="#Hexagon:isNeighbour">Hexagon:isNeighbour (other)</a></td>
 	<td class="summary">Check if the given hexagon is at an adjacent location to self</td>
 	</tr>
 	<tr>
-	<td class="name" nowrap><a href="#swap">swap (other)</a></td>
+	<td class="name" nowrap><a href="#Hexagon:swap">Hexagon:swap (other)</a></td>
 	<td class="summary">Swap the location of one hexagon with another</td>
 	</tr>
 	<tr>
-	<td class="name" nowrap><a href="#move">move (dir, remove)</a></td>
+	<td class="name" nowrap><a href="#Hexagon:move">Hexagon:move (dir, remove)</a></td>
 	<td class="summary">Move a hexagon in a certain direction (using a tween animation)</td>
 	</tr>
 	<tr>
-	<td class="name" nowrap><a href="#moveTo">moveTo (x, y, z)</a></td>
+	<td class="name" nowrap><a href="#Hexagon:moveTo">Hexagon:moveTo (x, y, z)</a></td>
 	<td class="summary">Move a hexagon to a location</td>
 	</tr>
 	<tr>
-	<td class="name" nowrap><a href="#setWorldCoordinates">setWorldCoordinates (x, y, z, margin, remove)</a></td>
+	<td class="name" nowrap><a href="#Hexagon:setWorldCoordinates">Hexagon:setWorldCoordinates (x, y, z, margin, remove)</a></td>
 	<td class="summary">Set the world coordinates for a hexagon, and tween to that loccation</td>
 	</tr>
 	<tr>
-	<td class="name" nowrap><a href="#checkCollision">checkCollision (x, y)</a></td>
+	<td class="name" nowrap><a href="#Hexagon:checkCollision">Hexagon:checkCollision (x, y)</a></td>
 	<td class="summary">Check to see if this hexagon contains the given point.</td>
 	</tr>
 	<tr>
-	<td class="name" nowrap><a href="#checkForWin">checkForWin ()</a></td>
+	<td class="name" nowrap><a href="#Hexagon:checkForWin">Hexagon:checkForWin ()</a></td>
 	<td class="summary">Check the hexagons for a win condition</td>
 	</tr>
 	<tr>
-	<td class="name" nowrap><a href="#slideHexagons">slideHexagons (axis, axisValue, dir, inverted)</a></td>
+	<td class="name" nowrap><a href="#Hexagon:slideHexagons">Hexagon:slideHexagons (axis, axisValue, dir, inverted)</a></td>
 	<td class="summary">Slide hexagons in a certain direction along an axis</td>
 	</tr>
 	<tr>
-	<td class="name" nowrap><a href="#getDirection">getDirection (axis, isInverted)</a></td>
+	<td class="name" nowrap><a href="#Hexagon:getDirection">Hexagon:getDirection (axis, isInverted)</a></td>
 	<td class="summary">Converts an axis and a boolean into a compass direction</td>
 	</tr>
 </table>
@@ -116,12 +119,12 @@
 <br/>
 
 
-    <h2 class="section-header "><a name="Functions"></a>Functions</h2>
+    <h2 class="section-header "><a name="Methods"></a>Methods</h2>
 
     <dl class="function">
     <dt>
-    <a name = "init"></a>
-    <strong>init (x, y, z, color)</strong>
+    <a name = "Hexagon:init"></a>
+    <strong>Hexagon:init (x, y, z, color)</strong>
     </dt>
     <dd>
     Initialize a new hexagon object
@@ -151,7 +154,7 @@
     <h3>Returns:</h3>
     <ol>
 
-           <span class="types"><span class="type">Hexagon</span></span>
+           <span class="types"><a class="type" href="../classes/Hexagon.html#">Hexagon</a></span>
         a new hexagon object
     </ol>
 
@@ -160,8 +163,8 @@
 
 </dd>
     <dt>
-    <a name = "update"></a>
-    <strong>update (dt)</strong>
+    <a name = "Hexagon:update"></a>
+    <strong>Hexagon:update (dt)</strong>
     </dt>
     <dd>
     Updates the hex object
@@ -181,8 +184,8 @@
 
 </dd>
     <dt>
-    <a name = "draw"></a>
-    <strong>draw ()</strong>
+    <a name = "Hexagon:draw"></a>
+    <strong>Hexagon:draw ()</strong>
     </dt>
     <dd>
     Draws a hexagon object
@@ -195,8 +198,8 @@
 
 </dd>
     <dt>
-    <a name = "tweenIn"></a>
-    <strong>tweenIn (time, The)</strong>
+    <a name = "Hexagon:tweenIn"></a>
+    <strong>Hexagon:tweenIn (time, The)</strong>
     </dt>
     <dd>
     Tweens a hexagon from its starting position.   Called once at the beginning of the game.
@@ -221,8 +224,8 @@
 
 </dd>
     <dt>
-    <a name = "equals"></a>
-    <strong>equals (other)</strong>
+    <a name = "Hexagon:equals"></a>
+    <strong>Hexagon:equals (other)</strong>
     </dt>
     <dd>
     Compare a hexagon with another to see if they occupy the same space
@@ -231,7 +234,7 @@
     <h3>Parameters:</h3>
     <ul>
         <li><span class="parameter">other</span>
-            <span class="types"><span class="type">Hexagon</span></span>
+            <span class="types"><a class="type" href="../classes/Hexagon.html#">Hexagon</a></span>
          The other hexagon to compare with self
         </li>
     </ul>
@@ -248,8 +251,8 @@
 
 </dd>
     <dt>
-    <a name = "isNeighbour"></a>
-    <strong>isNeighbour (other)</strong>
+    <a name = "Hexagon:isNeighbour"></a>
+    <strong>Hexagon:isNeighbour (other)</strong>
     </dt>
     <dd>
     Check if the given hexagon is at an adjacent location to self
@@ -258,7 +261,7 @@
     <h3>Parameters:</h3>
     <ul>
         <li><span class="parameter">other</span>
-            <span class="types"><span class="type">Hexagon</span></span>
+            <span class="types"><a class="type" href="../classes/Hexagon.html#">Hexagon</a></span>
          The other hexagont o compare with self
         </li>
     </ul>
@@ -275,8 +278,8 @@
 
 </dd>
     <dt>
-    <a name = "swap"></a>
-    <strong>swap (other)</strong>
+    <a name = "Hexagon:swap"></a>
+    <strong>Hexagon:swap (other)</strong>
     </dt>
     <dd>
     Swap the location of one hexagon with another
@@ -285,7 +288,7 @@
     <h3>Parameters:</h3>
     <ul>
         <li><span class="parameter">other</span>
-            <span class="types"><span class="type">Hexagon</span></span>
+            <span class="types"><a class="type" href="../classes/Hexagon.html#">Hexagon</a></span>
          The other hexagon to swap with self
         </li>
     </ul>
@@ -296,8 +299,8 @@
 
 </dd>
     <dt>
-    <a name = "move"></a>
-    <strong>move (dir, remove)</strong>
+    <a name = "Hexagon:move"></a>
+    <strong>Hexagon:move (dir, remove)</strong>
     </dt>
     <dd>
     Move a hexagon in a certain direction (using a tween animation)
@@ -321,8 +324,8 @@
 
 </dd>
     <dt>
-    <a name = "moveTo"></a>
-    <strong>moveTo (x, y, z)</strong>
+    <a name = "Hexagon:moveTo"></a>
+    <strong>Hexagon:moveTo (x, y, z)</strong>
     </dt>
     <dd>
     Move a hexagon to a location
@@ -350,8 +353,8 @@
 
 </dd>
     <dt>
-    <a name = "setWorldCoordinates"></a>
-    <strong>setWorldCoordinates (x, y, z, margin, remove)</strong>
+    <a name = "Hexagon:setWorldCoordinates"></a>
+    <strong>Hexagon:setWorldCoordinates (x, y, z, margin, remove)</strong>
     </dt>
     <dd>
     Set the world coordinates for a hexagon, and tween to that loccation
@@ -387,8 +390,8 @@
 
 </dd>
     <dt>
-    <a name = "checkCollision"></a>
-    <strong>checkCollision (x, y)</strong>
+    <a name = "Hexagon:checkCollision"></a>
+    <strong>Hexagon:checkCollision (x, y)</strong>
     </dt>
     <dd>
     Check to see if this hexagon contains the given point.   Used for mouse click detection
@@ -418,8 +421,8 @@
 
 </dd>
     <dt>
-    <a name = "checkForWin"></a>
-    <strong>checkForWin ()</strong>
+    <a name = "Hexagon:checkForWin"></a>
+    <strong>Hexagon:checkForWin ()</strong>
     </dt>
     <dd>
     Check the hexagons for a win condition
@@ -438,8 +441,8 @@
 
 </dd>
     <dt>
-    <a name = "slideHexagons"></a>
-    <strong>slideHexagons (axis, axisValue, dir, inverted)</strong>
+    <a name = "Hexagon:slideHexagons"></a>
+    <strong>Hexagon:slideHexagons (axis, axisValue, dir, inverted)</strong>
     </dt>
     <dd>
     Slide hexagons in a certain direction along an axis
@@ -471,8 +474,8 @@
 
 </dd>
     <dt>
-    <a name = "getDirection"></a>
-    <strong>getDirection (axis, isInverted)</strong>
+    <a name = "Hexagon:getDirection"></a>
+    <strong>Hexagon:getDirection (axis, isInverted)</strong>
     </dt>
     <dd>
     Converts an axis and a boolean into a compass direction
@@ -508,7 +511,7 @@
 </div> <!-- id="main" -->
 <div id="about">
 <i>generated by <a href="http://github.com/stevedonovan/LDoc">LDoc 1.4.3</a></i>
-<i style="float:right;">Last updated 2016-03-19 12:12:45 </i>
+<i style="float:right;">Last updated 2016-03-19 12:09:58 </i>
 </div> <!-- id="about" -->
 </div> <!-- id="container" -->
 </body>

@@ -1,1 +1,1 @@
---dir . --all --project Hexagons --title Default
+--dir scripts --project Hexagons --title Default
