@@ -1,4 +1,4 @@
-function between(x, first, second)
+function math.between(x, first, second)
 	return x >= first and x <= second or x <= first and x >= second
 end
 

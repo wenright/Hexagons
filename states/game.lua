@@ -114,27 +114,27 @@ function Game:mousemoved(x, y, dx, dy)
 			local v1, v2 = -dx/dist, dy/dist
 
 			-- Slide hexagons based on the direction that the user swiped
-			if between(v1, 0, 1) and between(v2, 0.5, 1) then
+			if math.between(v1, 0, 1) and math.between(v2, 0.5, 1) then
 				Game.slideDirection = 'SW'
 				Game.slideAxis = 'y'
 				Game.slideInverted = false
-			elseif between(v1, 0, 1) and between(v2, -0.5, 0.5) then
+			elseif math.between(v1, 0, 1) and math.between(v2, -0.5, 0.5) then
 				Game.slideDirection = 'W'
 				Game.slideAxis = 'z'
 				Game.slideInverted = true
-			elseif between(v1, 0, 1) and between(v2, -0.5, -1) then
+			elseif math.between(v1, 0, 1) and math.between(v2, -0.5, -1) then
 				Game.slideDirection = 'NW'
 				Game.slideAxis = 'x'
 				Game.slideInverted = true
-			elseif between(v1, 0, -1) and between(v2, -0.5, -1) then
+			elseif math.between(v1, 0, -1) and math.between(v2, -0.5, -1) then
 				Game.slideDirection = 'NE'
 				Game.slideAxis = 'y'
 				Game.slideInverted = true
-			elseif between(v1, 0, -1) and between(v2, -0.5, 0.5) then
+			elseif math.between(v1, 0, -1) and math.between(v2, -0.5, 0.5) then
 				Game.slideDirection = 'E'
 				Game.slideAxis = 'z'
 				Game.slideInverted = false
-			elseif between(v1, 0, -1) and between(v2, 0.5, 1) then
+			elseif math.between(v1, 0, -1) and math.between(v2, 0.5, 1) then
 				Game.slideDirection = 'SE'
 				Game.slideAxis = 'x'
 				Game.slideInverted = false

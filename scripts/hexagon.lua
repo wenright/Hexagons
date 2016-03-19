@@ -9,10 +9,10 @@ local tweenTime = 1
 
 --- A table of the default colors to draw hexagons with
 -- @table colors
--- @field grey
--- @field blue
--- @field green
--- @field pink
+-- @field 1 grey
+-- @field 2 blue
+-- @field 3 green
+-- @field 4 pink
 local colors = {
 	{85, 98, 112},    -- grey
 	{78, 205, 196},   -- blue

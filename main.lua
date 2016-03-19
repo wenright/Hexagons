@@ -1,5 +1,6 @@
 --- This is the entry point into the game
 -- @module Hex
+-- @author Will
 
 require 'scripts.utils'
 
