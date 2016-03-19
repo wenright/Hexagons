@@ -1,0 +1,259 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN"
+   "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd">
+<html>
+<meta http-equiv="Content-Type" content="text/html; charset=UTF-8"/>
+<head>
+    <title>Reference</title>
+    <link rel="stylesheet" href="../ldoc.css" type="text/css" />
+</head>
+<body>
+
+<div id="container">
+
+<div id="product">
+	<div id="product_logo"></div>
+	<div id="product_name"><big><b></b></big></div>
+	<div id="product_description"></div>
+</div> <!-- id="product" -->
+
+
+<div id="main">
+
+
+<!-- Menu -->
+
+<div id="navigation">
+<br/>
+<h1>ldoc</h1>
+
+<ul>
+  <li><a href="../index.html">Index</a></li>
+</ul>
+
+<h2>Contents</h2>
+<ul>
+<li><a href="#Methods">Methods</a></li>
+</ul>
+
+
+<h2>Classes</h2>
+<ul class="$(kind=='Topics' and '' or 'nowrap'">
+  <li><strong>Entities</strong></li>
+  <li><a href="../classes/Hexagon.html">Hexagon</a></li>
+</ul>
+<h2>Modules</h2>
+<ul class="$(kind=='Topics' and '' or 'nowrap'">
+  <li><a href="../modules/Hex.html">Hex</a></li>
+</ul>
+
+</div>
+
+<div id="content">
+
+<h1>Class <code>Entities</code></h1>
+<p>A collection of entities</p>
+<p></p>
+
+
+<h2><a href="#Methods">Methods</a></h2>
+<table class="function_list">
+	<tr>
+	<td class="name" nowrap><a href="#Entities:init">Entities:init (class)</a></td>
+	<td class="summary">Initialize a new Entities object</td>
+	</tr>
+	<tr>
+	<td class="name" nowrap><a href="#Entities:add">Entities:add (...)</a></td>
+	<td class="summary">Add a new entity to the system</td>
+	</tr>
+	<tr>
+	<td class="name" nowrap><a href="#Entities:remove">Entities:remove (e)</a></td>
+	<td class="summary">Remove an entity from the system</td>
+	</tr>
+	<tr>
+	<td class="name" nowrap><a href="#Entities:update">Entities:update (dt)</a></td>
+	<td class="summary">Update all entities in the system</td>
+	</tr>
+	<tr>
+	<td class="name" nowrap><a href="#Entities:draw">Entities:draw ()</a></td>
+	<td class="summary">Draw all entities in the system</td>
+	</tr>
+	<tr>
+	<td class="name" nowrap><a href="#Entities:getAtPoint">Entities:getAtPoint (x, y, The)</a></td>
+	<td class="summary">Find the entity at the given point</td>
+	</tr>
+	<tr>
+	<td class="name" nowrap><a href="#Entities:forEach">Entities:forEach (func)</a></td>
+	<td class="summary">Loop over each object, calling the given function on each entity</td>
+	</tr>
+</table>
+
+<br/>
+<br/>
+
+
+    <h2 class="section-header "><a name="Methods"></a>Methods</h2>
+
+    <dl class="function">
+    <dt>
+    <a name = "Entities:init"></a>
+    <strong>Entities:init (class)</strong>
+    </dt>
+    <dd>
+    Initialize a new Entities object
+
+
+    <h3>Parameters:</h3>
+    <ul>
+        <li><span class="parameter">class</span>
+            <span class="types"><span class="type">Class</span></span>
+         The class of object that will occupy the entity system
+        </li>
+    </ul>
+
+
+
+
+
+</dd>
+    <dt>
+    <a name = "Entities:add"></a>
+    <strong>Entities:add (...)</strong>
+    </dt>
+    <dd>
+    Add a new entity to the system
+
+
+    <h3>Parameters:</h3>
+    <ul>
+        <li><span class="parameter">...</span>
+         The parameters that will be passed into the newly created object using the class from init
+        </li>
+    </ul>
+
+    <h3>Returns:</h3>
+    <ol>
+
+        The object that was created and added
+    </ol>
+
+
+
+
+</dd>
+    <dt>
+    <a name = "Entities:remove"></a>
+    <strong>Entities:remove (e)</strong>
+    </dt>
+    <dd>
+    Remove an entity from the system
+
+
+    <h3>Parameters:</h3>
+    <ul>
+        <li><span class="parameter">e</span>
+         The entity to remove
+        </li>
+    </ul>
+
+
+
+
+
+</dd>
+    <dt>
+    <a name = "Entities:update"></a>
+    <strong>Entities:update (dt)</strong>
+    </dt>
+    <dd>
+    Update all entities in the system
+
+
+    <h3>Parameters:</h3>
+    <ul>
+        <li><span class="parameter">dt</span>
+            <span class="types"><span class="type">number</span></span>
+         The time between frame draws
+        </li>
+    </ul>
+
+
+
+
+
+</dd>
+    <dt>
+    <a name = "Entities:draw"></a>
+    <strong>Entities:draw ()</strong>
+    </dt>
+    <dd>
+    Draw all entities in the system
+
+
+
+
+
+
+
+</dd>
+    <dt>
+    <a name = "Entities:getAtPoint"></a>
+    <strong>Entities:getAtPoint (x, y, The)</strong>
+    </dt>
+    <dd>
+    Find the entity at the given point
+
+
+    <h3>Parameters:</h3>
+    <ul>
+        <li><span class="parameter">x</span>
+            <span class="types"><span class="type">number</span></span>
+         The x coordinate to check
+        </li>
+        <li><span class="parameter">y</span>
+            <span class="types"><span class="type">number</span></span>
+         The y coordinate to check
+        </li>
+        <li><span class="parameter">The</span>
+            <span class="types"><span class="type">Class</span></span>
+         object at the given location, if there is one
+        </li>
+    </ul>
+
+
+
+
+
+</dd>
+    <dt>
+    <a name = "Entities:forEach"></a>
+    <strong>Entities:forEach (func)</strong>
+    </dt>
+    <dd>
+    Loop over each object, calling the given function on each entity
+
+
+    <h3>Parameters:</h3>
+    <ul>
+        <li><span class="parameter">func</span>
+            <span class="types"><span class="type">function</span></span>
+         The function that will be called for each entity
+        </li>
+    </ul>
+
+
+
+
+
+</dd>
+</dl>
+
+
+</div> <!-- id="content" -->
+</div> <!-- id="main" -->
+<div id="about">
+<i>generated by <a href="http://github.com/stevedonovan/LDoc">LDoc 1.4.3</a></i>
+<i style="float:right;">Last updated 2016-03-19 12:35:08 </i>
+</div> <!-- id="about" -->
+</div> <!-- id="container" -->
+</body>
+</html>
