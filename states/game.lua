@@ -149,8 +149,8 @@ function Game:mousemoved(x, y, dx, dy)
         Game.consecutiveSlideAxisValue = Game.slideAxisValue
       end
 
-      -- TODO slide direction needs to be updated somehow
-			Hexagon.slideHexagons(Game.consecutiveSlideAxis, Game.consecutiveSlideAxisValue, Game.slideDirection,  Game.slideInverted)
+      local direction = Hexagon.getDirection(Game.consecutiveSlideAxis, Game.slideInverted)
+			Hexagon.slideHexagons(Game.consecutiveSlideAxis, Game.consecutiveSlideAxisValue, direction, Game.slideInverted)
 			Game.pointerStart.x = x
 			Game.pointerStart.y = y
 

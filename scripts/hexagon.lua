@@ -241,4 +241,16 @@ function Hexagon.slideHexagons(axis, axisValue, dir, inverted, amount)
 	end)
 end
 
+function Hexagon.getDirection(axis, isInverted)
+  if isInverted then
+    if axis == 'z' then return 'W'
+    elseif axis == 'x' then return 'NW'
+    elseif axis == 'y' then return 'NE' end
+  else
+    if axis == 'z' then return 'E'
+    elseif axis == 'x' then return 'SE'
+    elseif axis == 'y' then return 'SW' end
+  end
+end
+
 return Hexagon
