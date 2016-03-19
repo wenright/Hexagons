@@ -53,7 +53,7 @@ local Hexagon = Class {
 -- @tparam number y y-coordinate to draw hexagon
 -- @tparam number z z-coordinate to draw hexagon
 -- @tparam number color Color that hexagon will draw as. Also used to determine win condition
--- @treturn table a new hexagon object
+-- @treturn Hexagon a new hexagon object
 function Hexagon:init(x, y, z, color)
     self.x, self.y, self.z = x, y, z
 
@@ -64,13 +64,13 @@ function Hexagon:init(x, y, z, color)
     self.color = color or colors[love.math.random(#colors)]
   end
 
---- Update
--- Updates the hex object
--- @param dt Delta time: time between frame draws
+--- Updates the hex object
+-- @tparam number dt Time between frame draws
 function Hexagon:update(dt)
 
 end
 
+--- Draws a hexagon object
 function Hexagon:draw()
 	love.graphics.push()
 
@@ -85,6 +85,10 @@ function Hexagon:draw()
 	love.graphics.pop()
 end
 
+--- Tweens a hexagon from its starting position.  Called once at the beginning of the game.
+-- Parameters can be adjusted in hexagon.lua
+-- @tparam number time Duration of tween animation
+-- @tparam string The tween function to use. Ex: 'out-expo' 
 function Hexagon:tweenIn(time, func)
 	local x, y, z = self.x, self.y, self.z
 
@@ -101,10 +105,16 @@ function Hexagon:tweenIn(time, func)
 	end)
 end
 
+--- Compare a hexagon with another to see if they occupy the same space
+-- @tparam Hexagon other The other hexagon to compare with self
+-- @treturn boolean Wether or not this hexagon is at the same location as the other
 function Hexagon:equals(other)
 	return self.x == other.x and self.y == other.y and self.z == other.z
 end
 
+--- Check if the given hexagon is at an adjacent location to self
+-- @tparam Hexagon other The other hexagont o compare with self
+-- @treturn boolean Wether or not this hexagon is a neighbour of the other
 function Hexagon:isNeighbour(other)
 	for _, dir in pairs(Hexagon.directions) do
 		if self.x + dir.x == other.x and self.y + dir.y == other.y and self.z + dir.z == other.z then
@@ -115,6 +125,8 @@ function Hexagon:isNeighbour(other)
 	return false
 end
 
+--- Swap the location of one hexagon with another
+-- @tparam Hexagon other The other hexagon to swap with self
 function Hexagon:swap(other)
 	self.x, other.x = other.x, self.x
 	self.y, other.y = other.y, self.y
@@ -127,6 +139,9 @@ function Hexagon:swap(other)
 	Timer.tween(speed, other, {drawX = self.drawX, drawY = self.drawY}, tweenFunc)
 end
 
+--- Move a hexagon in a certain direction (using a tween animation)
+-- @tparam string dir The compass direction to move the hexagon. Ex 'NE'
+-- @tparam boolean remove Wether or not to remove this hexagon after moving it. This is used for moving hexes off the map
 function Hexagon:move(dir, remove)
 	dir = Hexagon.directions[dir]
 	assert(dir, 'That direction doesn\'t exist')
@@ -138,6 +153,10 @@ function Hexagon:move(dir, remove)
 	self:setWorldCoordinates(self.x, self.y, self.z, endMargin, remove)
 end
 
+--- Move a hexagon to a location
+-- @tparam number x x-coordinate to move hexagon to
+-- @tparam number y y-coordinate to move hexagon to
+-- @tparam number z z-coordinate to move hexagon to
 function Hexagon:moveTo(x, y, z)
 	self.x = x
 	self.y = y
@@ -146,6 +165,12 @@ function Hexagon:moveTo(x, y, z)
 	self:setWorldCoordinates(x, y, z, endMargin)
 end
 
+--- Set the world coordinates for a hexagon, and tween to that loccation
+-- @tparam number x x-coordinate to move hexagon to
+-- @tparam number y y-coordinate to move hexagon to
+-- @tparam number z z-coordinate to move hexagon to
+-- @tparam number margin How far apart the hexagons should be
+-- @tparam boolean remove Wether or not hexagon should be removed when finished moving
 function Hexagon:setWorldCoordinates(x, y, z, margin, remove)
 	local newDrawX = Game.hexSize * (y - x) * math.sqrt(3) / 2 * margin
 	local newDrawY = Game.hexSize * ((y + x) / 2 - z) * margin
@@ -164,11 +189,17 @@ function Hexagon:setWorldCoordinates(x, y, z, margin, remove)
 		end)
 end
 
+--- Check to see if this hexagon contains the given point.  Used for mouse click detection
+-- @tparam number x x coordinate to check
+-- @tparam number y y coordinate to check
+-- @treturn boolean True if point lies inside this hexagon
 function Hexagon:checkCollision(x, y)
 	-- TODO use a more accurate collision detection method (Currently circle based)
 	return math.sqrt((self.drawX - x)^2 + (self.drawY - y)^2) < Game.hexSize - 5
 end
 
+--- Check the hexagons for a win condition
+-- @treturn boolean True if the game is over
 function Hexagon:checkForWin()
 	local won = true
 	local c = 0
@@ -186,7 +217,12 @@ function Hexagon:checkForWin()
 	return won and c == 6
 end
 
-function Hexagon.slideHexagons(axis, axisValue, dir, inverted, amount)
+--- Slide hexagons in a certain direction along an axis
+-- @tparam string axis The axis to slide hexagon along.  Ex 'y'
+-- @tparam number axisValue This is the x, y, or z coordinate of the row to be moved
+-- @tparam string dir The compass direction that the hexagons will slide
+-- @tparam boolean inverted Used to determine sorting order so that hexagons slide in the right order
+function Hexagon.slideHexagons(axis, axisValue, dir, inverted)
 	Game.canMove = false
 
 	local slideTweenTime = 0.2
@@ -255,6 +291,10 @@ function Hexagon.slideHexagons(axis, axisValue, dir, inverted, amount)
 	end)
 end
 
+--- Converts an axis and a boolean into a compass direction
+-- @tparam string axis The 3D axis to use.  Ex 'y'
+-- @tparam boolean isInverted Usefule for determing the compass direction that the axis uses
+-- @treturn string The compass direction the the axis and iversion imply
 function Hexagon.getDirection(axis, isInverted)
   if isInverted then
     if axis == 'z' then return 'W'
