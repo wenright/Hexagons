@@ -1,11 +1,18 @@
 --- A hexagon object
--- @module Hexagon
+-- @classmod Hexagon
 
+-- A few config variables. Probably should be moved into the hexagon class
 local offset = 30
 local startMargin = 5
 local endMargin = 1.1
 local tweenTime = 1
 
+--- A table of the default colors to draw hexagons with
+-- @table colors
+-- @field grey
+-- @field blue
+-- @field green
+-- @field pink
 local colors = {
 	{85, 98, 112},    -- grey
 	{78, 205, 196},   -- blue
@@ -14,6 +21,7 @@ local colors = {
 }
 
 local Hexagon = Class {
+  -- A table of vertices that make up a hexagon
 	vertices = {
 		math.cos(math.rad(60 * 0 + offset)) * Game.hexSize,
 		math.sin(math.rad(60 * 0 + offset)) * Game.hexSize,
@@ -34,6 +42,14 @@ local Hexagon = Class {
 		math.sin(math.rad(60 * 5 + offset)) * Game.hexSize
 	},
 
+  --- A table of the possible compass directions and their equivalent 3D locations
+  -- @table directions
+  -- @field NW x =  0, y = -1, z =  1
+  -- @field W  x =  1, y = -1, z =  0
+  -- @field SW x =  1, y =  0, z = -1
+  -- @field SE x =  0, y =  1, z = -1
+  -- @field E  x = -1, y =  1, z =  0
+  -- @field NE x = -1, y =  0, z =  1
 	directions = {
 		NW = {x =  0, y = -1, z =  1},
 		W  = {x =  1, y = -1, z =  0},
@@ -88,7 +104,7 @@ end
 --- Tweens a hexagon from its starting position.  Called once at the beginning of the game.
 -- Parameters can be adjusted in hexagon.lua
 -- @tparam number time Duration of tween animation
--- @tparam string The tween function to use. Ex: 'out-expo' 
+-- @tparam string func The tween function to use. Ex: 'out-expo' 
 function Hexagon:tweenIn(time, func)
 	local x, y, z = self.x, self.y, self.z
 
