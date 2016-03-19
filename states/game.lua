@@ -1,3 +1,18 @@
+--- A state for when the game is being played
+-- @submodule Hex
+
+--- Holds current game information
+-- @table Game
+-- @field gridRadius How many hexagons should be drawn
+-- @field hexSize The draw size for a hexagon
+-- @field pointerStart Where the user has first clicked the screen
+-- @field canMove Determines if the user can slide.  False while tween animation is playing
+-- @field started True once the initial tweenIn animation has finished
+-- @field over True when the player has won the game
+-- @field slideDirection The direction the player has started sliding
+-- @field slideAxis The axis the player has started sliding on
+-- @field isDragged True if the player is currently clicking the screen
+-- @field stencilFunction Used to prevent certain areas from drawing
 local Game = {
 	gridRadius = 2,
 	hexSize = 50,
@@ -23,6 +38,7 @@ local Game = {
 	end
 }
 
+--- Initialize the game
 function Game:init()
 	print('Creating hexagons...')
 	Game.hexagons = Entities(Hexagon)
@@ -51,10 +67,13 @@ function Game:init()
 	print('Game loaded')
 end
 
+--- Called once per frame, updates the game
+-- @tparam number dt Time passed between frame draws
 function Game:update(dt)
 	Game.hexagons:update(dt)
 end
 
+--- Draw the current frame
 function Game:draw()
 	Camera:attach()
 
