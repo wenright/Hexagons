@@ -1,0 +1,600 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN"
+   "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd">
+<html>
+<meta http-equiv="Content-Type" content="text/html; charset=UTF-8"/>
+<head>
+    <title>Reference</title>
+    <link rel="stylesheet" href="../ldoc.css" type="text/css" />
+</head>
+<body>
+
+<div id="container">
+
+<div id="product">
+	<div id="product_logo"></div>
+	<div id="product_name"><big><b></b></big></div>
+	<div id="product_description"></div>
+</div> <!-- id="product" -->
+
+
+<div id="main">
+
+
+<!-- Menu -->
+
+<div id="navigation">
+<br/>
+<h1>ldoc</h1>
+
+<ul>
+  <li><a href="../index.html">Index</a></li>
+</ul>
+
+<h2>Contents</h2>
+<ul>
+<li><a href="#Tables">Tables</a></li>
+<li><a href="#Methods">Methods</a></li>
+</ul>
+
+
+<h2>Classes</h2>
+<ul class="$(kind=='Topics' and '' or 'nowrap'">
+  <li><a href="../classes/Entities.html">Entities</a></li>
+  <li><strong>Hexagon</strong></li>
+</ul>
+<h2>Modules</h2>
+<ul class="$(kind=='Topics' and '' or 'nowrap'">
+  <li><a href="../modules/conf.html">conf</a></li>
+  <li><a href="../modules/Hex.html">Hex</a></li>
+</ul>
+
+</div>
+
+<div id="content">
+
+<h1>Class <code>Hexagon</code></h1>
+<p>A hexagon object</p>
+<p></p>
+
+
+<h2><a href="#Tables">Tables</a></h2>
+<table class="function_list">
+	<tr>
+	<td class="name" nowrap><a href="#Hexagon.colors">Hexagon.colors</a></td>
+	<td class="summary">A table of the default colors to draw hexagons with</td>
+	</tr>
+	<tr>
+	<td class="name" nowrap><a href="#Hexagon.directions">Hexagon.directions</a></td>
+	<td class="summary">A table of the possible compass directions and their equivalent 3D locations</td>
+	</tr>
+</table>
+<h2><a href="#Methods">Methods</a></h2>
+<table class="function_list">
+	<tr>
+	<td class="name" nowrap><a href="#Hexagon:init">Hexagon:init (x, y, z, color)</a></td>
+	<td class="summary">Initialize a new hexagon object
+ Note that coordinates are 3 dimensional, but will be drawn on a 2D plane</td>
+	</tr>
+	<tr>
+	<td class="name" nowrap><a href="#Hexagon:update">Hexagon:update (dt)</a></td>
+	<td class="summary">Updates the hex object</td>
+	</tr>
+	<tr>
+	<td class="name" nowrap><a href="#Hexagon:draw">Hexagon:draw ()</a></td>
+	<td class="summary">Draws a hexagon object</td>
+	</tr>
+	<tr>
+	<td class="name" nowrap><a href="#Hexagon:tweenIn">Hexagon:tweenIn (time, func)</a></td>
+	<td class="summary">Tweens a hexagon from its starting position.</td>
+	</tr>
+	<tr>
+	<td class="name" nowrap><a href="#Hexagon:equals">Hexagon:equals (other)</a></td>
+	<td class="summary">Compare a hexagon with another to see if they occupy the same space</td>
+	</tr>
+	<tr>
+	<td class="name" nowrap><a href="#Hexagon:isNeighbour">Hexagon:isNeighbour (other)</a></td>
+	<td class="summary">Check if the given hexagon is at an adjacent location to self</td>
+	</tr>
+	<tr>
+	<td class="name" nowrap><a href="#Hexagon:swap">Hexagon:swap (other)</a></td>
+	<td class="summary">Swap the location of one hexagon with another</td>
+	</tr>
+	<tr>
+	<td class="name" nowrap><a href="#Hexagon:move">Hexagon:move (dir, remove)</a></td>
+	<td class="summary">Move a hexagon in a certain direction (using a tween animation)</td>
+	</tr>
+	<tr>
+	<td class="name" nowrap><a href="#Hexagon:moveTo">Hexagon:moveTo (x, y, z)</a></td>
+	<td class="summary">Move a hexagon to a location</td>
+	</tr>
+	<tr>
+	<td class="name" nowrap><a href="#Hexagon:setWorldCoordinates">Hexagon:setWorldCoordinates (x, y, z, margin, remove)</a></td>
+	<td class="summary">Set the world coordinates for a hexagon, and tween to that loccation</td>
+	</tr>
+	<tr>
+	<td class="name" nowrap><a href="#Hexagon:checkCollision">Hexagon:checkCollision (x, y)</a></td>
+	<td class="summary">Check to see if this hexagon contains the given point.</td>
+	</tr>
+	<tr>
+	<td class="name" nowrap><a href="#Hexagon:checkForWin">Hexagon:checkForWin ()</a></td>
+	<td class="summary">Check the hexagons for a win condition</td>
+	</tr>
+	<tr>
+	<td class="name" nowrap><a href="#Hexagon:slideHexagons">Hexagon:slideHexagons (axis, axisValue, dir, inverted)</a></td>
+	<td class="summary">Slide hexagons in a certain direction along an axis</td>
+	</tr>
+	<tr>
+	<td class="name" nowrap><a href="#Hexagon:getDirection">Hexagon:getDirection (axis, isInverted)</a></td>
+	<td class="summary">Converts an axis and a boolean into a compass direction</td>
+	</tr>
+</table>
+
+<br/>
+<br/>
+
+
+    <h2 class="section-header "><a name="Tables"></a>Tables</h2>
+
+    <dl class="function">
+    <dt>
+    <a name = "Hexagon.colors"></a>
+    <strong>Hexagon.colors</strong>
+    </dt>
+    <dd>
+    A table of the default colors to draw hexagons with
+
+
+    <h3>Fields:</h3>
+    <ul>
+        <li><span class="parameter">1</span>
+         grey
+        </li>
+        <li><span class="parameter">2</span>
+         blue
+        </li>
+        <li><span class="parameter">3</span>
+         green
+        </li>
+        <li><span class="parameter">4</span>
+         pink
+        </li>
+    </ul>
+
+
+
+
+
+</dd>
+    <dt>
+    <a name = "Hexagon.directions"></a>
+    <strong>Hexagon.directions</strong>
+    </dt>
+    <dd>
+    A table of the possible compass directions and their equivalent 3D locations
+
+
+    <h3>Fields:</h3>
+    <ul>
+        <li><span class="parameter">NW</span>
+         x =  0, y = -1, z =  1
+        </li>
+        <li><span class="parameter">W</span>
+          x =  1, y = -1, z =  0
+        </li>
+        <li><span class="parameter">SW</span>
+         x =  1, y =  0, z = -1
+        </li>
+        <li><span class="parameter">SE</span>
+         x =  0, y =  1, z = -1
+        </li>
+        <li><span class="parameter">E</span>
+          x = -1, y =  1, z =  0
+        </li>
+        <li><span class="parameter">NE</span>
+         x = -1, y =  0, z =  1
+        </li>
+    </ul>
+
+
+
+
+
+</dd>
+</dl>
+    <h2 class="section-header "><a name="Methods"></a>Methods</h2>
+
+    <dl class="function">
+    <dt>
+    <a name = "Hexagon:init"></a>
+    <strong>Hexagon:init (x, y, z, color)</strong>
+    </dt>
+    <dd>
+    Initialize a new hexagon object
+ Note that coordinates are 3 dimensional, but will be drawn on a 2D plane
+
+
+    <h3>Parameters:</h3>
+    <ul>
+        <li><span class="parameter">x</span>
+            <span class="types"><span class="type">number</span></span>
+         x-coordinate to draw hexagon
+        </li>
+        <li><span class="parameter">y</span>
+            <span class="types"><span class="type">number</span></span>
+         y-coordinate to draw hexagon
+        </li>
+        <li><span class="parameter">z</span>
+            <span class="types"><span class="type">number</span></span>
+         z-coordinate to draw hexagon
+        </li>
+        <li><span class="parameter">color</span>
+            <span class="types"><span class="type">number</span></span>
+         Color that hexagon will draw as. Also used to determine win condition
+        </li>
+    </ul>
+
+    <h3>Returns:</h3>
+    <ol>
+
+           <span class="types"><a class="type" href="../classes/Hexagon.html#">Hexagon</a></span>
+        a new hexagon object
+    </ol>
+
+
+
+
+</dd>
+    <dt>
+    <a name = "Hexagon:update"></a>
+    <strong>Hexagon:update (dt)</strong>
+    </dt>
+    <dd>
+    Updates the hex object
+
+
+    <h3>Parameters:</h3>
+    <ul>
+        <li><span class="parameter">dt</span>
+            <span class="types"><span class="type">number</span></span>
+         Time between frame draws
+        </li>
+    </ul>
+
+
+
+
+
+</dd>
+    <dt>
+    <a name = "Hexagon:draw"></a>
+    <strong>Hexagon:draw ()</strong>
+    </dt>
+    <dd>
+    Draws a hexagon object
+
+
+
+
+
+
+
+</dd>
+    <dt>
+    <a name = "Hexagon:tweenIn"></a>
+    <strong>Hexagon:tweenIn (time, func)</strong>
+    </dt>
+    <dd>
+    Tweens a hexagon from its starting position.   Called once at the beginning of the game.
+ Parameters can be adjusted in hexagon.lua
+
+
+    <h3>Parameters:</h3>
+    <ul>
+        <li><span class="parameter">time</span>
+            <span class="types"><span class="type">number</span></span>
+         Duration of tween animation
+        </li>
+        <li><span class="parameter">func</span>
+            <span class="types"><a class="type" href="http://www.lua.org/manual/5.1/manual.html#5.4">string</a></span>
+         The tween function to use. Ex: 'out-expo'
+        </li>
+    </ul>
+
+
+
+
+
+</dd>
+    <dt>
+    <a name = "Hexagon:equals"></a>
+    <strong>Hexagon:equals (other)</strong>
+    </dt>
+    <dd>
+    Compare a hexagon with another to see if they occupy the same space
+
+
+    <h3>Parameters:</h3>
+    <ul>
+        <li><span class="parameter">other</span>
+            <span class="types"><a class="type" href="../classes/Hexagon.html#">Hexagon</a></span>
+         The other hexagon to compare with self
+        </li>
+    </ul>
+
+    <h3>Returns:</h3>
+    <ol>
+
+           <span class="types"><span class="type">boolean</span></span>
+        Wether or not this hexagon is at the same location as the other
+    </ol>
+
+
+
+
+</dd>
+    <dt>
+    <a name = "Hexagon:isNeighbour"></a>
+    <strong>Hexagon:isNeighbour (other)</strong>
+    </dt>
+    <dd>
+    Check if the given hexagon is at an adjacent location to self
+
+
+    <h3>Parameters:</h3>
+    <ul>
+        <li><span class="parameter">other</span>
+            <span class="types"><a class="type" href="../classes/Hexagon.html#">Hexagon</a></span>
+         The other hexagont o compare with self
+        </li>
+    </ul>
+
+    <h3>Returns:</h3>
+    <ol>
+
+           <span class="types"><span class="type">boolean</span></span>
+        Wether or not this hexagon is a neighbour of the other
+    </ol>
+
+
+
+
+</dd>
+    <dt>
+    <a name = "Hexagon:swap"></a>
+    <strong>Hexagon:swap (other)</strong>
+    </dt>
+    <dd>
+    Swap the location of one hexagon with another
+
+
+    <h3>Parameters:</h3>
+    <ul>
+        <li><span class="parameter">other</span>
+            <span class="types"><a class="type" href="../classes/Hexagon.html#">Hexagon</a></span>
+         The other hexagon to swap with self
+        </li>
+    </ul>
+
+
+
+
+
+</dd>
+    <dt>
+    <a name = "Hexagon:move"></a>
+    <strong>Hexagon:move (dir, remove)</strong>
+    </dt>
+    <dd>
+    Move a hexagon in a certain direction (using a tween animation)
+
+
+    <h3>Parameters:</h3>
+    <ul>
+        <li><span class="parameter">dir</span>
+            <span class="types"><a class="type" href="http://www.lua.org/manual/5.1/manual.html#5.4">string</a></span>
+         The compass direction to move the hexagon. Ex 'NE'
+        </li>
+        <li><span class="parameter">remove</span>
+            <span class="types"><span class="type">boolean</span></span>
+         Wether or not to remove this hexagon after moving it. This is used for moving hexes off the map
+        </li>
+    </ul>
+
+
+
+
+
+</dd>
+    <dt>
+    <a name = "Hexagon:moveTo"></a>
+    <strong>Hexagon:moveTo (x, y, z)</strong>
+    </dt>
+    <dd>
+    Move a hexagon to a location
+
+
+    <h3>Parameters:</h3>
+    <ul>
+        <li><span class="parameter">x</span>
+            <span class="types"><span class="type">number</span></span>
+         x-coordinate to move hexagon to
+        </li>
+        <li><span class="parameter">y</span>
+            <span class="types"><span class="type">number</span></span>
+         y-coordinate to move hexagon to
+        </li>
+        <li><span class="parameter">z</span>
+            <span class="types"><span class="type">number</span></span>
+         z-coordinate to move hexagon to
+        </li>
+    </ul>
+
+
+
+
+
+</dd>
+    <dt>
+    <a name = "Hexagon:setWorldCoordinates"></a>
+    <strong>Hexagon:setWorldCoordinates (x, y, z, margin, remove)</strong>
+    </dt>
+    <dd>
+    Set the world coordinates for a hexagon, and tween to that loccation
+
+
+    <h3>Parameters:</h3>
+    <ul>
+        <li><span class="parameter">x</span>
+            <span class="types"><span class="type">number</span></span>
+         x-coordinate to move hexagon to
+        </li>
+        <li><span class="parameter">y</span>
+            <span class="types"><span class="type">number</span></span>
+         y-coordinate to move hexagon to
+        </li>
+        <li><span class="parameter">z</span>
+            <span class="types"><span class="type">number</span></span>
+         z-coordinate to move hexagon to
+        </li>
+        <li><span class="parameter">margin</span>
+            <span class="types"><span class="type">number</span></span>
+         How far apart the hexagons should be
+        </li>
+        <li><span class="parameter">remove</span>
+            <span class="types"><span class="type">boolean</span></span>
+         Wether or not hexagon should be removed when finished moving
+        </li>
+    </ul>
+
+
+
+
+
+</dd>
+    <dt>
+    <a name = "Hexagon:checkCollision"></a>
+    <strong>Hexagon:checkCollision (x, y)</strong>
+    </dt>
+    <dd>
+    Check to see if this hexagon contains the given point.   Used for mouse click detection
+
+
+    <h3>Parameters:</h3>
+    <ul>
+        <li><span class="parameter">x</span>
+            <span class="types"><span class="type">number</span></span>
+         x coordinate to check
+        </li>
+        <li><span class="parameter">y</span>
+            <span class="types"><span class="type">number</span></span>
+         y coordinate to check
+        </li>
+    </ul>
+
+    <h3>Returns:</h3>
+    <ol>
+
+           <span class="types"><span class="type">boolean</span></span>
+        True if point lies inside this hexagon
+    </ol>
+
+
+
+
+</dd>
+    <dt>
+    <a name = "Hexagon:checkForWin"></a>
+    <strong>Hexagon:checkForWin ()</strong>
+    </dt>
+    <dd>
+    Check the hexagons for a win condition
+
+
+
+    <h3>Returns:</h3>
+    <ol>
+
+           <span class="types"><span class="type">boolean</span></span>
+        True if the game is over
+    </ol>
+
+
+
+
+</dd>
+    <dt>
+    <a name = "Hexagon:slideHexagons"></a>
+    <strong>Hexagon:slideHexagons (axis, axisValue, dir, inverted)</strong>
+    </dt>
+    <dd>
+    Slide hexagons in a certain direction along an axis
+
+
+    <h3>Parameters:</h3>
+    <ul>
+        <li><span class="parameter">axis</span>
+            <span class="types"><a class="type" href="http://www.lua.org/manual/5.1/manual.html#5.4">string</a></span>
+         The axis to slide hexagon along.  Ex 'y'
+        </li>
+        <li><span class="parameter">axisValue</span>
+            <span class="types"><span class="type">number</span></span>
+         This is the x, y, or z coordinate of the row to be moved
+        </li>
+        <li><span class="parameter">dir</span>
+            <span class="types"><a class="type" href="http://www.lua.org/manual/5.1/manual.html#5.4">string</a></span>
+         The compass direction that the hexagons will slide
+        </li>
+        <li><span class="parameter">inverted</span>
+            <span class="types"><span class="type">boolean</span></span>
+         Used to determine sorting order so that hexagons slide in the right order
+        </li>
+    </ul>
+
+
+
+
+
+</dd>
+    <dt>
+    <a name = "Hexagon:getDirection"></a>
+    <strong>Hexagon:getDirection (axis, isInverted)</strong>
+    </dt>
+    <dd>
+    Converts an axis and a boolean into a compass direction
+
+
+    <h3>Parameters:</h3>
+    <ul>
+        <li><span class="parameter">axis</span>
+            <span class="types"><a class="type" href="http://www.lua.org/manual/5.1/manual.html#5.4">string</a></span>
+         The 3D axis to use.  Ex 'y'
+        </li>
+        <li><span class="parameter">isInverted</span>
+            <span class="types"><span class="type">boolean</span></span>
+         Usefule for determing the compass direction that the axis uses
+        </li>
+    </ul>
+
+    <h3>Returns:</h3>
+    <ol>
+
+           <span class="types"><a class="type" href="http://www.lua.org/manual/5.1/manual.html#5.4">string</a></span>
+        The compass direction the the axis and iversion imply
+    </ol>
+
+
+
+
+</dd>
+</dl>
+
+
+</div> <!-- id="content" -->
+</div> <!-- id="main" -->
+<div id="about">
+<i>generated by <a href="http://github.com/stevedonovan/LDoc">LDoc 1.4.3</a></i>
+<i style="float:right;">Last updated 2016-03-19 12:59:41 </i>
+</div> <!-- id="about" -->
+</div> <!-- id="container" -->
+</body>
+</html>

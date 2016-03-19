@@ -1,0 +1,363 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN"
+   "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd">
+<html>
+<meta http-equiv="Content-Type" content="text/html; charset=UTF-8"/>
+<head>
+    <title>Reference</title>
+    <link rel="stylesheet" href="../ldoc.css" type="text/css" />
+</head>
+<body>
+
+<div id="container">
+
+<div id="product">
+	<div id="product_logo"></div>
+	<div id="product_name"><big><b></b></big></div>
+	<div id="product_description"></div>
+</div> <!-- id="product" -->
+
+
+<div id="main">
+
+
+<!-- Menu -->
+
+<div id="navigation">
+<br/>
+<h1>ldoc</h1>
+
+<ul>
+  <li><a href="../index.html">Index</a></li>
+</ul>
+
+<h2>Contents</h2>
+<ul>
+<li><a href="#Functions">Functions</a></li>
+<li><a href="#scripts_utils_Functions">scripts.utils Functions</a></li>
+<li><a href="#states_game_Functions">states.game Functions</a></li>
+</ul>
+
+
+<h2>Modules</h2>
+<ul class="$(kind=='Topics' and '' or 'nowrap'">
+  <li><a href="../modules/conf.html">conf</a></li>
+  <li><strong>Hex</strong></li>
+</ul>
+<h2>Classes</h2>
+<ul class="$(kind=='Topics' and '' or 'nowrap'">
+  <li><a href="../classes/Entities.html">Entities</a></li>
+  <li><a href="../classes/Hexagon.html">Hexagon</a></li>
+</ul>
+
+</div>
+
+<div id="content">
+
+<h1>Module <code>Hex</code></h1>
+<p>This is the entry point into the game</p>
+<p></p>
+    <h3>Info:</h3>
+    <ul>
+        <li><strong>Author</strong>: Will</li>
+    </ul>
+
+
+<h2><a href="#Functions">Functions</a></h2>
+<table class="function_list">
+	<tr>
+	<td class="name" nowrap><a href="#love.load">love.load ()</a></td>
+	<td class="summary">Called once when LOVE is loaded.</td>
+	</tr>
+	<tr>
+	<td class="name" nowrap><a href="#love.update">love.update (dt)</a></td>
+	<td class="summary">Called once per frame.</td>
+	</tr>
+	<tr>
+	<td class="name" nowrap><a href="#love.draw">love.draw ()</a></td>
+	<td class="summary">Draws the frames per second indicator</td>
+	</tr>
+	<tr>
+	<td class="name" nowrap><a href="#love.keypressed">love.keypressed (key)</a></td>
+	<td class="summary">Exits the game when the escape key is pressed</td>
+	</tr>
+</table>
+<h2><a href="#scripts_utils_Functions">scripts.utils Functions</a></h2>
+<table class="function_list">
+	<tr>
+	<td class="name" nowrap><a href="#math.between">math.between (x, first, second)</a></td>
+	<td class="summary">Check if a value is between two others.</td>
+	</tr>
+	<tr>
+	<td class="name" nowrap><a href="#math.sign">math.sign (x)</a></td>
+	<td class="summary">Returns the sign of a given number</td>
+	</tr>
+</table>
+<h2><a href="#states_game_Functions">states.game Functions</a></h2>
+<table class="function_list">
+	<tr>
+	<td class="name" nowrap><a href="#Game">Game</a></td>
+	<td class="summary">Holds current game information</td>
+	</tr>
+	<tr>
+	<td class="name" nowrap><a href="#Game:init">Game:init ()</a></td>
+	<td class="summary">Initialize the game</td>
+	</tr>
+	<tr>
+	<td class="name" nowrap><a href="#Game:update">Game:update (dt)</a></td>
+	<td class="summary">Called once per frame, updates the game</td>
+	</tr>
+	<tr>
+	<td class="name" nowrap><a href="#Game:draw">Game:draw ()</a></td>
+	<td class="summary">Draw the current frame</td>
+	</tr>
+</table>
+
+<br/>
+<br/>
+
+
+    <h2 class="section-header "><a name="Functions"></a>Functions</h2>
+
+    <dl class="function">
+    <dt>
+    <a name = "love.load"></a>
+    <strong>love.load ()</strong>
+    </dt>
+    <dd>
+    Called once when LOVE is loaded.   Initializes values and switches to the game state
+
+
+
+
+
+
+
+</dd>
+    <dt>
+    <a name = "love.update"></a>
+    <strong>love.update (dt)</strong>
+    </dt>
+    <dd>
+    Called once per frame.   Used to update the Timer object
+
+
+    <h3>Parameters:</h3>
+    <ul>
+        <li><span class="parameter">dt</span>
+            <span class="types"><span class="type">number</span></span>
+         The time in milliseconds between frame draws
+        </li>
+    </ul>
+
+
+
+
+
+</dd>
+    <dt>
+    <a name = "love.draw"></a>
+    <strong>love.draw ()</strong>
+    </dt>
+    <dd>
+    Draws the frames per second indicator
+
+
+
+
+
+
+
+</dd>
+    <dt>
+    <a name = "love.keypressed"></a>
+    <strong>love.keypressed (key)</strong>
+    </dt>
+    <dd>
+    Exits the game when the escape key is pressed
+
+
+    <h3>Parameters:</h3>
+    <ul>
+        <li><span class="parameter">key</span>
+            <span class="types"><a class="type" href="http://www.lua.org/manual/5.1/manual.html#5.4">string</a></span>
+         The key pressed
+        </li>
+    </ul>
+
+
+
+
+
+</dd>
+</dl>
+    <h2 class="section-header "><a name="scripts_utils_Functions"></a>scripts.utils Functions</h2>
+
+    <dl class="function">
+    <dt>
+    <a name = "math.between"></a>
+    <strong>math.between (x, first, second)</strong>
+    </dt>
+    <dd>
+    Check if a value is between two others.   Parameters need not be in ascending order.
+
+
+    <h3>Parameters:</h3>
+    <ul>
+        <li><span class="parameter">x</span>
+            <span class="types"><span class="type">number</span></span>
+         The value to compare with the other two
+        </li>
+        <li><span class="parameter">first</span>
+            <span class="types"><span class="type">number</span></span>
+         The first value (could be lower or upper bound)
+        </li>
+        <li><span class="parameter">second</span>
+            <span class="types"><span class="type">number</span></span>
+         The second value (could be lower or upper bound)
+        </li>
+    </ul>
+
+
+
+
+
+</dd>
+    <dt>
+    <a name = "math.sign"></a>
+    <strong>math.sign (x)</strong>
+    </dt>
+    <dd>
+    Returns the sign of a given number
+
+
+    <h3>Parameters:</h3>
+    <ul>
+        <li><span class="parameter">x</span>
+            <span class="types"><span class="type">number</span></span>
+         The number whose sign we will check
+        </li>
+    </ul>
+
+    <h3>Returns:</h3>
+    <ol>
+
+           <span class="types"><span class="type">number</span></span>
+        -1 if x < 0, 1 if x > 0, or 0 if x is 0
+    </ol>
+
+
+
+
+</dd>
+</dl>
+    <h2 class="section-header "><a name="states_game_Functions"></a>states.game Functions</h2>
+
+    <dl class="function">
+    <dt>
+    <a name = "Game"></a>
+    <strong>Game</strong>
+    </dt>
+    <dd>
+    Holds current game information
+
+
+    <h3>Fields:</h3>
+    <ul>
+        <li><span class="parameter">gridRadius</span>
+         How many hexagons should be drawn
+        </li>
+        <li><span class="parameter">hexSize</span>
+         The draw size for a hexagon
+        </li>
+        <li><span class="parameter">pointerStart</span>
+         Where the user has first clicked the screen
+        </li>
+        <li><span class="parameter">canMove</span>
+         Determines if the user can slide.  False while tween animation is playing
+        </li>
+        <li><span class="parameter">started</span>
+         True once the initial tweenIn animation has finished
+        </li>
+        <li><span class="parameter">over</span>
+         True when the player has won the game
+        </li>
+        <li><span class="parameter">slideDirection</span>
+         The direction the player has started sliding
+        </li>
+        <li><span class="parameter">slideAxis</span>
+         The axis the player has started sliding on
+        </li>
+        <li><span class="parameter">isDragged</span>
+         True if the player is currently clicking the screen
+        </li>
+        <li><span class="parameter">stencilFunction</span>
+         Used to prevent certain areas from drawing
+        </li>
+    </ul>
+
+
+
+
+
+</dd>
+    <dt>
+    <a name = "Game:init"></a>
+    <strong>Game:init ()</strong>
+    </dt>
+    <dd>
+    Initialize the game
+
+
+
+
+
+
+
+</dd>
+    <dt>
+    <a name = "Game:update"></a>
+    <strong>Game:update (dt)</strong>
+    </dt>
+    <dd>
+    Called once per frame, updates the game
+
+
+    <h3>Parameters:</h3>
+    <ul>
+        <li><span class="parameter">dt</span>
+            <span class="types"><span class="type">number</span></span>
+         Time passed between frame draws
+        </li>
+    </ul>
+
+
+
+
+
+</dd>
+    <dt>
+    <a name = "Game:draw"></a>
+    <strong>Game:draw ()</strong>
+    </dt>
+    <dd>
+    Draw the current frame
+
+
+
+
+
+
+
+</dd>
+</dl>
+
+
+</div> <!-- id="content" -->
+</div> <!-- id="main" -->
+<div id="about">
+<i>generated by <a href="http://github.com/stevedonovan/LDoc">LDoc 1.4.3</a></i>
+<i style="float:right;">Last updated 2016-03-19 12:59:41 </i>
+</div> <!-- id="about" -->
+</div> <!-- id="container" -->
+</body>
+</html>

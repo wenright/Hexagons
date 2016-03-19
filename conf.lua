@@ -1,3 +1,8 @@
+--- A configuration file for LOVE
+-- @module conf
+
+--- Configuation settings for the game window
+-- @tparam table t The table containing all of the settings that can be modified
 function love.conf(t)
     t.identity = nil                   -- The name of the save directory (string)
     t.version = "0.10.0"                -- The LÖVE version this game was made for (string)
