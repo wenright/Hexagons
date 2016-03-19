@@ -51,7 +51,7 @@ end
 --- Find the entity at the given point
 -- @tparam number x The x coordinate to check
 -- @tparam number y The y coordinate to check
--- @tparam Class The object at the given location, if there is one
+-- @treturn Class The object at the given location, if there is one
 function Entities:getAtPoint(x, y)
 	x, y = Camera:worldCoords(x, y)
 	for _, entity in pairs(self.pool) do
