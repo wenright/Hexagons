@@ -217,7 +217,7 @@ function Hexagon.slideHexagons(axis, axisValue, dir, inverted, amount)
 		-- Find the one that has to move around the map, and duplicate/teleport it
 		if math.abs(hex.x - hex.tx) > 1 or math.abs(hex.y - hex.ty) > 1 or math.abs(hex.z - hex.tz) > 1 then
 			local dirVal = Hexagon.directions[dir]
-			assert(dirVal)
+			assert(dirVal, 'dirVal is null')
 
 			local newHex = Game.hexagons:add(hex.tx - dirVal.x, hex.ty - dirVal.y, hex.tz - dirVal.z, hex.color)
 			newHex:moveTo(hex.tx, hex.ty, hex.tz)
