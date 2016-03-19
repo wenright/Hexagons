@@ -12,7 +12,7 @@ local Game = {
 
 		love.graphics.rotate(math.rad(30))
 
-		local scale = 4
+		local scale = 4.4
 		love.graphics.scale(scale)
 
 		love.graphics.polygon('fill', Hexagon.vertices)
