@@ -90,29 +90,7 @@ end
 
 -- TODO this is old code. Use code from mouse*
 function Game:touchreleased(id, x, y)
-	local dx, dy = Game.pointerStart.x - x, Game.pointerStart.y - y
-	local dist = math.sqrt(dx^2 + dy^2)
 
-	if dist > 30 and Game.canMove then
-		local v1, v2 = -dx/dist, dy/dist
-
-		-- Slide hexagons based on the direction that the user swiped
-		if between(v1, 0, 1) and between(v2, 0.5, 1) then
-			Hexagon.slideHexagons('y', 'NE', true)
-		elseif between(v1, 0, 1) and between(v2, -0.5, 0.5) then
-			Hexagon.slideHexagons('z', 'E',  false)
-		elseif between(v1, 0, 1) and between(v2, -0.5, -1) then
-			Hexagon.slideHexagons('x', 'SE', false)
-		elseif between(v1, 0, -1) and between(v2, -0.5, -1) then
-			Hexagon.slideHexagons('y', 'SW', false)
-		elseif between(v1, 0, -1) and between(v2, -0.5, 0.5) then
-			Hexagon.slideHexagons('z', 'W', true)
-		elseif between(v1, 0, -1) and between(v2, 0.5, 1) then
-			Hexagon.slideHexagons('x', 'NW', true)
-		else
-			-- The user must have missed all hexagons, so allow moving again
-		end
-	end
 end
 
 function Game:mousepressed(x, y)
@@ -165,8 +143,14 @@ function Game:mousemoved(x, y, dx, dy)
 			Game.slideAxisValue = Game.hoverHex[Game.slideAxis]
 		end
 
-		if Game.canMove and diffDist >= Game.hexSize * 2 then
-			Hexagon.slideHexagons(Game.slideAxis, Game.slideAxisValue, Game.slideDirection,  Game.slideInverted)
+		if Game.canMove and diffDist >= Game.hexSize * 2 and Game.slideDirection then
+      if not (Game.consecutiveSlideAxis or Game.consecutiveSlideAxisValue) then
+        Game.consecutiveSlideAxis = Game.slideAxis
+        Game.consecutiveSlideAxisValue = Game.slideAxisValue
+      end
+
+      -- TODO slide direction needs to be updated somehow
+			Hexagon.slideHexagons(Game.consecutiveSlideAxis, Game.consecutiveSlideAxisValue, Game.slideDirection,  Game.slideInverted)
 			Game.pointerStart.x = x
 			Game.pointerStart.y = y
 
@@ -178,6 +162,8 @@ end
 
 function Game:mousereleased(x, y)
 	Game.slideDirection = nil
+  Game.consecutiveSlideAxis = nil
+  Game.consecutiveSlideAxisValue = nil
 	Game.slideAxis = nil
 	Game.hoverHex = false
 	Game.isDragged = false
