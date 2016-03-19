@@ -38,7 +38,7 @@ local Hexagon = Class {
 		math.sin(math.rad(60 * 4 + offset)) * Game.hexSize,
 
 		math.cos(math.rad(60 * 5 + offset)) * Game.hexSize,
-		math.sin(math.rad(60 * 5 + offset)) * Game.hexSize,
+		math.sin(math.rad(60 * 5 + offset)) * Game.hexSize
 	},
 
 	directions = {
@@ -151,6 +151,7 @@ function Hexagon:setWorldCoordinates(x, y, z, margin, remove)
 end
 
 function Hexagon:checkCollision(x, y)
+	-- TODO use a more accurate collision detection method (Currently circle based)
 	return math.sqrt((self.drawX - x)^2 + (self.drawY - y)^2) < Game.hexSize - 5
 end
 

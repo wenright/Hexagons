@@ -166,6 +166,9 @@ function Game:mousemoved(x, y, dx, dy)
 			Hexagon.slideHexagons(Game.slideAxis, Game.slideAxisValue, Game.slideDirection,  Game.slideInverted)
 			Game.pointerStart.x = x
 			Game.pointerStart.y = y
+
+			-- Find a new hexagon to rotate around (The one under mouse pointer)
+			Game.hoverHex = Game.hexagons:getAtPoint(Game.pointerStart.x, Game.pointerStart.y)
 		end
 	end
 end
