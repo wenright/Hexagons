@@ -1,3 +1,6 @@
+--- A hexagon object
+-- @module Hexagon
+
 local offset = 30
 local startMargin = 5
 local endMargin = 1.1
@@ -11,16 +14,6 @@ local colors = {
 }
 
 local Hexagon = Class {
-	init = function(self, x, y, z, color)
-		self.x, self.y, self.z = x, y, z
-
-		self.drawX = Game.hexSize * (y - x) * math.sqrt(3) / 2 * endMargin
-		self.drawY = Game.hexSize * ((y + x) / 2 - z) * endMargin
-
-		-- self.color = {255, 55, 20}
-		self.color = color or colors[love.math.random(#colors)]
-	end,
-
 	vertices = {
 		math.cos(math.rad(60 * 0 + offset)) * Game.hexSize,
 		math.sin(math.rad(60 * 0 + offset)) * Game.hexSize,
@@ -53,6 +46,27 @@ local Hexagon = Class {
 	type = 'hexagon'
 }
 
+
+--- Initialize a new hexagon object
+-- Note that coordinates are 3 dimensional, but will be drawn on a 2D plane
+-- @tparam number x x-coordinate to draw hexagon
+-- @tparam number y y-coordinate to draw hexagon
+-- @tparam number z z-coordinate to draw hexagon
+-- @tparam number color Color that hexagon will draw as. Also used to determine win condition
+-- @treturn table a new hexagon object
+function Hexagon:init(x, y, z, color)
+    self.x, self.y, self.z = x, y, z
+
+    self.drawX = Game.hexSize * (y - x) * math.sqrt(3) / 2 * endMargin
+    self.drawY = Game.hexSize * ((y + x) / 2 - z) * endMargin
+
+    -- self.color = {255, 55, 20}
+    self.color = color or colors[love.math.random(#colors)]
+  end
+
+--- Update
+-- Updates the hex object
+-- @param dt Delta time: time between frame draws
 function Hexagon:update(dt)
 
 end
