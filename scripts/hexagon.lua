@@ -230,6 +230,8 @@ function Hexagon.slideHexagons(axis, axisValue, dir, inverted, amount)
 	end
 
 	Timer.after(slideTweenTime, function()
+    Game.canMove = true
+
 		Game.hexagons:forEach(function(hex)
 			if hex:checkForWin() then
 				print('You won!')

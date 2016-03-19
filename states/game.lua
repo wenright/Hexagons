@@ -2,7 +2,7 @@ local Game = {
 	gridRadius = 2,
 	hexSize = 50,
 	pointerStart = {x = 0, y = 0},
-	canMove = true,
+	canMove = false,
 	started = false,
 	over = false,
 	slideDirection = nil,
@@ -33,7 +33,9 @@ function Game:init()
 			local z = -x + -y
 			if math.abs(x) <= Game.gridRadius and math.abs(y) <= Game.gridRadius and math.abs(z) <= Game.gridRadius then
 				local hex = Game.hexagons:add(x, y, z)
-				hex:tweenIn(1, 'out-expo')
+        local tweenInTime = 1
+				hex:tweenIn(tweenInTime, 'out-expo')
+        Timer.after(tweenInTime, function() Game.canMove = true end)
 
 				-- HACK: maybe just draw hexagons manually. Maintaining a second list of hexes could break things
 				local fakeHex = Game.stencilHexagons:add(x, y, z)
@@ -86,6 +88,7 @@ function Game:touchmoved(id, x, y, dx, dy)
 
 end
 
+-- TODO this is old code. Use code from mouse*
 function Game:touchreleased(id, x, y)
 	local dx, dy = Game.pointerStart.x - x, Game.pointerStart.y - y
 	local dist = math.sqrt(dx^2 + dy^2)
