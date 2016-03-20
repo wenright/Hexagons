@@ -301,11 +301,11 @@ function Hexagon.slideHexagons(axis, axisValue, dir, inverted)
 		Game.hexagons:forEach(function(hex)
 			if hex:checkForWin() then
 				print('You won!')
-				Game.over = true
+				Game.isOver = true
 			end
 		end)
 
-    if Game.over then
+    if Game.isOver then
       Game:over()
     end
 	end)

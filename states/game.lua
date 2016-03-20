@@ -19,7 +19,7 @@ local Game = {
 	pointerStart = {x = 0, y = 0},
 	canMove = false,
 	started = false,
-	over = false,
+	isOver = false,
 	slideDirection = nil,
 	slideAxis = nil,
 	isDragged = false,
@@ -204,7 +204,10 @@ function Game:over()
           hex:tweenIn(1, 'out-expo')
         end)
 
-        Timer.after(1, function() Game.canMove = true end)
+        Timer.after(1, function() 
+          Game.canMove = true
+          Game.isOver = false
+        end)
       end)
     end)
   end)
