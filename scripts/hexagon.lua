@@ -304,6 +304,20 @@ function Hexagon.slideHexagons(axis, axisValue, dir, inverted)
 				Game.over = true
 			end
 		end)
+
+    if Game.over then
+      Game.canMove = false
+      Game.started = false
+
+      Game.hexagons:forEach(function(hex)
+        local outMargin = 2.5
+        Timer.tween(1, hex, {
+            drawX = Game.hexSize * (hex.y - hex.x) * math.sqrt(3) / 2 * outMargin,
+            drawY = Game.hexSize * ((hex.y + hex.x) / 2 - hex.z) * outMargin
+          },
+          'out-expo')
+      end)
+    end
 	end)
 end
 

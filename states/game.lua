@@ -91,101 +91,90 @@ function Game:draw()
 	love.graphics.setStencilTest()
 
 	Camera:detach()
-
-	if Game.over then
-		love.graphics.setColor(255, 255, 255)
-		love.graphics.print('You won!', love.graphics.getWidth() / 2, love.graphics.getHeight() / 2)
-	end
 end
 
-function Game:touchpressed(id, x, y)
-  pointerPressed(x, y)
+function Game:touchpressed(id, x, y) Game:pointerpressed(x, y) end
+function Game:touchmoved(id, x, y, dx, dy) Game:pointermoved(x, y, dx, dy) end
+function Game:touchreleased(id, x, y) Game:pointerreleased(x, y) end
+function Game:mousepressed(x, y) Game:pointerpressed(x, y) end
+function Game:mousemoved(x, y, dx, dy) Game:pointermoved(x, y, dx, dy) end
+function Game:mousereleased(x, y) Game:pointerreleased(x, y) end
+
+function Game:pointerpressed(x, y)
+  Game.isDragged = true
+  Game.pointerStart = {x = x, y = y}
 end
 
--- TODO for mobile
-function Game:touchmoved(id, x, y, dx, dy)
+function Game:pointermoved(x, y, dx, dy)
+-- TODO moving is still inaccurate at times
+  if Game.isDragged then
+    local diffX, diffY = Game.pointerStart.x - x, Game.pointerStart.y - y
+    local diffDist = math.sqrt(diffX^2 + diffY^2)
 
-end
+    local dist = math.sqrt(dx^2 + dy^2)
 
--- TODO this is old code. Use code from mouse*
-function Game:touchreleased(id, x, y)
+    if not Game.hoverHex then
+      Game.hoverHex = Game.hexagons:getAtPoint(Game.pointerStart.x, Game.pointerStart.y)
+    end
 
-end
+    -- Only perform these actions if the user is over a hexagon
+    if Game.hoverHex then
+      local v1, v2 = -dx/dist, dy/dist
 
-function Game:mousepressed(x, y)
-	Game.isDragged = true
-	Game.pointerStart = {x = x, y = y}
-end
+      -- Slide hexagons based on the direction that the user swiped
+      if math.between(v1, 0, 1) and math.between(v2, 0.5, 1) then
+        Game.slideDirection = 'SW'
+        Game.slideAxis = 'y'
+        Game.slideInverted = false
+      elseif math.between(v1, 0, 1) and math.between(v2, -0.5, 0.5) then
+        Game.slideDirection = 'W'
+        Game.slideAxis = 'z'
+        Game.slideInverted = true
+      elseif math.between(v1, 0, 1) and math.between(v2, -0.5, -1) then
+        Game.slideDirection = 'NW'
+        Game.slideAxis = 'x'
+        Game.slideInverted = true
+      elseif math.between(v1, 0, -1) and math.between(v2, -0.5, -1) then
+        Game.slideDirection = 'NE'
+        Game.slideAxis = 'y'
+        Game.slideInverted = true
+      elseif math.between(v1, 0, -1) and math.between(v2, -0.5, 0.5) then
+        Game.slideDirection = 'E'
+        Game.slideAxis = 'z'
+        Game.slideInverted = false
+      elseif math.between(v1, 0, -1) and math.between(v2, 0.5, 1) then
+        Game.slideDirection = 'SE'
+        Game.slideAxis = 'x'
+        Game.slideInverted = false
+      end
 
-function Game:mousemoved(x, y, dx, dy)
-	if Game.isDragged then
-		local diffX, diffY = Game.pointerStart.x - x, Game.pointerStart.y - y
-		local diffDist = math.sqrt(diffX^2 + diffY^2)
+      Game.slideAxisValue = Game.hoverHex[Game.slideAxis]
+    end
 
-		local dist = math.sqrt(dx^2 + dy^2)
-
-		if not Game.hoverHex then
-			Game.hoverHex = Game.hexagons:getAtPoint(Game.pointerStart.x, Game.pointerStart.y)
-		end
-
-		-- Only perform these actions if the user is over a hexagon
-		if Game.hoverHex then
-			local v1, v2 = -dx/dist, dy/dist
-
-			-- Slide hexagons based on the direction that the user swiped
-			if math.between(v1, 0, 1) and math.between(v2, 0.5, 1) then
-				Game.slideDirection = 'SW'
-				Game.slideAxis = 'y'
-				Game.slideInverted = false
-			elseif math.between(v1, 0, 1) and math.between(v2, -0.5, 0.5) then
-				Game.slideDirection = 'W'
-				Game.slideAxis = 'z'
-				Game.slideInverted = true
-			elseif math.between(v1, 0, 1) and math.between(v2, -0.5, -1) then
-				Game.slideDirection = 'NW'
-				Game.slideAxis = 'x'
-				Game.slideInverted = true
-			elseif math.between(v1, 0, -1) and math.between(v2, -0.5, -1) then
-				Game.slideDirection = 'NE'
-				Game.slideAxis = 'y'
-				Game.slideInverted = true
-			elseif math.between(v1, 0, -1) and math.between(v2, -0.5, 0.5) then
-				Game.slideDirection = 'E'
-				Game.slideAxis = 'z'
-				Game.slideInverted = false
-			elseif math.between(v1, 0, -1) and math.between(v2, 0.5, 1) then
-				Game.slideDirection = 'SE'
-				Game.slideAxis = 'x'
-				Game.slideInverted = false
-			end
-
-			Game.slideAxisValue = Game.hoverHex[Game.slideAxis]
-		end
-
-		if Game.canMove and diffDist >= Game.hexSize * 2 and Game.slideDirection then
+    if Game.canMove and diffDist >= Game.hexSize and Game.slideDirection then
       if not (Game.consecutiveSlideAxis or Game.consecutiveSlideAxisValue) then
         Game.consecutiveSlideAxis = Game.slideAxis
         Game.consecutiveSlideAxisValue = Game.slideAxisValue
       end
 
       local direction = Hexagon.getDirection(Game.consecutiveSlideAxis, Game.slideInverted)
-			Hexagon.slideHexagons(Game.consecutiveSlideAxis, Game.consecutiveSlideAxisValue, direction, Game.slideInverted)
-			Game.pointerStart.x = x
-			Game.pointerStart.y = y
+      Hexagon.slideHexagons(Game.consecutiveSlideAxis, Game.consecutiveSlideAxisValue, direction, Game.slideInverted)
+      Game.pointerStart.x = x
+      Game.pointerStart.y = y
 
-			-- Find a new hexagon to rotate around (The one under mouse pointer)
-			Game.hoverHex = Game.hexagons:getAtPoint(Game.pointerStart.x, Game.pointerStart.y)
-		end
-	end
+      -- Find a new hexagon to rotate around (The one under mouse pointer)
+      Game.hoverHex = Game.hexagons:getAtPoint(Game.pointerStart.x, Game.pointerStart.y)
+    end
+  end
 end
 
-function Game:mousereleased(x, y)
-	Game.slideDirection = nil
+function Game:pointerreleased(x, y)
+  Game.slideDirection = nil
   Game.consecutiveSlideAxis = nil
   Game.consecutiveSlideAxisValue = nil
-	Game.slideAxis = nil
-	Game.hoverHex = false
-	Game.isDragged = false
+  Game.slideAxis = nil
+  Game.hoverHex = false
+  Game.isDragged = false
 end
 
 return Game
