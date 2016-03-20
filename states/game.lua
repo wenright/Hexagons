@@ -177,10 +177,7 @@ function Game:pointerreleased(x, y)
   Game.isDragged = false
 end
 
-function Game:keypressed(key)
-  if key == 's' then Game:over() end
-end
-
+--- Called when the player completes a hexagon and the game is over
 function Game:over()
   Game.canMove = false
   Game.started = false

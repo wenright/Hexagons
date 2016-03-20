@@ -327,6 +327,8 @@ function Hexagon.getDirection(axis, isInverted)
   end
 end
 
+--- Finds a new random color from the table of colors
+-- @treturn table a random color from the color table
 function Hexagon.newColor() return colors[love.math.random(#colors)] end
 
 return Hexagon
