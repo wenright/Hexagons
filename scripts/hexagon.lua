@@ -3,7 +3,7 @@
 
 -- A few config variables. Probably should be moved into the hexagon class
 local offset = 30
-local startMargin = 5
+local startMargin = 2.5
 local endMargin = 1.1
 local tweenTime = 1
 
@@ -306,17 +306,7 @@ function Hexagon.slideHexagons(axis, axisValue, dir, inverted)
 		end)
 
     if Game.over then
-      Game.canMove = false
-      Game.started = false
-
-      Game.hexagons:forEach(function(hex)
-        local outMargin = 2.5
-        Timer.tween(1, hex, {
-            drawX = Game.hexSize * (hex.y - hex.x) * math.sqrt(3) / 2 * outMargin,
-            drawY = Game.hexSize * ((hex.y + hex.x) / 2 - hex.z) * outMargin
-          },
-          'out-expo')
-      end)
+      Game:over()
     end
 	end)
 end
@@ -336,5 +326,7 @@ function Hexagon.getDirection(axis, isInverted)
     elseif axis == 'y' then return 'SW' end
   end
 end
+
+function Hexagon.newColor() return colors[love.math.random(#colors)] end
 
 return Hexagon

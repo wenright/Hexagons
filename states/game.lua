@@ -177,4 +177,40 @@ function Game:pointerreleased(x, y)
   Game.isDragged = false
 end
 
+function Game:keypressed(key)
+  if key == 's' then Game:over() end
+end
+
+function Game:over()
+  Game.canMove = false
+  Game.started = false
+
+  Game.hexagons:forEach(function(hex)
+    local outMargin = 2.5
+    Timer.tween(1, hex, {
+        drawX = Game.hexSize * (hex.y - hex.x) * math.sqrt(3) / 2 * outMargin,
+        drawY = Game.hexSize * ((hex.y + hex.x) / 2 - hex.z) * outMargin
+      },
+      'out-expo')
+  end)
+
+  Timer.after(1, function () 
+    Timer.tween(1, Camera, {x = love.graphics.getWidth()/2}, 'in-quad', function()
+      Camera.x = -love.graphics.getWidth()/2
+
+      Game.hexagons:forEach(function(hex)
+        hex.color = Hexagon.newColor()
+      end)
+
+      Timer.tween(1, Camera, {x = 0}, 'out-quad', function()    
+        Game.hexagons:forEach(function(hex)
+          hex:tweenIn(1, 'out-expo')
+        end)
+
+        Timer.after(1, function() Game.canMove = true end)
+      end)
+    end)
+  end)
+end
+
 return Game
