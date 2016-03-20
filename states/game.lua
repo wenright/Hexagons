@@ -192,14 +192,14 @@ function Game:over()
   end)
 
   Timer.after(1, function () 
-    Timer.tween(1, Camera, {x = love.graphics.getWidth()/2}, 'in-quad', function()
+    Timer.tween(0.5, Camera, {x = love.graphics.getWidth()/2}, 'in-quad', function()
       Camera.x = -love.graphics.getWidth()/2
 
       Game.hexagons:forEach(function(hex)
         hex.color = Hexagon.newColor()
       end)
 
-      Timer.tween(1, Camera, {x = 0}, 'out-quad', function()    
+      Timer.tween(0.5, Camera, {x = 0}, 'out-quad', function()    
         Game.hexagons:forEach(function(hex)
           hex:tweenIn(1, 'out-expo')
         end)
