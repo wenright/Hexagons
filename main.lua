@@ -18,7 +18,7 @@ Hexagon = require 'scripts.hexagon'
 function love.load()
 	io.stdout:setvbuf('no')
 
-	Camera:zoom(2, 2)
+	Camera:zoom(1.25, 1.25)
 
 	Gamestate.registerEvents()
 	Gamestate.switch(Game)

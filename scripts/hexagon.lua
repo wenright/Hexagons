@@ -3,7 +3,7 @@
 
 -- A few config variables. Probably should be moved into the hexagon class
 local offset = 30
-local startMargin = 2.5
+local startMargin = 1.5
 local endMargin = 1.1
 local tweenTime = 1
 
@@ -104,7 +104,7 @@ end
 --- Tweens a hexagon from its starting position.  Called once at the beginning of the game.
 -- Parameters can be adjusted in hexagon.lua
 -- @tparam number time Duration of tween animation
--- @tparam string func The tween function to use. Ex: 'out-expo' 
+-- @tparam string func The tween function to use. Ex: 'out-expo'
 function Hexagon:tweenIn(time, func)
 	local x, y, z = self.x, self.y, self.z
 
