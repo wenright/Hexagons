@@ -48,7 +48,7 @@ function Game:init()
 		for y = -Game.gridRadius, Game.gridRadius  do
 			local z = -x + -y
 			if math.abs(x) <= Game.gridRadius and math.abs(y) <= Game.gridRadius and math.abs(z) <= Game.gridRadius then
-				local hex = Game.hexagons:add(x, y, z)
+				local hex = Game.hexagons:add(x, y, z, nil, true)
         local tweenInTime = 1
 				hex:tweenIn(tweenInTime, 'out-expo')
         Timer.after(tweenInTime, function() Game.canMove = true end)

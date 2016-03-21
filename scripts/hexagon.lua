@@ -20,6 +20,13 @@ local colors = {
 	{255, 107, 107},  -- pink
 }
 
+local hexes = {
+  7,
+  5,
+  4,
+  3
+}
+
 local Hexagon = Class {
   -- A table of vertices that make up a hexagon
 	vertices = {
@@ -70,14 +77,24 @@ local Hexagon = Class {
 -- @tparam number z z-coordinate to draw hexagon
 -- @tparam number color Color that hexagon will draw as. Also used to determine win condition
 -- @treturn Hexagon a new hexagon object
-function Hexagon:init(x, y, z, color)
+function Hexagon:init(x, y, z, color, generateColor)
     self.x, self.y, self.z = x, y, z
 
     self.drawX = Game.hexSize * (y - x) * math.sqrt(3) / 2 * endMargin
     self.drawY = Game.hexSize * ((y + x) / 2 - z) * endMargin
 
-    -- self.color = {255, 55, 20}
-    self.color = color or colors[love.math.random(#colors)]
+    if color then
+      self.color = color
+    elseif generateColor then
+      -- TODO this is called for the invisible hexes as well. It shouldn't be
+      local i
+      repeat
+        i = love.math.random(#hexes)
+      until hexes[i] > 0
+
+      hexes[i] = hexes[i] - 1
+      self.color = colors[i]
+    end
   end
 
 --- Updates the hex object
