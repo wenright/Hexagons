@@ -86,7 +86,7 @@ function Hexagon:init(x, y, z, color, generateColor)
     if color then
       self.color = color
     elseif generateColor then
-      -- TODO this is called for the invisible hexes as well. It shouldn't be
+      -- TODO this needs to be called again when finished with first puzzle
       local i
       repeat
         i = love.math.random(#hexes)
@@ -94,6 +94,8 @@ function Hexagon:init(x, y, z, color, generateColor)
 
       hexes[i] = hexes[i] - 1
       self.color = colors[i]
+    else
+      self.color = colors[love.math.random(#colors)]
     end
   end
 
