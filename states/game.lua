@@ -41,8 +41,12 @@ local Game = {
 --- Initialize the game
 function Game:init()
 	print('Creating hexagons...')
+  Game.score = 0
 	Game.hexagons = Entities(Hexagon)
 	Game.stencilHexagons = Entities(Hexagon)
+
+  -- TODO
+  Game.hexagonsMapped = {}
 
 	for x = -Game.gridRadius, Game.gridRadius do
 		for y = -Game.gridRadius, Game.gridRadius  do
@@ -52,6 +56,7 @@ function Game:init()
         local tweenInTime = 1
 				hex:tweenIn(tweenInTime, 'out-expo')
         Timer.after(tweenInTime, function() Game.canMove = true end)
+        Game.hexagonsMapped[x .. y .. z] = hex
 
 				-- HACK: maybe just draw hexagons manually. Maintaining a second list of hexes could break things
 				local fakeHex = Game.stencilHexagons:add(x, y, z)
@@ -61,6 +66,8 @@ function Game:init()
 			end
 		end
 	end
+
+  updateScore()
 
 	love.graphics.setBackgroundColor(52, 56, 62)
 
@@ -91,6 +98,9 @@ function Game:draw()
 	love.graphics.setStencilTest()
 
 	Camera:detach()
+
+  love.graphics.setColor(255, 255, 255)
+  love.graphics.print(Game.score, 0, 15)
 end
 
 function Game:touchpressed(id, x, y) Game:pointerpressed(x, y) end

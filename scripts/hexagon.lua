@@ -18,6 +18,7 @@ local colors = {
 	{78, 205, 196},   -- blue
 	{199, 244, 100},  -- green
 	{255, 107, 107},  -- pink
+	{255, 0, 255}	  -- Error magenta
 }
 
 local hexes = {
@@ -115,6 +116,9 @@ function Hexagon:draw()
 	-- This allows for filled polygons while still anti-aliasing without having to use full screen anti-aliasing
 	-- 	(Lines are anti-aliased automatically, fills are not)
 	love.graphics.polygon('fill', Hexagon.vertices)
+	love.graphics.polygon('line', Hexagon.vertices)
+
+	love.graphics.setColor(self.color2 or {255, 255, 255, 255})
 	love.graphics.polygon('line', Hexagon.vertices)
 
 	love.graphics.pop()
@@ -235,21 +239,33 @@ end
 
 --- Check the hexagons for a win condition
 -- @treturn boolean True if the game is over
-function Hexagon:checkForWin()
-	local won = true
-	local c = 0
+function Hexagon:countScore()
+	local score = 0
 
+	local sameColoredNeighbours = {}
+
+	-- For each neighbour...
 	Game.hexagons:forEach(function(hex)
-
 		if hex:isNeighbour(self) then
-			c = c + 1
-			if hex.color ~= self.color then
-				won = false
+			if hex.color == self.color and not hex.visited then
+				hex.visited = true
+				score = score + hex:countScore() + 1
+				table.insert(sameColoredNeighbours, hex)
 			end
 		end
 	end)
 
-	return won and c == 6
+	for k, hex in pairs(sameColoredNeighbours) do
+		hex.visited = false
+		
+		if #sameColoredNeighbours > 2 then
+			hex.color2 = colors[5]
+			hex.visited = false
+			-- TODO destroy these hexes in a cool fashion
+		end
+	end
+
+	return score
 end
 
 --- Slide hexagons in a certain direction along an axis
@@ -317,12 +333,7 @@ function Hexagon.slideHexagons(axis, axisValue, dir, inverted)
 	Timer.after(slideTweenTime, function()
     Game.canMove = true
 
-		Game.hexagons:forEach(function(hex)
-			if hex:checkForWin() then
-				print('You won!')
-				Game.isOver = true
-			end
-		end)
+    updateScore()
 
     if Game.isOver then
       Game:over()
@@ -349,5 +360,14 @@ end
 --- Finds a new random color from the table of colors
 -- @treturn table a random color from the color table
 function Hexagon.newColor() return colors[love.math.random(#colors)] end
+
+function updateScore()
+	Game.hexagons:forEach(function(hex)
+		local score = hex:countScore()
+		if score > 2 then
+			Game.score = Game.score + score^2 * 100
+		end
+	end)
+end
 
 return Hexagon
