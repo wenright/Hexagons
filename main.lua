@@ -11,6 +11,8 @@ Camera = require 'lib.hump.camera'(0, 0)
 
 Game = require 'states.game'
 
+Input = require 'scripts.input'
+
 Entities = require 'scripts.entities'
 Hexagon = require 'scripts.hexagon'
 

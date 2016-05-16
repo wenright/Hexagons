@@ -257,7 +257,7 @@ function Hexagon:countScore()
 
 	for k, hex in pairs(sameColoredNeighbours) do
 		hex.visited = false
-		
+
 		if #sameColoredNeighbours > 2 then
 			hex.color2 = colors[5]
 			hex.visited = false
@@ -363,6 +363,8 @@ function Hexagon.newColor() return colors[love.math.random(#colors)] end
 
 function updateScore()
 	Game.hexagons:forEach(function(hex)
+		hex.color2 = {255, 255, 255}
+
 		local score = hex:countScore()
 		if score > 2 then
 			Game.score = Game.score + score^2 * 100
