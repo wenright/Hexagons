@@ -33,14 +33,6 @@ function Entities:remove(e)
 	end
 end
 
---- Update all entities in the system
--- @tparam number dt The time between frame draws
-function Entities:update(dt)
-	for _, entity in pairs(self.pool) do
-		entity:update(dt)
-	end
-end
-
 --- Draw all entities in the system
 function Entities:draw()
 	for _, entity in pairs(self.pool) do

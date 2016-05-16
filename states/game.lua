@@ -43,7 +43,7 @@ function Game:init()
 	print('Creating hexagons...')
   Game.score = 0
 	Game.hexagons = Entities(Hexagon)
-	Game.stencilHexagons = Entities(Hexagon)
+	Game.stencilHexagons = Entities(HexagonShape)
 
   -- TODO
   Game.hexagonsMapped = {}
@@ -52,13 +52,14 @@ function Game:init()
 		for y = -Game.gridRadius, Game.gridRadius  do
 			local z = -x + -y
 			if math.abs(x) <= Game.gridRadius and math.abs(y) <= Game.gridRadius and math.abs(z) <= Game.gridRadius then
+        -- Generate the actual hexagons
 				local hex = Game.hexagons:add(x, y, z, nil, true)
         local tweenInTime = 1
 				hex:tweenIn(tweenInTime, 'out-expo')
         Timer.after(tweenInTime, function() Game.canMove = true end)
         Game.hexagonsMapped[x .. y .. z] = hex
 
-				-- HACK: maybe just draw hexagons manually. Maintaining a second list of hexes could break things
+        -- Generate the stencil hexagons
 				local fakeHex = Game.stencilHexagons:add(x, y, z)
 				local margin = 1.1
 				fakeHex.drawX = Game.hexSize * (y - x) * math.sqrt(3) / 2 * margin
@@ -72,12 +73,6 @@ function Game:init()
 	love.graphics.setBackgroundColor(52, 56, 62)
 
 	print('Game loaded')
-end
-
---- Called once per frame, updates the game
--- @tparam number dt Time passed between frame draws
-function Game:update(dt)
-	Game.hexagons:update(dt)
 end
 
 --- Draw the current frame

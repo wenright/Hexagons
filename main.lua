@@ -12,8 +12,9 @@ Camera = require 'lib.hump.camera'(0, 0)
 Game = require 'states.game'
 
 Input = require 'scripts.input'
-
 Entities = require 'scripts.entities'
+Colors = require 'scripts.colors'
+HexagonShape = require 'scripts.hexagonshape'
 Hexagon = require 'scripts.hexagon'
 
 --- Called once when LOVE is loaded.  Initializes values and switches to the game state

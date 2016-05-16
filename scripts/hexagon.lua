@@ -2,25 +2,12 @@
 -- @classmod Hexagon
 
 -- A few config variables. Probably should be moved into the hexagon class
-local offset = 30
+-- TODO move these
 local startMargin = 1.5
 local endMargin = 1.1
 local tweenTime = 1
 
---- A table of the default colors to draw hexagons with
--- @table colors
--- @field 1 grey
--- @field 2 blue
--- @field 3 green
--- @field 4 pink
-local colors = {
-	{85, 98, 112},    -- grey
-	{78, 205, 196},   -- blue
-	{199, 244, 100},  -- green
-	{255, 107, 107},  -- pink
-	{255, 0, 255}	  -- Error magenta
-}
-
+-- TODO move this
 local hexes = {
   7,
   5,
@@ -29,47 +16,9 @@ local hexes = {
 }
 
 local Hexagon = Class {
-  -- A table of vertices that make up a hexagon
-	vertices = {
-		math.cos(math.rad(60 * 0 + offset)) * Game.hexSize,
-		math.sin(math.rad(60 * 0 + offset)) * Game.hexSize,
-
-		math.cos(math.rad(60 * 1 + offset)) * Game.hexSize,
-		math.sin(math.rad(60 * 1 + offset)) * Game.hexSize,
-
-		math.cos(math.rad(60 * 2 + offset)) * Game.hexSize,
-		math.sin(math.rad(60 * 2 + offset)) * Game.hexSize,
-
-		math.cos(math.rad(60 * 3 + offset)) * Game.hexSize,
-		math.sin(math.rad(60 * 3 + offset)) * Game.hexSize,
-
-		math.cos(math.rad(60 * 4 + offset)) * Game.hexSize,
-		math.sin(math.rad(60 * 4 + offset)) * Game.hexSize,
-
-		math.cos(math.rad(60 * 5 + offset)) * Game.hexSize,
-		math.sin(math.rad(60 * 5 + offset)) * Game.hexSize
-	},
-
-  --- A table of the possible compass directions and their equivalent 3D locations
-  -- @table directions
-  -- @field NW x =  0, y = -1, z =  1
-  -- @field W  x =  1, y = -1, z =  0
-  -- @field SW x =  1, y =  0, z = -1
-  -- @field SE x =  0, y =  1, z = -1
-  -- @field E  x = -1, y =  1, z =  0
-  -- @field NE x = -1, y =  0, z =  1
-	directions = {
-		NW = {x =  0, y = -1, z =  1},
-		W  = {x =  1, y = -1, z =  0},
-		SW = {x =  1, y =  0, z = -1},
-		SE = {x =  0, y =  1, z = -1},
-		E  = {x = -1, y =  1, z =  0},
-		NE = {x = -1, y =  0, z =  1}
-	},
-
+	__includes = HexagonShape,
 	type = 'hexagon'
 }
-
 
 --- Initialize a new hexagon object
 -- Note that coordinates are 3 dimensional, but will be drawn on a 2D plane
@@ -78,50 +27,8 @@ local Hexagon = Class {
 -- @tparam number z z-coordinate to draw hexagon
 -- @tparam number color Color that hexagon will draw as. Also used to determine win condition
 -- @treturn Hexagon a new hexagon object
-function Hexagon:init(x, y, z, color, generateColor)
-    self.x, self.y, self.z = x, y, z
-
-    self.drawX = Game.hexSize * (y - x) * math.sqrt(3) / 2 * endMargin
-    self.drawY = Game.hexSize * ((y + x) / 2 - z) * endMargin
-
-    if color then
-      self.color = color
-    elseif generateColor then
-      -- TODO this needs to be called again when finished with first puzzle
-      local i
-      repeat
-        i = love.math.random(#hexes)
-      until hexes[i] > 0
-
-      hexes[i] = hexes[i] - 1
-      self.color = colors[i]
-    else
-      self.color = colors[love.math.random(#colors)]
-    end
-  end
-
---- Updates the hex object
--- @tparam number dt Time between frame draws
-function Hexagon:update(dt)
-
-end
-
---- Draws a hexagon object
-function Hexagon:draw()
-	love.graphics.push()
-
-	love.graphics.translate(self.drawX, self.drawY)
-	love.graphics.setColor(self.color)
-
-	-- This allows for filled polygons while still anti-aliasing without having to use full screen anti-aliasing
-	-- 	(Lines are anti-aliased automatically, fills are not)
-	love.graphics.polygon('fill', Hexagon.vertices)
-	love.graphics.polygon('line', Hexagon.vertices)
-
-	love.graphics.setColor(self.color2 or {255, 255, 255, 255})
-	love.graphics.polygon('line', Hexagon.vertices)
-
-	love.graphics.pop()
+function Hexagon:init(x, y, z, color)
+	HexagonShape.init(self, x, y, z, color)
 end
 
 --- Tweens a hexagon from its starting position.  Called once at the beginning of the game.
@@ -155,7 +62,7 @@ end
 -- @tparam Hexagon other The other hexagont o compare with self
 -- @treturn boolean Wether or not this hexagon is a neighbour of the other
 function Hexagon:isNeighbour(other)
-	for _, dir in pairs(Hexagon.directions) do
+	for _, dir in pairs(HexagonShape.directions) do
 		if self.x + dir.x == other.x and self.y + dir.y == other.y and self.z + dir.z == other.z then
 			return true
 		end
@@ -182,7 +89,7 @@ end
 -- @tparam string dir The compass direction to move the hexagon. Ex 'NE'
 -- @tparam boolean remove Wether or not to remove this hexagon after moving it. This is used for moving hexes off the map
 function Hexagon:move(dir, remove)
-	dir = Hexagon.directions[dir]
+	dir = HexagonShape.directions[dir]
 	assert(dir, 'That direction doesn\'t exist')
 
 	self.x = self.x + dir.x
@@ -259,7 +166,7 @@ function Hexagon:countScore()
 		hex.visited = false
 
 		if #sameColoredNeighbours > 2 then
-			hex.color2 = colors[5]
+			hex.color2 = Colors[5]
 			hex.visited = false
 			-- TODO destroy these hexes in a cool fashion
 		end
@@ -317,7 +224,7 @@ function Hexagon.slideHexagons(axis, axisValue, dir, inverted)
 	for _, hex in pairs(hexes) do
 		-- Find the one that has to move around the map, and duplicate/teleport it
 		if math.abs(hex.x - hex.tx) > 1 or math.abs(hex.y - hex.ty) > 1 or math.abs(hex.z - hex.tz) > 1 then
-			local dirVal = Hexagon.directions[dir]
+			local dirVal = HexagonShape.directions[dir]
 			assert(dirVal, 'dirVal is null')
 
 			local newHex = Game.hexagons:add(hex.tx - dirVal.x, hex.ty - dirVal.y, hex.tz - dirVal.z, hex.color)
@@ -331,13 +238,13 @@ function Hexagon.slideHexagons(axis, axisValue, dir, inverted)
 	end
 
 	Timer.after(slideTweenTime, function()
-    Game.canMove = true
+	    Game.canMove = true
 
-    updateScore()
+	    updateScore()
 
-    if Game.isOver then
-      Game:over()
-    end
+	    if Game.isOver then
+	      Game:over()
+	    end
 	end)
 end
 
@@ -359,7 +266,7 @@ end
 
 --- Finds a new random color from the table of colors
 -- @treturn table a random color from the color table
-function Hexagon.newColor() return colors[love.math.random(#colors)] end
+function Hexagon.newColor() return Colors[love.math.random(#Colors)] end
 
 function updateScore()
 	Game.hexagons:forEach(function(hex)
