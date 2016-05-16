@@ -5,7 +5,6 @@
 -- TODO move these
 local startMargin = 1.5
 local endMargin = 1.1
-local tweenTime = 1
 
 -- TODO move this
 local hexes = {

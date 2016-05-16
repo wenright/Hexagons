@@ -1,6 +1,8 @@
+--- A hexagon shape.  Contains no logic for moving hexagons, just displaying them
+-- @classmod HexagonShape
+
 local startMargin = 1.5
 local endMargin = 1.1
-local tweenTime = 1
 local offset = 30
 
 local HexagonShape = Class {
@@ -48,11 +50,7 @@ function HexagonShape:init(x, y, z, color)
 	self.drawX = Game.hexSize * (y - x) * math.sqrt(3) / 2 * endMargin
 	self.drawY = Game.hexSize * ((y + x) / 2 - z) * endMargin
 
-	if color then
-		self.color = color
-	else
-		self.color = Colors[love.math.random(#Colors)]
-	end
+	self.color = color or Colors[love.math.random(#Colors)]
 end
 
 function HexagonShape:draw()
@@ -66,8 +64,8 @@ function HexagonShape:draw()
 	love.graphics.polygon('fill', HexagonShape.vertices)
 	love.graphics.polygon('line', HexagonShape.vertices)
 
-	love.graphics.setColor(self.color2 or {255, 255, 255, 255})
-	love.graphics.polygon('line', HexagonShape.vertices)
+	-- love.graphics.setColor(self.color2 or {255, 255, 255, 255})
+	-- love.graphics.polygon('line', HexagonShape.vertices)
 
 	love.graphics.pop()
 end
