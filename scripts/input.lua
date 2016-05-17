@@ -84,7 +84,7 @@ function Input:pointerreleased(x, y)
     print('You got ' .. #connected)
 
     for _, hex in pairs(connected) do
-      Timer.tween(0.5, hex, {scale = 0}, 'out-quad', function()
+      Timer.tween(0.5, hex, {scale = 0}, 'out-expo', function()
         Game.hexagons:remove(hex)
 
         Game.stencilHexagons:forEach(function(other)
