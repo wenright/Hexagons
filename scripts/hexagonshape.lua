@@ -51,6 +51,8 @@ function HexagonShape:init(x, y, z, color)
 	self.drawY = Game.hexSize * ((y + x) / 2 - z) * endMargin
 
 	self.color = color or Colors[love.math.random(#Colors)]
+
+	self.scale = 1
 end
 
 --- Compare a hexagon with another to see if they occupy the same space
@@ -64,6 +66,7 @@ function HexagonShape:draw()
 	love.graphics.push()
 
 	love.graphics.translate(self.drawX, self.drawY)
+	love.graphics.scale(self.scale)
 	love.graphics.setColor(self.color)
 
 	-- This allows for filled polygons while still anti-aliasing without having to use full screen anti-aliasing
