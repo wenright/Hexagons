@@ -33,7 +33,7 @@ local Game = {
 		local scale = 4.4
 		love.graphics.scale(scale)
 
-		love.graphics.polygon('fill', Hexagon.vertices)
+		-- love.graphics.polygon('fill', Hexagon.vertices)
 		love.graphics.pop()
 	end
 }
@@ -45,9 +45,6 @@ function Game:init()
 	Game.hexagons = Entities(Hexagon)
 	Game.stencilHexagons = Entities(HexagonShape)
 
-  -- TODO
-  Game.hexagonsMapped = {}
-
 	for x = -Game.gridRadius, Game.gridRadius do
 		for y = -Game.gridRadius, Game.gridRadius  do
 			local z = -x + -y
@@ -57,18 +54,15 @@ function Game:init()
         local tweenInTime = 1
 				hex:tweenIn(tweenInTime, 'out-expo')
         Timer.after(tweenInTime, function() Game.canMove = true end)
-        Game.hexagonsMapped[x .. y .. z] = hex
 
         -- Generate the stencil hexagons
 				local fakeHex = Game.stencilHexagons:add(x, y, z)
-				local margin = 1.1
+				local margin = 1
 				fakeHex.drawX = Game.hexSize * (y - x) * math.sqrt(3) / 2 * margin
 				fakeHex.drawY = Game.hexSize * ((y + x) / 2 - z) * margin
 			end
 		end
 	end
-
-  updateScore()
 
 	love.graphics.setBackgroundColor(52, 56, 62)
 

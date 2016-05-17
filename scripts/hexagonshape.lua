@@ -2,7 +2,7 @@
 -- @classmod HexagonShape
 
 local startMargin = 1.5
-local endMargin = 1.1
+local endMargin = 1
 local offset = 30
 
 local HexagonShape = Class {
@@ -51,6 +51,13 @@ function HexagonShape:init(x, y, z, color)
 	self.drawY = Game.hexSize * ((y + x) / 2 - z) * endMargin
 
 	self.color = color or Colors[love.math.random(#Colors)]
+end
+
+--- Compare a hexagon with another to see if they occupy the same space
+-- @tparam Hexagon other The other hexagon to compare with self
+-- @treturn boolean Wether or not this hexagon is at the same location as the other
+function HexagonShape:equals(other)
+	return self.x == other.x and self.y == other.y and self.z == other.z
 end
 
 function HexagonShape:draw()

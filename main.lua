@@ -17,6 +17,8 @@ Colors = require 'scripts.colors'
 HexagonShape = require 'scripts.hexagonshape'
 Hexagon = require 'scripts.hexagon'
 
+DEBUG = true
+
 --- Called once when LOVE is loaded.  Initializes values and switches to the game state
 function love.load()
 	io.stdout:setvbuf('no')
@@ -31,6 +33,10 @@ end
 -- @tparam number dt The time in milliseconds between frame draws
 function love.update(dt)
 	Timer.update(dt)
+
+	if DEBUG then
+		require 'lib.bird.lovebird':update(dt)
+	end
 end
 
 --- Draws the frames per second indicator
@@ -43,4 +49,9 @@ end
 -- @tparam string key The key pressed
 function love.keypressed(key)
 	if key == 'escape' then love.event.quit() end
+end
+
+local old_print = print
+function print(...)
+	old_print(...)
 end

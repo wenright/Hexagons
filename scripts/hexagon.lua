@@ -4,7 +4,7 @@
 -- A few config variables. Probably should be moved into the hexagon class
 -- TODO move these
 local startMargin = 1.5
-local endMargin = 1.1
+local endMargin = 1
 
 -- TODO move this
 local hexes = {
@@ -48,13 +48,6 @@ function Hexagon:tweenIn(time, func)
 	function()
 		Game.started = true
 	end)
-end
-
---- Compare a hexagon with another to see if they occupy the same space
--- @tparam Hexagon other The other hexagon to compare with self
--- @treturn boolean Wether or not this hexagon is at the same location as the other
-function Hexagon:equals(other)
-	return self.x == other.x and self.y == other.y and self.z == other.z
 end
 
 --- Check if the given hexagon is at an adjacent location to self
@@ -143,35 +136,31 @@ function Hexagon:checkCollision(x, y)
 	return math.sqrt((self.drawX - x)^2 + (self.drawY - y)^2) < Game.hexSize - 5
 end
 
---- Check the hexagons for a win condition
--- @treturn boolean True if the game is over
-function Hexagon:countScore()
-	local score = 0
+--- Recursively counts connected Hexagons using a BFS
+-- Do not call this from outside, use Hexagon:getScore instead.
+local function getConnected(this, connected)
+	this.visited = true
 
-	local sameColoredNeighbours = {}
-
-	-- For each neighbour...
 	Game.hexagons:forEach(function(hex)
-		if hex:isNeighbour(self) then
-			if hex.color == self.color and not hex.visited then
-				hex.visited = true
-				score = score + hex:countScore() + 1
-				table.insert(sameColoredNeighbours, hex)
+		if hex:isNeighbour(this) then
+			if hex.color == this.color and not hex.visited then
+				table.insert(connected, hex)
+				getConnected(hex, connected)
 			end
 		end
 	end)
+end
 
-	for k, hex in pairs(sameColoredNeighbours) do
+--- Counts the score for a given hexagon by traversing all connected similarly colored hexe
+-- This is basically a wrapper for countScore, but it also resets the visited field
+-- @treturn boolean True if the game is over
+function Hexagon:getConnected()
+	local connected = {self}
+	getConnected(self, connected)
+	Game.hexagons:forEach(function(hex)
 		hex.visited = false
-
-		if #sameColoredNeighbours > 2 then
-			hex.color2 = Colors[5]
-			hex.visited = false
-			-- TODO destroy these hexes in a cool fashion
-		end
-	end
-
-	return score
+	end)
+	return connected
 end
 
 --- Slide hexagons in a certain direction along an axis
@@ -239,8 +228,6 @@ function Hexagon.slideHexagons(axis, axisValue, dir, inverted)
 	Timer.after(slideTweenTime, function()
 	    Game.canMove = true
 
-	    updateScore()
-
 	    if Game.isOver then
 	      Game:over()
 	    end
@@ -266,16 +253,5 @@ end
 --- Finds a new random color from the table of colors
 -- @treturn table a random color from the color table
 function Hexagon.newColor() return Colors[love.math.random(#Colors)] end
-
-function updateScore()
-	Game.hexagons:forEach(function(hex)
-		hex.color2 = {255, 255, 255}
-
-		local score = hex:countScore()
-		if score > 2 then
-			Game.score = Game.score + score^2 * 100
-		end
-	end)
-end
 
 return Hexagon

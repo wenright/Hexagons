@@ -2,6 +2,7 @@ local Input = {}
 
 function Input:pointerpressed(x, y)
   Game.isDragged = true
+  Game.hasMoved = false
   Game.pointerStart = {x = x, y = y}
 end
 
@@ -52,6 +53,8 @@ function Input:pointermoved(x, y, dx, dy)
     end
 
     if Game.canMove and diffDist >= Game.hexSize * 2 and Game.slideDirection then
+      Game.hasMoved = true
+
       if not (Game.consecutiveSlideAxis or Game.consecutiveSlideAxisValue) then
         Game.consecutiveSlideAxis = Game.slideAxis
         Game.consecutiveSlideAxisValue = Game.slideAxisValue
@@ -69,12 +72,35 @@ function Input:pointermoved(x, y, dx, dy)
 end
 
 function Input:pointerreleased(x, y)
+  Game.hoverHex = Game.hexagons:getAtPoint(x, y)
+
+  local diffX, diffY = Game.pointerStart.x - x, Game.pointerStart.y - y
+  local diffDist = math.sqrt(diffX^2 + diffY^2)
+
+  -- TODO check if anything has moved also.  Don't destroy if it has
+  if Game.hoverHex and not Game.hasMoved and diffDist < Game.hexSize then 
+    -- User just tapped, so count score for hoverHex
+    local connected = Game.hoverHex:getConnected()
+    print('You got ' .. #connected)
+
+    for _, hex in pairs(connected) do
+      Game.stencilHexagons:forEach(function(other)
+        if hex:equals(other) then
+          Game.stencilHexagons:remove(other)
+        end
+      end)
+
+      Game.hexagons:remove(hex)
+    end
+  end
+
   Game.slideDirection = nil
   Game.consecutiveSlideAxis = nil
   Game.consecutiveSlideAxisValue = nil
   Game.slideAxis = nil
   Game.hoverHex = false
   Game.isDragged = false
+  Game.hasMoved = false
 end
 
 --- Called when the player completes a hexagon and the game is over
