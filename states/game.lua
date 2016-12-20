@@ -5,6 +5,7 @@
 -- @table Game
 -- @field gridRadius How many hexagons should be drawn
 -- @field hexSize The draw size for a hexagon
+-- @field slideTweenTime Time it takes for a hex to slide when the player drags
 -- @field pointerStart Where the user has first clicked the screen
 -- @field canMove Determines if the user can slide.  False while tween animation is playing
 -- @field started True once the initial tweenIn animation has finished
@@ -16,6 +17,7 @@
 local Game = {
   gridRadius = 2,
   hexSize = 50,
+  slideTweenTime = 0.2,
   pointerStart = {x = 0, y = 0},
   canMove = false,
   started = false,
@@ -120,12 +122,13 @@ function Game:checkForPairs()
 
   Game.hexagons:forEach(function (hex)
     hex.checkedForPairs = false
-
-    -- Return the hexes back to their original positions
-    if not atLeastOnePairMatched then
-      hex:returnToPreviousLocation()
-    end
   end)
+
+  if not atLeastOnePairMatched then
+    Timer.after(Game.slideTweenTime, function()
+      Hexagon.undoSlideHexagons()
+    end)
+  end
 end
 
 function Game:touchpressed(id, x, y) Input:pointerpressed(x, y) end

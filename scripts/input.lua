@@ -62,7 +62,8 @@ function Input:pointermoved(x, y, dx, dy)
       end
 
       local direction = Hexagon.getDirection(Game.consecutiveSlideAxis, Game.slideInverted)
-      Hexagon.slideHexagons(Game.consecutiveSlideAxis, Game.consecutiveSlideAxisValue, direction, Game.slideInverted, Game.checkForPairs)
+      Hexagon.slideHexagons(Game.consecutiveSlideAxis, Game.consecutiveSlideAxisValue, direction, Game.slideInverted, true)
+      Timer.after(Game.slideTweenTime, function() Game.checkForPairs() end)
       Game.pointerStart.x = x
       Game.pointerStart.y = y
     end

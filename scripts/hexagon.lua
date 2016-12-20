@@ -133,15 +133,6 @@ function Hexagon:setWorldCoordinates(x, y, z, margin, remove, skipTween)
   end
 end
 
-function Hexagon:returnToPreviousLocation()
-  if self.previousSlide then
-    local prev = Hexagon.previousSlide
-    Hexagon.slideHexagons(prev.axis, prev.axisValue, prev.dir, prev.inverted, function() end)
-  else
-    print('WAHT')
-  end
-end
-
 --- Check to see if this hexagon contains the given point.  Used for mouse click detection
 -- @tparam number x x coordinate to check
 -- @tparam number y y coordinate to check
@@ -184,11 +175,9 @@ end
 -- @tparam string dir The compass direction that the hexagons will slide
 -- @tparam boolean inverted Used to determine sorting order so that hexagons slide in the right order
 -- @tparam function finishedFunction The function that is called once the tweening has finished
-function Hexagon.slideHexagons(axis, axisValue, dir, inverted, finishedFunction)
-  print('slideringo ' .. axis)
+function Hexagon.slideHexagons(axis, axisValue, dir, inverted)
   Game.canMove = false
 
-  local slideTweenTime = 0.2
   local prevHex = hoverHex
 
   local hexes = {}
@@ -233,24 +222,33 @@ function Hexagon.slideHexagons(axis, axisValue, dir, inverted, finishedFunction)
     -- Find the one that has to move around the map, and duplicate/teleport it
     if math.abs(hex.x - hex.tx) > 1 or math.abs(hex.y - hex.ty) > 1 or math.abs(hex.z - hex.tz) > 1 then
       local dirVal = HexagonShape.directions[dir]
+      assert(dirVal, 'dirVal is null')
 
-      Game.hexagons:add(hex.x, hex.y, hex.z, hex.color):move(dir, true)
-      hex:setWorldCoordinates(hex.tx - dirVal.x, hex.ty - dirVal.y, hex.tz - dirVal.z, endMargin, false, true)
-      hex:setWorldCoordinates(hex.tx, hex.ty, hex.tz, endMargin, false, false)
+      local newHex = Game.hexagons:add(hex.tx - dirVal.x, hex.ty - dirVal.y, hex.tz - dirVal.z, hex.color)
+      newHex:moveTo(hex.tx, hex.ty, hex.tz)
+
+      -- Move this new hex up a little, then remove it when done
+      hex:move(dir, true)
     else
       hex:moveTo(hex.tx, hex.ty, hex.tz)
     end
   end
 
-  Timer.after(slideTweenTime * 2, function()
+  Timer.after(Game.slideTweenTime * 2, function()
       Game.canMove = true
 
       if Game.isOver then
         Game:over()
       end
-
-      finishedFunction()
   end)
+end
+
+function Hexagon.undoSlideHexagons()
+  local prev = Hexagon.previousSlide
+  Hexagon.slideHexagons(prev.axis,
+                        prev.axisValue,
+                        Hexagon.getDirection(prev.axis, not prev.inverted),
+                        not prev.inverted)
 end
 
 --- Converts an axis and a boolean into a compass direction
