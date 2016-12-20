@@ -18,7 +18,8 @@ function Input:pointermoved(x, y, dx, dy)
       Game.hoverHex = Game.hexagons:getAtPoint(Game.pointerStart.x, Game.pointerStart.y)
     end
 
-    -- Only perform these actions if the user is over a hexagon
+    -- Determine the direction that the hexagons will slide in
+    -- Only perform these actions if the users pointer is over a hexagon
     if Game.hoverHex then
       local v1, v2 = -dx/dist, dy/dist
 
@@ -52,7 +53,7 @@ function Input:pointermoved(x, y, dx, dy)
       Game.slideAxisValue = Game.hoverHex[Game.slideAxis]
     end
 
-    if Game.canMove and diffDist >= Game.hexSize * 2 and Game.slideDirection then
+    if not Game.hasMoved and Game.canMove and diffDist >= Game.hexSize * 2 and Game.slideDirection then
       Game.hasMoved = true
 
       if not (Game.consecutiveSlideAxis or Game.consecutiveSlideAxisValue) then
@@ -61,41 +62,14 @@ function Input:pointermoved(x, y, dx, dy)
       end
 
       local direction = Hexagon.getDirection(Game.consecutiveSlideAxis, Game.slideInverted)
-      Hexagon.slideHexagons(Game.consecutiveSlideAxis, Game.consecutiveSlideAxisValue, direction, Game.slideInverted)
+      Hexagon.slideHexagons(Game.consecutiveSlideAxis, Game.consecutiveSlideAxisValue, direction, Game.slideInverted, Game.checkForPairs)
       Game.pointerStart.x = x
       Game.pointerStart.y = y
-
-      -- Find a new hexagon to rotate around (The one under mouse pointer)
-      Game.hoverHex = Game.hexagons:getAtPoint(Game.pointerStart.x, Game.pointerStart.y)
     end
   end
 end
 
 function Input:pointerreleased(x, y)
-  Game.hoverHex = Game.hexagons:getAtPoint(x, y)
-
-  local diffX, diffY = Game.pointerStart.x - x, Game.pointerStart.y - y
-  local diffDist = math.sqrt(diffX^2 + diffY^2)
-
-  -- TODO check if anything has moved also.  Don't destroy if it has
-  if Game.hoverHex and not Game.hasMoved and diffDist < Game.hexSize then 
-    -- User just tapped, so count score for hoverHex
-    local connected = Game.hoverHex:getConnected()
-    print('You got ' .. #connected)
-
-    for _, hex in pairs(connected) do
-      Timer.tween(0.5, hex, {scale = 0}, 'out-expo', function()
-        Game.hexagons:remove(hex)
-
-        Game.stencilHexagons:forEach(function(other)
-          if hex:equals(other) then
-            Game.stencilHexagons:remove(other)
-          end
-        end)
-      end)
-    end
-  end
-
   Game.slideDirection = nil
   Game.consecutiveSlideAxis = nil
   Game.consecutiveSlideAxisValue = nil

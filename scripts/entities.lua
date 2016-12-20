@@ -45,6 +45,7 @@ end
 -- @tparam number y The y coordinate to check
 -- @treturn Class The object at the given location, if there is one
 function Entities:getAtPoint(x, y)
+	-- TODO Maybe select the closest hex instead of the one directly under cursor
 	x, y = Camera:worldCoords(x, y)
 	for _, entity in pairs(self.pool) do
 		if entity:checkCollision(x, y) then

@@ -33,8 +33,8 @@ end
 --- Tweens a hexagon from its starting position.  Called once at the beginning of the game.
 -- Parameters can be adjusted in hexagon.lua
 -- @tparam number time Duration of tween animation
--- @tparam string func The tween function to use. Ex: 'out-expo'
-function Hexagon:tweenIn(time, func)
+-- @tparam string tweenFunction The tween function to use. Ex: 'out-expo'
+function Hexagon:tweenIn(time, tweenFunction)
 	local x, y, z = self.x, self.y, self.z
 
 	self.drawX = Game.hexSize * (y - x) * math.sqrt(3) / 2 * startMargin
@@ -44,7 +44,7 @@ function Hexagon:tweenIn(time, func)
 		drawX = Game.hexSize * (y - x) * math.sqrt(3) / 2 * endMargin,
 		drawY = Game.hexSize * ((y + x) / 2 - z) * endMargin
 	},
-	func,
+	tweenFunction,
 	function()
 		Game.started = true
 	end)
@@ -151,8 +151,8 @@ local function getConnected(this, connected)
 	end)
 end
 
---- Counts the score for a given hexagon by traversing all connected similarly colored hexe
--- This is basically a wrapper for countScore, but it also resets the visited field
+--- Counts the score for a given hexagon by traversing all connected similarly colored hexes
+-- This is basically a wrapper for the local getConnected, but it also resets the visited field
 -- @treturn boolean True if the game is over
 function Hexagon:getConnected()
 	local connected = {self}
@@ -168,7 +168,8 @@ end
 -- @tparam number axisValue This is the x, y, or z coordinate of the row to be moved
 -- @tparam string dir The compass direction that the hexagons will slide
 -- @tparam boolean inverted Used to determine sorting order so that hexagons slide in the right order
-function Hexagon.slideHexagons(axis, axisValue, dir, inverted)
+-- @tparam function finishedFunction The function that is called once the tweening has finished
+function Hexagon.slideHexagons(axis, axisValue, dir, inverted, finishedFunction)
 	Game.canMove = false
 
 	local slideTweenTime = 0.2
@@ -225,18 +226,20 @@ function Hexagon.slideHexagons(axis, axisValue, dir, inverted)
 		end
 	end
 
-	Timer.after(slideTweenTime, function()
+	Timer.after(slideTweenTime * 2, function()
 	    Game.canMove = true
 
 	    if Game.isOver then
 	      Game:over()
 	    end
+
+      finishedFunction()
 	end)
 end
 
 --- Converts an axis and a boolean into a compass direction
 -- @tparam string axis The 3D axis to use.  Ex 'y'
--- @tparam boolean isInverted Usefule for determing the compass direction that the axis uses
+-- @tparam boolean isInverted Useful for determing the compass direction that the axis uses
 -- @treturn string The compass direction the the axis and iversion imply
 function Hexagon.getDirection(axis, isInverted)
   if isInverted then

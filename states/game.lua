@@ -33,7 +33,7 @@ local Game = {
 		local scale = 4.4
 		love.graphics.scale(scale)
 
-		-- love.graphics.polygon('fill', Hexagon.vertices)
+		love.graphics.polygon('fill', Hexagon.vertices)
 		love.graphics.pop()
 	end
 }
@@ -87,6 +87,38 @@ function Game:draw()
 
   love.graphics.setColor(255, 255, 255)
   love.graphics.print(Game.score, 0, 15)
+end
+
+function Game:checkForPairs()
+	Game.hexagons:forEach(function (hex)
+		if not hex.checkedForPairs then
+			hex.checkedForPairs = true
+
+			local connected = hex:getConnected()
+
+			if #connected > 3 then
+				print('You got ' .. #connected)
+
+				for _, connectedHex in pairs(connected) do
+					connectedHex.checkedForPairs = true
+
+					Timer.tween(0.5, connectedHex, {scale = 0}, 'out-expo', function()
+						Game.hexagons:remove(connectedHex)
+
+						Game.stencilHexagons:forEach(function(other)
+							if connectedHex:equals(other) then
+								Game.stencilHexagons:remove(other)
+							end
+						end)
+					end)
+				end
+			end
+		end
+	end)
+
+	Game.hexagons:forEach(function (hex)
+		hex.checkedForPairs = false
+	end)
 end
 
 function Game:touchpressed(id, x, y) Input:pointerpressed(x, y) end
