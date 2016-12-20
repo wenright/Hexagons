@@ -57,9 +57,6 @@ function Game:init()
 
         -- Generate the stencil hexagons
 				local fakeHex = Game.stencilHexagons:add(x, y, z)
-				local margin = 1
-				fakeHex.drawX = Game.hexSize * (y - x) * math.sqrt(3) / 2 * margin
-				fakeHex.drawY = Game.hexSize * ((y + x) / 2 - z) * margin
 			end
 		end
 	end

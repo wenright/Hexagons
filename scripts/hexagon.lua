@@ -4,7 +4,7 @@
 -- A few config variables. Probably should be moved into the hexagon class
 -- TODO move these
 local startMargin = 1.5
-local endMargin = 1
+local endMargin = 1.1
 
 -- TODO move this
 local hexes = {

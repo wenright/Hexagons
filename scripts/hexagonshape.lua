@@ -2,7 +2,7 @@
 -- @classmod HexagonShape
 
 local startMargin = 1.5
-local endMargin = 1
+local endMargin = 1.1
 local offset = 30
 
 local HexagonShape = Class {
