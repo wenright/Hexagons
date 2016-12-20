@@ -16,6 +16,7 @@ Entities = require 'scripts.entities'
 Colors = require 'scripts.colors'
 HexagonShape = require 'scripts.hexagonshape'
 Hexagon = require 'scripts.hexagon'
+ScoreText = require 'scripts.scoretext'
 
 DEBUG = true
 
@@ -27,6 +28,8 @@ function love.load()
 
   Gamestate.registerEvents()
   Gamestate.switch(Game)
+
+  love.graphics.setFont(love.graphics.newFont('font/kenpixel_high.ttf', 48))
 end
 
 --- Called once per frame.  Used to update the Timer object

@@ -73,6 +73,8 @@ function Game:init()
 
   love.graphics.setBackgroundColor(52, 56, 62)
 
+  Game.scoreTexts = Entities(ScoreText)
+
   print('Game loaded')
 end
 
@@ -93,10 +95,12 @@ function Game:draw()
 
   love.graphics.setStencilTest()
 
+  Game.scoreTexts:draw()
+
   Camera:detach()
 
   love.graphics.setColor(255, 255, 255)
-  love.graphics.print(Game.score, 0, 15)
+  love.graphics.print(Game.score, 0, 50)
 end
 
 function Game.checkForPairs(fromPlayerMove)
@@ -112,9 +116,9 @@ function Game.checkForPairs(fromPlayerMove)
       if #connected > 3 then
         atLeastOnePairMatched = true
 
-        local score = ((#connected)^2) * 100
+        local score = ((#connected)^2) * 25
         Game.score = Game.score + score
-        Game.scoreTexts:add(score, hex.drawX, hex.drawY)
+        Game.scoreTexts:add(score, hex.drawX, hex.drawY, hex.color)
 
         for _, connectedHex in pairs(connected) do
           connectedHex.checkedForPairs = true
