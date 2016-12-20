@@ -6,6 +6,7 @@
 -- @field gridRadius How many hexagons should be drawn
 -- @field hexSize The draw size for a hexagon
 -- @field slideTweenTime Time it takes for a hex to slide when the player drags
+-- @field tweenInTime Time it takes for a hex to slide when it is spawned
 -- @field pointerStart Where the user has first clicked the screen
 -- @field canMove Determines if the user can slide.  False while tween animation is playing
 -- @field started True once the initial tweenIn animation has finished
@@ -18,6 +19,7 @@ local Game = {
   gridRadius = 2,
   hexSize = 50,
   slideTweenTime = 0.2,
+  tweenInTime = 1,
   pointerStart = {x = 0, y = 0},
   canMove = false,
   started = false,
@@ -26,7 +28,8 @@ local Game = {
   slideAxis = nil,
   isDragged = false,
   stencilFunction = function()
-    Game.stencilHexagons:draw()
+    -- TODO re-add stencil hexagons that are removed from game
+    -- Game.stencilHexagons:draw()
 
     love.graphics.push()
 
@@ -46,6 +49,7 @@ function Game:init()
   Game.score = 0
   Game.hexagons = Entities(Hexagon)
   Game.stencilHexagons = Entities(HexagonShape)
+  local tweenInTime = 1
 
   for x = -Game.gridRadius, Game.gridRadius do
     for y = -Game.gridRadius, Game.gridRadius  do
@@ -53,15 +57,21 @@ function Game:init()
       if math.abs(x) <= Game.gridRadius and math.abs(y) <= Game.gridRadius and math.abs(z) <= Game.gridRadius then
         -- Generate the actual hexagons
         local hex = Game.hexagons:add(x, y, z, nil, true)
-        local tweenInTime = 1
         hex:tweenIn(tweenInTime, 'out-expo')
-        Timer.after(tweenInTime, function() Game.canMove = true end)
+        Timer.after(tweenInTime, function()
+          Game.canMove = true
+          Game.started = true
+        end)
 
         -- Generate the stencil hexagons
         local fakeHex = Game.stencilHexagons:add(x, y, z)
       end
     end
   end
+
+  Timer.after(tweenInTime, function()
+    Game.checkForPairs(false)
+  end)
 
   love.graphics.setBackgroundColor(52, 56, 62)
 
@@ -72,10 +82,10 @@ end
 function Game:draw()
   Camera:attach()
 
-  if Game.started then
+  -- if Game.started then
     love.graphics.stencil(Game.stencilFunction, 'replace', 1)
     love.graphics.setStencilTest('greater', 0)
-  end
+  -- end
 
   -- This shows where the stencil is cutting off
   -- love.graphics.setColor(28, 130, 124)
@@ -91,7 +101,9 @@ function Game:draw()
   love.graphics.print(Game.score, 0, 15)
 end
 
-function Game:checkForPairs()
+function Game.checkForPairs(fromPlayerMove)
+  Game.canMove = false
+
   local atLeastOnePairMatched = false
   Game.hexagons:forEach(function (hex)
     if not hex.checkedForPairs then
@@ -99,7 +111,7 @@ function Game:checkForPairs()
 
       local connected = hex:getConnected()
 
-      if #connected > 3 then
+      if #connected > 4 then
         atLeastOnePairMatched = true
         print('You got ' .. #connected)
 
@@ -114,6 +126,9 @@ function Game:checkForPairs()
                 Game.stencilHexagons:remove(other)
               end
             end)
+
+            -- Now that this hex been removed, let's have one spawn in and take its place
+            Game.hexagons:add(connectedHex.x, connectedHex.y, connectedHex.z, Hexagon.randomColor()):tweenIn(Game.tweenInTime, 'out-expo')
           end)
         end
       end
@@ -124,9 +139,19 @@ function Game:checkForPairs()
     hex.checkedForPairs = false
   end)
 
-  if not atLeastOnePairMatched then
+  if atLeastOnePairMatched then
+    Timer.after(Game.tweenInTime, function()
+      Game.checkForPairs(false)
+    end)
+  else
     Timer.after(Game.slideTweenTime, function()
-      Hexagon.undoSlideHexagons()
+      if fromPlayerMove then
+        Hexagon.undoSlideHexagons()
+      end
+
+      Timer.after(Game.slideTweenTime, function()
+        Game.canMove = true
+      end)
     end)
   end
 end

@@ -43,11 +43,7 @@ function Hexagon:tweenIn(time, tweenFunction)
   Timer.tween(time, self, {
     drawX = Game.hexSize * (y - x) * math.sqrt(3) / 2 * endMargin,
     drawY = Game.hexSize * ((y + x) / 2 - z) * endMargin
-  },
-  tweenFunction,
-  function()
-    Game.started = true
-  end)
+  }, tweenFunction)
 end
 
 --- Check if the given hexagon is at an adjacent location to self
@@ -121,8 +117,6 @@ function Hexagon:setWorldCoordinates(x, y, z, margin, remove, skipTween)
       },
       'in-out-quad',
       function()
-        Game.canMove = true
-
         if remove then
           Game.hexagons:remove(self)
         end
@@ -233,22 +227,16 @@ function Hexagon.slideHexagons(axis, axisValue, dir, inverted)
       hex:moveTo(hex.tx, hex.ty, hex.tz)
     end
   end
-
-  Timer.after(Game.slideTweenTime * 2, function()
-      Game.canMove = true
-
-      if Game.isOver then
-        Game:over()
-      end
-  end)
 end
 
+--- Reverts the most recent slideHexagons call. Use this when it is determined that no 3+ pairs were found
 function Hexagon.undoSlideHexagons()
-  local prev = Hexagon.previousSlide
-  Hexagon.slideHexagons(prev.axis,
-                        prev.axisValue,
-                        Hexagon.getDirection(prev.axis, not prev.inverted),
-                        not prev.inverted)
+  if Hexagon.previousSlide == nil then return end
+
+  Hexagon.slideHexagons(Hexagon.previousSlide.axis,
+                        Hexagon.previousSlide.axisValue,
+                        Hexagon.getDirection(Hexagon.previousSlide.axis, not Hexagon.previousSlide.inverted),
+                        not Hexagon.previousSlide.inverted)
 end
 
 --- Converts an axis and a boolean into a compass direction
@@ -269,6 +257,6 @@ end
 
 --- Finds a new random color from the table of colors
 -- @treturn table a random color from the color table
-function Hexagon.newColor() return Colors[love.math.random(#Colors)] end
+function Hexagon.randomColor() return Colors[love.math.random(#Colors)] end
 
 return Hexagon
