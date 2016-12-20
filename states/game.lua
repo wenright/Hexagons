@@ -35,8 +35,7 @@ local Game = {
 
     love.graphics.rotate(math.rad(30))
 
-    local scale = 4.4
-    love.graphics.scale(scale)
+    love.graphics.scale(4.4)
 
     love.graphics.polygon('fill', Hexagon.vertices)
     love.graphics.pop()
@@ -59,7 +58,6 @@ function Game:init()
         local hex = Game.hexagons:add(x, y, z, nil, true)
         hex:tweenIn(tweenInTime, 'out-expo')
         Timer.after(tweenInTime, function()
-          Game.canMove = true
           Game.started = true
         end)
 
@@ -111,9 +109,12 @@ function Game.checkForPairs(fromPlayerMove)
 
       local connected = hex:getConnected()
 
-      if #connected > 4 then
+      if #connected > 3 then
         atLeastOnePairMatched = true
-        print('You got ' .. #connected)
+
+        local score = ((#connected)^2) * 100
+        Game.score = Game.score + score
+        Game.scoreTexts:add(score, hex.drawX, hex.drawY)
 
         for _, connectedHex in pairs(connected) do
           connectedHex.checkedForPairs = true
@@ -128,7 +129,8 @@ function Game.checkForPairs(fromPlayerMove)
             end)
 
             -- Now that this hex been removed, let's have one spawn in and take its place
-            Game.hexagons:add(connectedHex.x, connectedHex.y, connectedHex.z, Hexagon.randomColor()):tweenIn(Game.tweenInTime, 'out-expo')
+            local newHex = Game.hexagons:add(connectedHex.x * 2, connectedHex.y * 2, connectedHex.z * 2, Hexagon.randomColor())
+            newHex:moveTo(connectedHex.x, connectedHex.y, connectedHex.z)
           end)
         end
       end

@@ -6,14 +6,6 @@
 local startMargin = 1.5
 local endMargin = 1.1
 
--- TODO move this
-local hexes = {
-  7,
-  5,
-  4,
-  3
-}
-
 local Hexagon = Class {
   __includes = HexagonShape,
   type = 'hexagon'
