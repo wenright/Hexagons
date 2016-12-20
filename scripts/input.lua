@@ -81,7 +81,7 @@ end
 
 --- Called when the player completes a hexagon and the game is over
 function Input:over()
-  -- TODO gameover code
+  -- TODO gameover code. Display 'tap to continue' or something
 end
 
 return Input

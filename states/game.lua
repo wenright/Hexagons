@@ -14,111 +14,118 @@
 -- @field isDragged True if the player is currently clicking the screen
 -- @field stencilFunction Used to prevent certain areas from drawing
 local Game = {
-	gridRadius = 2,
-	hexSize = 50,
-	pointerStart = {x = 0, y = 0},
-	canMove = false,
-	started = false,
-	isOver = false,
-	slideDirection = nil,
-	slideAxis = nil,
-	isDragged = false,
-	stencilFunction = function()
-		Game.stencilHexagons:draw()
+  gridRadius = 2,
+  hexSize = 50,
+  pointerStart = {x = 0, y = 0},
+  canMove = false,
+  started = false,
+  isOver = false,
+  slideDirection = nil,
+  slideAxis = nil,
+  isDragged = false,
+  stencilFunction = function()
+    Game.stencilHexagons:draw()
 
-		love.graphics.push()
+    love.graphics.push()
 
-		love.graphics.rotate(math.rad(30))
+    love.graphics.rotate(math.rad(30))
 
-		local scale = 4.4
-		love.graphics.scale(scale)
+    local scale = 4.4
+    love.graphics.scale(scale)
 
-		love.graphics.polygon('fill', Hexagon.vertices)
-		love.graphics.pop()
-	end
+    love.graphics.polygon('fill', Hexagon.vertices)
+    love.graphics.pop()
+  end
 }
 
 --- Initialize the game
 function Game:init()
-	print('Creating hexagons...')
+  print('Creating hexagons...')
   Game.score = 0
-	Game.hexagons = Entities(Hexagon)
-	Game.stencilHexagons = Entities(HexagonShape)
+  Game.hexagons = Entities(Hexagon)
+  Game.stencilHexagons = Entities(HexagonShape)
 
-	for x = -Game.gridRadius, Game.gridRadius do
-		for y = -Game.gridRadius, Game.gridRadius  do
-			local z = -x + -y
-			if math.abs(x) <= Game.gridRadius and math.abs(y) <= Game.gridRadius and math.abs(z) <= Game.gridRadius then
+  for x = -Game.gridRadius, Game.gridRadius do
+    for y = -Game.gridRadius, Game.gridRadius  do
+      local z = -x + -y
+      if math.abs(x) <= Game.gridRadius and math.abs(y) <= Game.gridRadius and math.abs(z) <= Game.gridRadius then
         -- Generate the actual hexagons
-				local hex = Game.hexagons:add(x, y, z, nil, true)
+        local hex = Game.hexagons:add(x, y, z, nil, true)
         local tweenInTime = 1
-				hex:tweenIn(tweenInTime, 'out-expo')
+        hex:tweenIn(tweenInTime, 'out-expo')
         Timer.after(tweenInTime, function() Game.canMove = true end)
 
         -- Generate the stencil hexagons
-				local fakeHex = Game.stencilHexagons:add(x, y, z)
-			end
-		end
-	end
+        local fakeHex = Game.stencilHexagons:add(x, y, z)
+      end
+    end
+  end
 
-	love.graphics.setBackgroundColor(52, 56, 62)
+  love.graphics.setBackgroundColor(52, 56, 62)
 
-	print('Game loaded')
+  print('Game loaded')
 end
 
 --- Draw the current frame
 function Game:draw()
-	Camera:attach()
+  Camera:attach()
 
-	if Game.started then
-		love.graphics.stencil(Game.stencilFunction, 'replace', 1)
-		love.graphics.setStencilTest('greater', 0)
-	end
+  if Game.started then
+    love.graphics.stencil(Game.stencilFunction, 'replace', 1)
+    love.graphics.setStencilTest('greater', 0)
+  end
 
-	-- This shows where the stencil is cutting off
-	-- love.graphics.setColor(28, 130, 124)
-	-- love.graphics.rectangle('fill', -1000, -1000, 2000, 2000)
+  -- This shows where the stencil is cutting off
+  -- love.graphics.setColor(28, 130, 124)
+  -- love.graphics.rectangle('fill', -1000, -1000, 2000, 2000)
 
-	Game.hexagons:draw()
+  Game.hexagons:draw()
 
-	love.graphics.setStencilTest()
+  love.graphics.setStencilTest()
 
-	Camera:detach()
+  Camera:detach()
 
   love.graphics.setColor(255, 255, 255)
   love.graphics.print(Game.score, 0, 15)
 end
 
 function Game:checkForPairs()
-	Game.hexagons:forEach(function (hex)
-		if not hex.checkedForPairs then
-			hex.checkedForPairs = true
+  local atLeastOnePairMatched = false
+  Game.hexagons:forEach(function (hex)
+    if not hex.checkedForPairs then
+      hex.checkedForPairs = true
 
-			local connected = hex:getConnected()
+      local connected = hex:getConnected()
 
-			if #connected > 3 then
-				print('You got ' .. #connected)
+      if #connected > 3 then
+        atLeastOnePairMatched = true
+        print('You got ' .. #connected)
 
-				for _, connectedHex in pairs(connected) do
-					connectedHex.checkedForPairs = true
+        for _, connectedHex in pairs(connected) do
+          connectedHex.checkedForPairs = true
 
-					Timer.tween(0.5, connectedHex, {scale = 0}, 'out-expo', function()
-						Game.hexagons:remove(connectedHex)
+          Timer.tween(0.5, connectedHex, {scale = 0}, 'out-expo', function()
+            Game.hexagons:remove(connectedHex)
 
-						Game.stencilHexagons:forEach(function(other)
-							if connectedHex:equals(other) then
-								Game.stencilHexagons:remove(other)
-							end
-						end)
-					end)
-				end
-			end
-		end
-	end)
+            Game.stencilHexagons:forEach(function(other)
+              if connectedHex:equals(other) then
+                Game.stencilHexagons:remove(other)
+              end
+            end)
+          end)
+        end
+      end
+    end
+  end)
 
-	Game.hexagons:forEach(function (hex)
-		hex.checkedForPairs = false
-	end)
+  Game.hexagons:forEach(function (hex)
+    hex.checkedForPairs = false
+
+    -- Return the hexes back to their original positions
+    if not atLeastOnePairMatched then
+      hex:returnToPreviousLocation()
+    end
+  end)
 end
 
 function Game:touchpressed(id, x, y) Input:pointerpressed(x, y) end
