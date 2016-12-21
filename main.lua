@@ -24,12 +24,12 @@ DEBUG = true
 function love.load()
   io.stdout:setvbuf('no')
 
-  Camera:zoom(1.25, 1.25)
+  Camera:zoom(2.75)
 
   Gamestate.registerEvents()
   Gamestate.switch(Game)
 
-  love.graphics.setFont(love.graphics.newFont('font/kenpixel_high.ttf', 48))
+  love.graphics.setFont(love.graphics.newFont('font/kenpixel_high.ttf', 64))
 end
 
 --- Called once per frame.  Used to update the Timer object

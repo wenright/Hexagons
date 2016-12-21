@@ -29,7 +29,7 @@ local Game = {
   isDragged = false,
   stencilFunction = function()
     -- TODO re-add stencil hexagons that are removed from game
-    -- Game.stencilHexagons:draw()
+    Game.stencilHexagons:draw()
 
     love.graphics.push()
 
@@ -126,11 +126,11 @@ function Game.checkForPairs(fromPlayerMove)
           Timer.tween(0.5, connectedHex, {scale = 0}, 'out-expo', function()
             Game.hexagons:remove(connectedHex)
 
-            Game.stencilHexagons:forEach(function(other)
-              if connectedHex:equals(other) then
-                Game.stencilHexagons:remove(other)
-              end
-            end)
+            -- Game.stencilHexagons:forEach(function(other)
+            --   if connectedHex:equals(other) then
+            --     Game.stencilHexagons:remove(other)
+            --   end
+            -- end)
 
             -- Now that this hex been removed, let's have one spawn in and take its place
             local newHex = Game.hexagons:add(connectedHex.x * 2, connectedHex.y * 2, connectedHex.z * 2, Hexagon.randomColor())
