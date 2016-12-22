@@ -107,6 +107,9 @@ function Game.checkForPairs(fromPlayerMove)
   Game.canMove = false
 
   local atLeastOnePairMatched = false
+  local pairsCount = 0
+  local score = 0
+
   Game.hexagons:forEach(function (hex)
     if not hex.checkedForPairs then
       hex.checkedForPairs = true
@@ -116,21 +119,17 @@ function Game.checkForPairs(fromPlayerMove)
       if #connected > 3 then
         atLeastOnePairMatched = true
 
-        local score = ((#connected)^2) * 25
-        Game.score = Game.score + score
-        Game.scoreTexts:add(score, hex.drawX, hex.drawY, hex.color)
+        local singleScore = ((#connected)^3) * 50
+        score = score + singleScore
+        Game.scoreTexts:add(singleScore, hex.drawX, hex.drawY, hex.color)
+
+        pairsCount = pairsCount + 1
 
         for _, connectedHex in pairs(connected) do
           connectedHex.checkedForPairs = true
 
           Timer.tween(0.5, connectedHex, {scale = 0}, 'out-expo', function()
             Game.hexagons:remove(connectedHex)
-
-            -- Game.stencilHexagons:forEach(function(other)
-            --   if connectedHex:equals(other) then
-            --     Game.stencilHexagons:remove(other)
-            --   end
-            -- end)
 
             -- Now that this hex been removed, let's have one spawn in and take its place
             local newHex = Game.hexagons:add(connectedHex.x * 2, connectedHex.y * 2, connectedHex.z * 2, Hexagon.randomColor())
@@ -140,6 +139,12 @@ function Game.checkForPairs(fromPlayerMove)
       end
     end
   end)
+
+  Game.score = Game.score + score * pairsCount
+
+  if pairsCount > 1 then
+    -- Game.scoreTexts:add('x' .. pairsCount, 0, 0, {132, 125, 174})
+  end
 
   Game.hexagons:forEach(function (hex)
     hex.checkedForPairs = false
