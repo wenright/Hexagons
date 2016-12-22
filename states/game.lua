@@ -5,6 +5,8 @@
 -- @table Game
 -- @field gridRadius How many hexagons should be drawn
 -- @field hexSize The draw size for a hexagon
+-- @field slideTweenTime Time it takes for a hex to slide when the player drags
+-- @field tweenInTime Time it takes for a hex to slide when it is spawned
 -- @field pointerStart Where the user has first clicked the screen
 -- @field canMove Determines if the user can slide.  False while tween animation is playing
 -- @field started True once the initial tweenIn animation has finished
@@ -14,203 +16,162 @@
 -- @field isDragged True if the player is currently clicking the screen
 -- @field stencilFunction Used to prevent certain areas from drawing
 local Game = {
-	gridRadius = 2,
-	hexSize = 50,
-	pointerStart = {x = 0, y = 0},
-	canMove = false,
-	started = false,
-	isOver = false,
-	slideDirection = nil,
-	slideAxis = nil,
-	isDragged = false,
-	stencilFunction = function()
-		Game.stencilHexagons:draw()
+  gridRadius = 2,
+  hexSize = 50,
+  slideTweenTime = 0.2,
+  tweenInTime = 1,
+  pointerStart = {x = 0, y = 0},
+  canMove = false,
+  started = false,
+  isOver = false,
+  slideDirection = nil,
+  slideAxis = nil,
+  isDragged = false,
+  stencilFunction = function()
+    -- TODO re-add stencil hexagons that are removed from game
+    Game.stencilHexagons:draw()
 
-		love.graphics.push()
+    love.graphics.push()
 
-		love.graphics.rotate(math.rad(30))
+    love.graphics.rotate(math.rad(30))
 
-		local scale = 4.4
-		love.graphics.scale(scale)
+    love.graphics.scale(4.4)
 
-		love.graphics.polygon('fill', Hexagon.vertices)
-		love.graphics.pop()
-	end
+    love.graphics.polygon('fill', Hexagon.vertices)
+    love.graphics.pop()
+  end
 }
 
 --- Initialize the game
 function Game:init()
-	print('Creating hexagons...')
-	Game.hexagons = Entities(Hexagon)
-	Game.stencilHexagons = Entities(Hexagon)
+  print('Creating hexagons...')
+  Game.score = 0
+  Game.hexagons = Entities(Hexagon)
+  Game.stencilHexagons = Entities(HexagonShape)
+  local tweenInTime = 1
 
-	for x = -Game.gridRadius, Game.gridRadius do
-		for y = -Game.gridRadius, Game.gridRadius  do
-			local z = -x + -y
-			if math.abs(x) <= Game.gridRadius and math.abs(y) <= Game.gridRadius and math.abs(z) <= Game.gridRadius then
-				local hex = Game.hexagons:add(x, y, z, nil, true)
-        local tweenInTime = 1
-				hex:tweenIn(tweenInTime, 'out-expo')
-        Timer.after(tweenInTime, function() Game.canMove = true end)
+  for x = -Game.gridRadius, Game.gridRadius do
+    for y = -Game.gridRadius, Game.gridRadius  do
+      local z = -x + -y
+      if math.abs(x) <= Game.gridRadius and math.abs(y) <= Game.gridRadius and math.abs(z) <= Game.gridRadius then
+        -- Generate the actual hexagons
+        local hex = Game.hexagons:add(x, y, z, nil, true)
+        hex:tweenIn(tweenInTime, 'out-expo')
+        Timer.after(tweenInTime, function()
+          Game.started = true
+        end)
 
-				-- HACK: maybe just draw hexagons manually. Maintaining a second list of hexes could break things
-				local fakeHex = Game.stencilHexagons:add(x, y, z)
-				local margin = 1.1
-				fakeHex.drawX = Game.hexSize * (y - x) * math.sqrt(3) / 2 * margin
-				fakeHex.drawY = Game.hexSize * ((y + x) / 2 - z) * margin
-			end
-		end
-	end
+        -- Generate the stencil hexagons
+        local fakeHex = Game.stencilHexagons:add(x, y, z)
+      end
+    end
+  end
 
-	love.graphics.setBackgroundColor(52, 56, 62)
+  Timer.after(tweenInTime, function()
+    Game.checkForPairs(false)
+  end)
 
-	print('Game loaded')
-end
+  love.graphics.setBackgroundColor(52, 56, 62)
 
---- Called once per frame, updates the game
--- @tparam number dt Time passed between frame draws
-function Game:update(dt)
-	Game.hexagons:update(dt)
+  Game.scoreTexts = Entities(ScoreText)
+
+  print('Game loaded')
 end
 
 --- Draw the current frame
 function Game:draw()
-	Camera:attach()
+  Camera:attach()
 
-	if Game.started then
-		love.graphics.stencil(Game.stencilFunction, 'replace', 1)
-		love.graphics.setStencilTest('greater', 0)
-	end
+  -- if Game.started then
+    love.graphics.stencil(Game.stencilFunction, 'replace', 1)
+    love.graphics.setStencilTest('greater', 0)
+  -- end
 
-	-- This shows where the stencil is cutting off
-	-- love.graphics.setColor(28, 130, 124)
-	-- love.graphics.rectangle('fill', -1000, -1000, 2000, 2000)
+  -- This shows where the stencil is cutting off
+  -- love.graphics.setColor(28, 130, 124)
+  -- love.graphics.rectangle('fill', -1000, -1000, 2000, 2000)
 
-	Game.hexagons:draw()
+  Game.hexagons:draw()
 
-	love.graphics.setStencilTest()
+  love.graphics.setStencilTest()
 
-	Camera:detach()
+  Game.scoreTexts:draw()
+
+  Camera:detach()
+
+  love.graphics.setColor(255, 255, 255)
+  love.graphics.print(Game.score, 0, 50)
 end
 
-function Game:touchpressed(id, x, y) Game:pointerpressed(x, y) end
-function Game:touchmoved(id, x, y, dx, dy) Game:pointermoved(x, y, dx, dy) end
-function Game:touchreleased(id, x, y) Game:pointerreleased(x, y) end
-function Game:mousepressed(x, y) Game:pointerpressed(x, y) end
-function Game:mousemoved(x, y, dx, dy) Game:pointermoved(x, y, dx, dy) end
-function Game:mousereleased(x, y) Game:pointerreleased(x, y) end
+function Game.checkForPairs(fromPlayerMove)
+  Game.canMove = false
 
-function Game:pointerpressed(x, y)
-  Game.isDragged = true
-  Game.pointerStart = {x = x, y = y}
-end
+  local atLeastOnePairMatched = false
+  local pairsCount = 0
+  local score = 0
 
-function Game:pointermoved(x, y, dx, dy)
--- TODO moving is still inaccurate at times
-  if Game.isDragged then
-    local diffX, diffY = Game.pointerStart.x - x, Game.pointerStart.y - y
-    local diffDist = math.sqrt(diffX^2 + diffY^2)
+  Game.hexagons:forEach(function (hex)
+    if not hex.checkedForPairs then
+      hex.checkedForPairs = true
 
-    local dist = math.sqrt(dx^2 + dy^2)
+      local connected = hex:getConnected()
 
-    if not Game.hoverHex then
-      Game.hoverHex = Game.hexagons:getAtPoint(Game.pointerStart.x, Game.pointerStart.y)
+      if #connected > 3 then
+        atLeastOnePairMatched = true
+
+        local singleScore = ((#connected)^3) * 50
+        score = score + singleScore
+        Game.scoreTexts:add(singleScore, hex.drawX, hex.drawY, hex.color)
+
+        pairsCount = pairsCount + 1
+
+        for _, connectedHex in pairs(connected) do
+          connectedHex.checkedForPairs = true
+
+          Timer.tween(0.5, connectedHex, {scale = 0}, 'out-expo', function()
+            Game.hexagons:remove(connectedHex)
+
+            -- Now that this hex been removed, let's have one spawn in and take its place
+            local newHex = Game.hexagons:add(connectedHex.x * 2, connectedHex.y * 2, connectedHex.z * 2, Hexagon.randomColor())
+            newHex:moveTo(connectedHex.x, connectedHex.y, connectedHex.z)
+          end)
+        end
+      end
     end
+  end)
 
-    -- Only perform these actions if the user is over a hexagon
-    if Game.hoverHex then
-      local v1, v2 = -dx/dist, dy/dist
+  Game.score = Game.score + score * pairsCount
 
-      -- Slide hexagons based on the direction that the user swiped
-      if math.between(v1, 0, 1) and math.between(v2, 0.5, 1) then
-        Game.slideDirection = 'SW'
-        Game.slideAxis = 'y'
-        Game.slideInverted = false
-      elseif math.between(v1, 0, 1) and math.between(v2, -0.5, 0.5) then
-        Game.slideDirection = 'W'
-        Game.slideAxis = 'z'
-        Game.slideInverted = true
-      elseif math.between(v1, 0, 1) and math.between(v2, -0.5, -1) then
-        Game.slideDirection = 'NW'
-        Game.slideAxis = 'x'
-        Game.slideInverted = true
-      elseif math.between(v1, 0, -1) and math.between(v2, -0.5, -1) then
-        Game.slideDirection = 'NE'
-        Game.slideAxis = 'y'
-        Game.slideInverted = true
-      elseif math.between(v1, 0, -1) and math.between(v2, -0.5, 0.5) then
-        Game.slideDirection = 'E'
-        Game.slideAxis = 'z'
-        Game.slideInverted = false
-      elseif math.between(v1, 0, -1) and math.between(v2, 0.5, 1) then
-        Game.slideDirection = 'SE'
-        Game.slideAxis = 'x'
-        Game.slideInverted = false
+  if pairsCount > 1 then
+    -- Game.scoreTexts:add('x' .. pairsCount, 0, 0, {132, 125, 174})
+  end
+
+  Game.hexagons:forEach(function (hex)
+    hex.checkedForPairs = false
+  end)
+
+  if atLeastOnePairMatched then
+    Timer.after(Game.tweenInTime, function()
+      Game.checkForPairs(false)
+    end)
+  else
+    Timer.after(Game.slideTweenTime, function()
+      if fromPlayerMove then
+        Hexagon.undoSlideHexagons()
       end
 
-      Game.slideAxisValue = Game.hoverHex[Game.slideAxis]
-    end
-
-    if Game.canMove and diffDist >= Game.hexSize * 2 and Game.slideDirection then
-      if not (Game.consecutiveSlideAxis or Game.consecutiveSlideAxisValue) then
-        Game.consecutiveSlideAxis = Game.slideAxis
-        Game.consecutiveSlideAxisValue = Game.slideAxisValue
-      end
-
-      local direction = Hexagon.getDirection(Game.consecutiveSlideAxis, Game.slideInverted)
-      Hexagon.slideHexagons(Game.consecutiveSlideAxis, Game.consecutiveSlideAxisValue, direction, Game.slideInverted)
-      Game.pointerStart.x = x
-      Game.pointerStart.y = y
-
-      -- Find a new hexagon to rotate around (The one under mouse pointer)
-      Game.hoverHex = Game.hexagons:getAtPoint(Game.pointerStart.x, Game.pointerStart.y)
-    end
+      Timer.after(Game.slideTweenTime, function()
+        Game.canMove = true
+      end)
+    end)
   end
 end
 
-function Game:pointerreleased(x, y)
-  Game.slideDirection = nil
-  Game.consecutiveSlideAxis = nil
-  Game.consecutiveSlideAxisValue = nil
-  Game.slideAxis = nil
-  Game.hoverHex = false
-  Game.isDragged = false
-end
-
---- Called when the player completes a hexagon and the game is over
-function Game:over()
-  Game.canMove = false
-  Game.started = false
-
-  Game.hexagons:forEach(function(hex)
-    local outMargin = 1.5
-    Timer.tween(1, hex, {
-        drawX = Game.hexSize * (hex.y - hex.x) * math.sqrt(3) / 2 * outMargin,
-        drawY = Game.hexSize * ((hex.y + hex.x) / 2 - hex.z) * outMargin
-      },
-      'out-expo')
-  end)
-
-  Timer.after(1, function ()
-    Timer.tween(0.5, Camera, {x = love.graphics.getWidth()/2}, 'in-quad', function()
-      Camera.x = -love.graphics.getWidth()/2
-
-      Game.hexagons:forEach(function(hex)
-        hex.color = Hexagon.newColor()
-      end)
-
-      Timer.tween(0.5, Camera, {x = 0}, 'out-quad', function()
-        Game.hexagons:forEach(function(hex)
-          hex:tweenIn(1, 'out-expo')
-        end)
-
-        Timer.after(1, function()
-          Game.canMove = true
-          Game.isOver = false
-        end)
-      end)
-    end)
-  end)
-end
+function Game:touchpressed(id, x, y) Input:pointerpressed(x, y) end
+function Game:touchmoved(id, x, y, dx, dy) Input:pointermoved(x, y, dx, dy) end
+function Game:touchreleased(id, x, y) Input:pointerreleased(x, y) end
+function Game:mousepressed(x, y) Input:pointerpressed(x, y) end
+function Game:mousemoved(x, y, dx, dy) Input:pointermoved(x, y, dx, dy) end
+function Game:mousereleased(x, y) Input:pointerreleased(x, y) end
 
 return Game
