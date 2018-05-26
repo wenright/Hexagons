@@ -71,7 +71,7 @@ function Game:init()
     Game.checkForPairs(false)
   end)
 
-  love.graphics.setBackgroundColor(52, 56, 62)
+  love.graphics.setBackgroundColor(0.1, 0.11, 0.125)
 
   Game.scoreTexts = Entities(ScoreText)
 
@@ -99,7 +99,7 @@ function Game:draw()
 
   Camera:detach()
 
-  love.graphics.setColor(255, 255, 255)
+  love.graphics.setColor(1, 1, 1)
   love.graphics.print(Game.score, 0, 50)
 end
 
@@ -143,7 +143,7 @@ function Game.checkForPairs(fromPlayerMove)
   Game.score = Game.score + score * pairsCount
 
   if pairsCount > 1 then
-    -- Game.scoreTexts:add('x' .. pairsCount, 0, 0, {132, 125, 174})
+    -- Game.scoreTexts:add('x' .. pairsCount, 0, 0, {0.4, 0.43, 0.78})
   end
 
   Game.hexagons:forEach(function (hex)

@@ -74,7 +74,7 @@ function HexagonShape:draw()
   love.graphics.polygon('fill', HexagonShape.vertices)
   love.graphics.polygon('line', HexagonShape.vertices)
 
-  -- love.graphics.setColor(self.color2 or {255, 255, 255, 255})
+  -- love.graphics.setColor(self.color2 or {1, 1, 1, 1})
   -- love.graphics.polygon('line', HexagonShape.vertices)
 
   love.graphics.pop()

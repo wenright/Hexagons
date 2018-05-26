@@ -24,7 +24,7 @@ DEBUG = true
 function love.load()
   io.stdout:setvbuf('no')
 
-  Camera:zoom(2.75)
+  Camera:zoom(1)
 
   Gamestate.registerEvents()
   Gamestate.switch(Game)
@@ -44,7 +44,7 @@ end
 
 --- Draws the frames per second indicator
 function love.draw()
-  love.graphics.setColor(255, 255, 255)
+  love.graphics.setColor(1, 1, 1)
   love.graphics.print(love.timer.getFPS())
 end
 
